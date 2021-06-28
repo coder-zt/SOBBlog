@@ -13,7 +13,7 @@ class DataBindingAdapter {
 
 @BindingAdapter("url")
 fun setImageViewRes(iv: ImageView, url:String){
-    val corners = RoundedCorners(ScreenUtils.dp2px(6f))
+    val corners = RoundedCorners(ScreenUtils.dp2px(6))
     val override = RequestOptions.bitmapTransform(corners)
         //.override(ScreenUtils.dp2px(30f), ScreenUtils.dp2px(30f));
     Glide.with(iv.context).load(url).apply(override).into(iv)

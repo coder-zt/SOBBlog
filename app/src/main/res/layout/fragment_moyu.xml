@@ -15,27 +15,57 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="match_parent">
 
                 <ImageView
+                    android:id="@+id/theme_iv"
                     android:layout_width="match_parent"
-                    android:layout_height="260dp"
+                    android:layout_height="320dp"
                     android:scaleType="fitXY"
                     android:src="@mipmap/nb"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
+                <TextView
+                    android:id="@+id/blank_tv"
+                    android:layout_below="@+id/theme_iv"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"/>
+
+                <TextView
+                    android:id="@+id/username_tv"
+                    android:layout_alignBottom="@+id/theme_iv"
+                    android:layout_toStartOf="@+id/avatar"
+                    android:layout_marginEnd="6dp"
+                    android:layout_marginBottom="6dp"
+                    android:text="PI大星"
+                    android:textSize="24sp"
+                    android:textColor="@color/white"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <ImageView
+                    android:id="@+id/avatar"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="-60dp"
+                    android:layout_marginEnd="30dp"
+                    url = "@{`https://imgs.sunofbeaches.com/group1/M00/00/0E/rBsADV4c3lOAe3XQAAARPTB-zes803.png`}"
+                    android:layout_alignTop="@+id/blank_tv"/>
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_moyu"
+                    android:layout_below="@id/blank_tv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
-            </LinearLayout>
+            </RelativeLayout>
 
         </androidx.core.widget.NestedScrollView>
 
