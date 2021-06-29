@@ -32,10 +32,12 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-    dataBinding{
-        //noinspection DataBindingWithoutKapt
-        enabled = true
+    buildFeatures{
+        dataBinding = true
+        // for view binding :
+        // viewBinding = true
     }
+
 }
 
 dependencies {

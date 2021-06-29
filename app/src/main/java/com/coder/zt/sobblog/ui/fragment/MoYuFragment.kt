@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.doOnPreDraw
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -28,6 +29,8 @@ class MoYuFragment:Fragment() {
         MoYuAdapter()
     }
 
+
+    
     var dataBinding:FragmentMoyuBinding? = null
     @SuppressLint("InflateParams")
     override fun onCreateView(
@@ -46,6 +49,9 @@ class MoYuFragment:Fragment() {
     private fun initView() {
         if (dataBinding != null) {
             dataBinding?.rvMoyu?.adapter = adapter
+        }
+        dataBinding?.scrollView?.doOnPreDraw {
+            Log.d(TAG, "initView: do on preDraw")
         }
     }
 
