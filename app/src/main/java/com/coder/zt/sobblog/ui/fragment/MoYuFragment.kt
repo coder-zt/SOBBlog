@@ -50,8 +50,17 @@ class MoYuFragment:Fragment() {
         if (dataBinding != null) {
             dataBinding?.rvMoyu?.adapter = adapter
         }
-        dataBinding?.scrollView?.doOnPreDraw {
-            Log.d(TAG, "initView: do on preDraw")
+        dataBinding?.apply {
+            this.pullView.setClickListener {
+                this.loadingView.setDistance(it.toFloat())
+            }
+            loadingView.setLoadingListener {
+                Log.d(TAG, "initView: 刷新数据")
+                loadingView.postDelayed({
+                    loadingView.setLoadingFinished()
+                }, 3000)
+            }
+
         }
     }
 
