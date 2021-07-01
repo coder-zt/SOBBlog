@@ -6,13 +6,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.doOnPreDraw
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.coder.zt.sobblog.R
 import com.coder.zt.sobblog.databinding.FragmentMoyuBinding
 import com.coder.zt.sobblog.ui.adapter.MoYuAdapter
+import com.coder.zt.sobblog.ui.view.RefreshView
 import com.coder.zt.sobblog.viewmodel.MoYuViewModel
 
 class MoYuFragment:Fragment() {
@@ -51,16 +51,25 @@ class MoYuFragment:Fragment() {
             dataBinding?.rvMoyu?.adapter = adapter
         }
         dataBinding?.apply {
-            this.pullView.setClickListener {
-                this.loadingView.setDistance(it.toFloat())
+            this.pullView.setPullDownListener {
+                val distance = this.loadingView.setDistance(it.toFloat())
+                distance
             }
-            loadingView.setLoadingListener {
-                Log.d(TAG, "initView: 刷新数据")
-                loadingView.postDelayed({
-                    loadingView.setLoadingFinished()
-                }, 3000)
-            }
+            pullView.setOnRefreshListener(object:RefreshView.OnRefreshListener{
+                override fun onRefresh() {
+                    pullView.postDelayed({
+                        loadingView.loadingFinished()
+                        pullView.refreshFinished()
+                    },1000)
+                }
 
+                override fun onLoading() {
+                    pullView.postDelayed({
+                        pullView.loadedFinished()
+                    },10000)
+                }
+
+            })
         }
     }
 

@@ -14,6 +14,9 @@ class NetWorkDispatcher {
 
     suspend fun getRecommendMinifeed(page:Int) = moYuService.getRecommend(page).await()
 
+
+    suspend fun getMinifeedComment(commentId:String, page:Int) = moYuService.getMinifeedComment(commentId, page).await()
+
     private suspend fun <T> Call<T>.await():T{
         return suspendCoroutine {
             enqueue(object :  Callback<T>{

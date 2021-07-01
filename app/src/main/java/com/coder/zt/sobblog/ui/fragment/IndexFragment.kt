@@ -37,18 +37,7 @@ class IndexFragment:Fragment() {
     }
 
     private fun initView() {
-        dataBinding?.apply {
-            this.pullView.setClickListener {
-                this.loadingView.setDistance(it.toFloat())
-            }
-            loadingView.setLoadingListener {
-                Log.d(TAG, "initView: 刷新数据")
-                loadingView.postDelayed({
-                    loadingView.setLoadingFinished()
-                }, 3000)
-            }
 
-        }
     }
 
     private fun initData() {

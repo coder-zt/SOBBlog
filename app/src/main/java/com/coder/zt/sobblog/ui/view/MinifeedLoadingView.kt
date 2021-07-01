@@ -55,13 +55,12 @@ class MinifeedLoadingView(context: Context, attrs: AttributeSet): View(context, 
     private var updateLocal:Boolean = true
     private var loading:Boolean = false
 
-    fun setDistance(len:Float){
+    fun setDistance(len:Float):Boolean{
         if(!updateLocal){
             if(abs(len) < loadingLen && !loading){
-                callback.invoke()
                 loading = true
             }
-            return
+            return false
         }
         distance = abs(len)
         rotate = distance
@@ -73,6 +72,7 @@ class MinifeedLoadingView(context: Context, attrs: AttributeSet): View(context, 
             }
         }
         invalidate()
+        return true
     }
 
     override fun onDraw(canvas: Canvas?) {
@@ -87,13 +87,9 @@ class MinifeedLoadingView(context: Context, attrs: AttributeSet): View(context, 
         }
     }
 
-    private lateinit var callback: () -> Unit
 
-    fun setLoadingListener( listener:() -> Unit){
-        this.callback = listener
-    }
 
-    fun setLoadingFinished(){
+    fun loadingFinished(){
         updateLocal = true
         loading = false
         mScroller.startScroll(0, loadingLen, 0, -loadingLen, 1000)
