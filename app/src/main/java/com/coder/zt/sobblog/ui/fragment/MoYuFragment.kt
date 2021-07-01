@@ -70,6 +70,9 @@ class MoYuFragment:Fragment() {
                 }
 
             })
+            pullView.setContentSlideListener {
+                adapter.checkChildrenState()
+            }
         }
     }
 
