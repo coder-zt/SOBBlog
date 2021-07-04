@@ -6,7 +6,7 @@
     <data>
         <variable
             name="data"
-            type="com.coder.zt.sobblog.model.moyu.MiniFeed" />
+            type="com.coder.zt.sobblog.model.moyu.MoYuDataDisplay.MiniFeed" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -30,7 +30,7 @@
             android:layout_height="20dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="4dp"
-            android:text="@{data.nickname,default=`sob-user`}"
+            android:text="@{data.nickName,default=`sob-user`}"
             android:gravity="center_vertical"
             android:textColor="#294F6C"
             android:textSize="16sp"
@@ -152,40 +152,53 @@
 
         </com.coder.zt.sobblog.ui.view.ExpansionLinearLayout>
 
-        <LinearLayout
+        <!--        <LinearLayout-->
+<!--            android:id="@+id/linearLayout"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="36dp"-->
+<!--            android:layout_marginBottom="12dp"-->
+<!--            android:background="#ddd"-->
+<!--            android:gravity="center_vertical"-->
+<!--            app:layout_constraintBottom_toTopOf="@+id/diver"-->
+<!--            app:layout_constraintEnd_toEndOf="@+id/do_btn"-->
+<!--            app:layout_constraintStart_toStartOf="@+id/textView3"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/rv_comment">-->
+
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="1"-->
+<!--                android:gravity="center"-->
+<!--                android:text="@{data.thumbUpCount + `点赞`}" />-->
+
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="1"-->
+<!--                android:gravity="center"-->
+<!--                android:text="@{data.commentCount + `评论`}" />-->
+
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="1"-->
+<!--                android:gravity="center"-->
+<!--                android:text="分享" />-->
+
+<!--        </LinearLayout>-->
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_comment"
             android:layout_width="0dp"
-            android:layout_height="36dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="12dp"
-            android:background="#ddd"
-            android:gravity="center_vertical"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="12dp"
+            android:background="@drawable/moyu_interaction_bg"
+            android:paddingVertical="8dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toTopOf="@+id/diver"
             app:layout_constraintEnd_toEndOf="@+id/do_btn"
             app:layout_constraintStart_toStartOf="@+id/textView3"
-            app:layout_constraintTop_toBottomOf="@+id/do_btn"
-            app:layout_constraintBottom_toTopOf="@+id/diver" >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@{data.thumbUpCount + `点赞`}"
-                android:gravity="center"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@{data.commentCount + `评论`}"
-                android:gravity="center"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="分享"
-                android:gravity="center"/>
-
-        </LinearLayout>
+            app:layout_constraintTop_toBottomOf="@+id/do_btn" />
 
         <View
             android:id="@+id/diver"

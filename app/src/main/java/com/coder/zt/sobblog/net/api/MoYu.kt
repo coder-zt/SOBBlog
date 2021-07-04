@@ -19,7 +19,7 @@ interface MoYu {
     fun getRecommend( @Path("page") page:Int): Call<MoYuList>
     //https://api.sunofbeach.net/ct/moyu/comment/1410400457637076994/1
 
-    @GET("/ct/moyu/list/comment/{commentId}/{page}")
+    @GET("/ct/moyu/comment/{commentId}/{page}")
     fun getMinifeedComment(@Path("commentId") commentId:String, @Path("page") page:Int): Call<MYComment>
 
 }

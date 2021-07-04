@@ -31,7 +31,7 @@ data class MiniFeed(
     val nickname: String,
     val position: String,
     val thumbUpCount: Int,
-    val thumbUpList: List<Any>,
+    val thumbUpList: List<String>,
     val topicId: Any,
     val topicName: Any,
     val userId: String,

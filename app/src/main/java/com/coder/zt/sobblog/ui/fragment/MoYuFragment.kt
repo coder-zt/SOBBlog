@@ -14,6 +14,7 @@ import com.coder.zt.sobblog.databinding.FragmentMoyuBinding
 import com.coder.zt.sobblog.ui.adapter.MoYuAdapter
 import com.coder.zt.sobblog.ui.view.RefreshView
 import com.coder.zt.sobblog.viewmodel.MoYuViewModel
+import com.google.gson.Gson
 
 class MoYuFragment:Fragment() {
 
@@ -77,12 +78,15 @@ class MoYuFragment:Fragment() {
     }
 
     private fun initData() {
-        activity?.let {
-            moyuViewModel.moyuList.observe(it){
-                Log.d(TAG, "initData: ${it.code}")
-                adapter.setData(it.data.list)
+        activity?.let { context ->
+            moyuViewModel.moyuDisplayData.observe(context){
+                Log.d(TAG, "initData: ${Gson().toJson(it)}")
+                adapter.setData(it.data)
+
             }
         }
+
+
     }
 
     override fun onResume() {

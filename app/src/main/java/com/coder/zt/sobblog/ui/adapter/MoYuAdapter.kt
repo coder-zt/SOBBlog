@@ -11,6 +11,7 @@ import com.coder.zt.sobblog.R
 import com.coder.zt.sobblog.databinding.MoyoTopViewBinding
 import com.coder.zt.sobblog.databinding.RvMoyuBinding
 import com.coder.zt.sobblog.model.moyu.MiniFeed
+import com.coder.zt.sobblog.model.moyu.MoYuDataDisplay
 
 /**
  * 摸鱼板块的内容
@@ -31,7 +32,7 @@ class MoYuAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
     private val contentViewSet:MutableSet<ContentView> = mutableSetOf()
     val mData by lazy {
-        mutableListOf<MiniFeed>()
+        mutableListOf<MoYuDataDisplay.MiniFeed>()
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         Log.d(TAG, "onCreateViewHolder: $viewType")
@@ -79,7 +80,7 @@ class MoYuAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         return mData.size + 1
     }
 
-    fun setData(data:List<MiniFeed>){
+    fun setData(data:List<MoYuDataDisplay.MiniFeed>){
         mData.clear()
         mData.addAll(data)
         notifyDataSetChanged()
@@ -94,7 +95,7 @@ class MoYuAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     class ContentView(val inflate:RvMoyuBinding) :RecyclerView.ViewHolder(inflate.root){
 
         private var showExpansion = false
-        fun setData(miniFeed: MiniFeed, position: Int,listener:()->Unit) {
+        fun setData(miniFeed: MoYuDataDisplay.MiniFeed, position: Int,listener:()->Unit) {
             inflate.data = miniFeed
             val picSize = miniFeed.images.size
             inflate.doBtn.setOnClickListener(object:View.OnClickListener{
@@ -106,6 +107,15 @@ class MoYuAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 }
             })
             Log.d(TAG, "setData:  $position ---> $picSize")
+            //展示评论数据
+            if(miniFeed.commentCount == 0 && miniFeed.thumbUpCount == 0){
+                inflate.rvComment.visibility = View.GONE
+                return
+            }else{
+                inflate.rvComment.visibility = View.VISIBLE
+                inflate.rvComment.adapter = MYCommentAdapter(miniFeed.thumbUpCount, miniFeed.comment)
+            }
+            // 设置动态图片显示的样式
             if(picSize == 0){
                 inflate.recyclerView.visibility = View.GONE
                 return

@@ -1,26 +1,51 @@
 package com.coder.zt.sobblog.repository
 
+import com.coder.zt.sobblog.model.moyu.Data
 import com.coder.zt.sobblog.model.moyu.MYComment
+import com.coder.zt.sobblog.model.moyu.MoYuDataDisplay
+import com.coder.zt.sobblog.model.moyu.MoYuDataDisplay.MiniFeed.Comment.SubComment
 import com.coder.zt.sobblog.model.moyu.MoYuList
 import com.coder.zt.sobblog.net.NetWorkDispatcher
 import com.coder.zt.sobblog.utils.Constants
 
 class MoYuRepository {
-    suspend fun getRecommendMinifeed(page:Int):MoYuList?{
+    suspend fun getRecommendMinifeed(page:Int):MoYuDataDisplay{
         val recommend = NetWorkDispatcher.getInstance().getRecommendMinifeed(page)
         return if (recommend.code == Constants.SUCCESS_CODE) {
-            recommend
+            val displayMiniFeed = mutableListOf<MoYuDataDisplay.MiniFeed>()
+            for (miniFeed in recommend.data.list) {
+                val displayComments = mutableListOf<MoYuDataDisplay.MiniFeed.Comment>()
+                //获取动态的评论数据
+                if(miniFeed.commentCount > 0){
+                    val minifeedComment = getMinifeedComment(miniFeed.id, 1)
+                    for (comment in minifeedComment) {
+                        val childDisplayComment = mutableListOf<SubComment>()
+                        //获取评论的子评论
+                        for (subComment in comment.subComments) {
+                            childDisplayComment.add(SubComment(subComment))
+                        }
+                        val displayComment = MoYuDataDisplay.MiniFeed.Comment(comment.content,
+                            comment.id,
+                            comment.nickname,
+                            childDisplayComment
+                        )
+                        displayComments.add(displayComment)
+                    }
+                }
+                displayMiniFeed.add(MoYuDataDisplay.MiniFeed(miniFeed, displayComments))
+            }
+            MoYuDataDisplay(recommend.data.currentPage, displayMiniFeed)
         }else{
-            null
+            MoYuDataDisplay(recommend.data.currentPage, listOf())
         }
     }
 
-    suspend fun getMinifeedComment(commentId:String, page:Int):MYComment?{
+    suspend fun getMinifeedComment(commentId:String, page:Int):List<MYComment.Data.Comment>{
         val comment = NetWorkDispatcher.getInstance().getMinifeedComment(commentId, page)
         return if (comment.code == Constants.SUCCESS_CODE) {
-            comment
+            comment.data.list
         }else{
-            null
+            listOf()
         }
     }
 
