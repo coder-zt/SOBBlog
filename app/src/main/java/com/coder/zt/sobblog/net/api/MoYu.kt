@@ -17,8 +17,10 @@ interface MoYu {
      */
     @GET("/ct/moyu/list/recommend/{page}")
     fun getRecommend( @Path("page") page:Int): Call<MoYuList>
-    //https://api.sunofbeach.net/ct/moyu/comment/1410400457637076994/1
 
+    /**
+     * 获取单条摸鱼动态的评论
+     */
     @GET("/ct/moyu/comment/{commentId}/{page}")
     fun getMinifeedComment(@Path("commentId") commentId:String, @Path("page") page:Int): Call<MYComment>
 

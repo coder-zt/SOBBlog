@@ -1,16 +1,14 @@
 package com.coder.zt.sobblog.repository
 
-import com.coder.zt.sobblog.model.moyu.Data
 import com.coder.zt.sobblog.model.moyu.MYComment
 import com.coder.zt.sobblog.model.moyu.MoYuDataDisplay
 import com.coder.zt.sobblog.model.moyu.MoYuDataDisplay.MiniFeed.Comment.SubComment
-import com.coder.zt.sobblog.model.moyu.MoYuList
-import com.coder.zt.sobblog.net.NetWorkDispatcher
+import com.coder.zt.sobblog.net.MoYuNetWork
 import com.coder.zt.sobblog.utils.Constants
 
 class MoYuRepository {
     suspend fun getRecommendMinifeed(page:Int):MoYuDataDisplay{
-        val recommend = NetWorkDispatcher.getInstance().getRecommendMinifeed(page)
+        val recommend = MoYuNetWork.getInstance().getRecommendMinifeed(page)
         return if (recommend.code == Constants.SUCCESS_CODE) {
             val displayMiniFeed = mutableListOf<MoYuDataDisplay.MiniFeed>()
             for (miniFeed in recommend.data.list) {
@@ -41,7 +39,7 @@ class MoYuRepository {
     }
 
     suspend fun getMinifeedComment(commentId:String, page:Int):List<MYComment.Data.Comment>{
-        val comment = NetWorkDispatcher.getInstance().getMinifeedComment(commentId, page)
+        val comment = MoYuNetWork.getInstance().getMinifeedComment(commentId, page)
         return if (comment.code == Constants.SUCCESS_CODE) {
             comment.data.list
         }else{

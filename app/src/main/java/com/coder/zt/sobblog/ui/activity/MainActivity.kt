@@ -12,6 +12,7 @@ import androidx.viewpager.widget.PagerAdapter
 import com.coder.zt.sobblog.R
 import com.coder.zt.sobblog.databinding.ActivityMainBinding
 import com.coder.zt.sobblog.ui.adapter.HomePagerAdapter
+import com.coder.zt.sobblog.ui.base.BaseActivity
 import com.coder.zt.sobblog.ui.fragment.IndexFragment
 import com.coder.zt.sobblog.ui.fragment.MineFragment
 import com.coder.zt.sobblog.ui.fragment.MoYuFragment
@@ -19,7 +20,7 @@ import com.coder.zt.sobblog.ui.fragment.OtherFragment
 import com.coder.zt.sobblog.viewmodel.MoYuViewModel
 import com.google.android.material.tabs.TabLayout
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     companion object{
         private const val TAG = "MainActivity"
@@ -33,11 +34,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (Build.VERSION.SDK_INT >= 21) {
-            val decorView = window.decorView
-            decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-            window.statusBarColor = Color.TRANSPARENT
-        }
         initView()
         initData()
     }
