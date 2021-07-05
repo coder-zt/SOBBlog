@@ -14,6 +14,8 @@ import com.coder.zt.sobblog.databinding.ActivityLoginBinding
 import com.coder.zt.sobblog.model.user.LoginInfo
 import com.coder.zt.sobblog.ui.base.BaseActivity
 import com.coder.zt.sobblog.utils.Constants
+import com.coder.zt.sobblog.utils.MdUtils
+import com.coder.zt.sobblog.utils.ToastUtils
 import com.coder.zt.sobblog.viewmodel.UserViewModel
 import okhttp3.internal.and
 import java.security.MessageDigest
@@ -36,60 +38,44 @@ class LoginActivity:BaseActivity() {
 
     private fun initData() {
         userViewModel.loginResult.observe(this){
-            Toast.makeText(this,userViewModel.loginMessage.value, Toast.LENGTH_SHORT ).show()
+            if (it) {
+                ToastUtils.show(userViewModel.loginMessage.value!!)
+            }else{
+                ToastUtils.showError(userViewModel.loginMessage.value!!)
+            }
+        }
+        userViewModel.captchaBitmap.observe(this){
+            dataBinding.ivHumanCode.setImageBitmap(it)
         }
     }
 
     private fun initView() {
         dataBinding.randomCode = java.util.Random().nextInt()
         dataBinding.ivHumanCode.setOnClickListener {
-            Glide.with(it.context)
-                .load(Constants.HUMAN_CODE_URL + java.util.Random().nextInt())
-                .into(it as ImageView)
+            userViewModel.captcha()
         }
         dataBinding.tvLoginBtn.setOnClickListener (object: View.OnClickListener{
             override fun onClick(v: View?) {
-                val phoneNum = dataBinding.tvPhoneNum.text.toString()
+                val phoneNum = dataBinding.etPhoneNum.text.toString()
                 if(phoneNum.isEmpty()){
-                    Toast.makeText(SOBApp._context,"手机号不能为空！", Toast.LENGTH_SHORT ).show()
+                    ToastUtils.showError("手机号不能为空！")
                     return
                 }
-                val password = dataBinding.tvPhoneNum.text.toString()
+                val password = dataBinding.etPassword.text.toString()
                 if(password.isEmpty()){
-                    Toast.makeText(SOBApp._context,"密码不能为空！", Toast.LENGTH_SHORT ).show()
+                    ToastUtils.showError("密码不能为空！")
                     return
                 }
-                val captcha = dataBinding.tvPhoneNum.text.toString()
+                val captcha = dataBinding.etVerify.text.toString()
                 if(captcha.isEmpty()){
-                    Toast.makeText(SOBApp._context,"验证码不能为空！", Toast.LENGTH_SHORT ).show()
+                    ToastUtils.showError("验证码不能为空！")
                     return
                 }
-                userViewModel.login(captcha, LoginInfo(phoneNum, md5(password)))
+                userViewModel.login(captcha, LoginInfo(phoneNum,    MdUtils.md5(password)))
             }
 
         })
     }
 
-    fun md5(string: String): String {
-        if (TextUtils.isEmpty(string)) {
-            return ""
-        }
-        var md5: MessageDigest? = null
-        try {
-            md5 = MessageDigest.getInstance("MD5")
-            val bytes = md5.digest(string.toByteArray())
-            var result: String = ""
-            for (b in bytes) {
-                var temp = Integer.toHexString(b and 0xff)
-                if (temp.length == 1) {
-                    temp = "0$temp"
-                }
-                result += temp
-            }
-            return result
-        } catch (e: NoSuchAlgorithmException) {
-            e.printStackTrace()
-        }
-        return ""
-    }
+
 }

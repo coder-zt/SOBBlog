@@ -10,6 +10,8 @@ class UserNetWork: NetWorkBase() {
 
         suspend fun login(captcha:String, loginInfo:LoginInfo) = userService.login(captcha, loginInfo).await()
 
+        suspend fun captcha(random:Int) = userService.captcha(random).await()
+
 
         companion object{
                 private var network: UserNetWork? = null
