@@ -107,6 +107,7 @@
                 android:gravity="center">
 
                 <LinearLayout
+                    android:id="@+id/thumb_btn_ll"
                     android:layout_weight="1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -117,6 +118,7 @@
                         android:layout_height="wrap_content"
                         android:background="@mipmap/like"/>
                     <TextView
+                        android:id="@+id/tv_thumb"
                         android:layout_width="wrap_content"
                         android:layout_height="20dp"
                         android:gravity="center"
@@ -129,6 +131,7 @@
 
 
                 <LinearLayout
+                    android:id="@+id/comment_btn_ll"
                     android:layout_weight="1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

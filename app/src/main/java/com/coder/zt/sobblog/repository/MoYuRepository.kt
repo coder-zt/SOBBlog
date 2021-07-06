@@ -1,5 +1,6 @@
 package com.coder.zt.sobblog.repository
 
+import com.coder.zt.sobblog.model.base.ServerResponse
 import com.coder.zt.sobblog.model.moyu.MYComment
 import com.coder.zt.sobblog.model.moyu.MoYuDataDisplay
 import com.coder.zt.sobblog.model.moyu.MoYuDataDisplay.MiniFeed.Comment.SubComment
@@ -45,6 +46,11 @@ class MoYuRepository {
         }else{
             listOf()
         }
+    }
+
+    suspend fun thumbUp(momentId:String):ServerResponse{
+        val comment = MoYuNetWork.getInstance().thumbUp(momentId)
+        return comment
     }
 
     companion object {

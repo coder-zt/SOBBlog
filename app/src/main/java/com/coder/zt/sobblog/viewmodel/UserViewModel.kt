@@ -5,9 +5,13 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.coder.zt.sobblog.model.datamanager.UserDataMan
 import com.coder.zt.sobblog.model.user.LoginInfo
+import com.coder.zt.sobblog.model.user.SobUserInfo
 import com.coder.zt.sobblog.net.UserNetWork
 import com.coder.zt.sobblog.repository.UserRepository
+import com.coder.zt.sobblog.utils.Constants
+import com.coder.zt.sobblog.utils.GsonUtils
 import kotlinx.coroutines.launch
 import kotlin.math.log
 
@@ -34,6 +38,19 @@ class UserViewModel:ViewModel() {
         viewModelScope.launch {
             val login = UserRepository.getInstance().captcha()
             captchaBitmap.postValue(login!!)
+        }
+    }
+
+    fun checkToken(){
+        viewModelScope.launch {
+            val response = UserRepository.getInstance().checkToken()
+            if(response.success && response.data != null){
+                val infoStr = GsonUtils.getInstance().toJson(response.data)
+                val userInfo = GsonUtils.getInstance().fromJson(infoStr, SobUserInfo::class.java)
+                UserDataMan.save(userInfo)
+            }
+            loginMessage.postValue(response.message)
+            loginResult.postValue(response.success)
         }
     }
 

@@ -11,9 +11,16 @@ object ServiceCreator {
     private val httpLoggingInterceptor =
         HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BASIC }
 
+    val cookieJar by lazy {
+        CookiesManager()
+    }
+
     private val client = OkHttpClient.Builder()
         .addInterceptor(httpLoggingInterceptor)
+        .cookieJar(cookieJar)
         .build()
+
+
 
     private val retrofit:Retrofit = Retrofit.Builder()
                             .baseUrl(Constants.BASE_URL)

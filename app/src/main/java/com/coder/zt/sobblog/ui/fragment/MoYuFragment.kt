@@ -27,11 +27,24 @@ class MoYuFragment:Fragment() {
     }
 
     val adapter by lazy {
-        MoYuAdapter()
+        MoYuAdapter(){ doType: MoYuAdapter.DO_TYPE, any: Any ->
+            when(doType){
+                MoYuAdapter.DO_TYPE.THUMB_UP ->{
+                    moyuViewModel.thumbUP(any as String)
+                }
+                MoYuAdapter.DO_TYPE.COMMENT ->{
+                    moyuViewModel.thumbUP(any as String)
+                }
+                MoYuAdapter.DO_TYPE.REPLY ->{
+                    moyuViewModel.thumbUP(any as String)
+                }
+            }
+
+        }
     }
 
 
-    
+
     var dataBinding:FragmentMoyuBinding? = null
     @SuppressLint("InflateParams")
     override fun onCreateView(

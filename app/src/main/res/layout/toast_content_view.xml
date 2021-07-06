@@ -18,7 +18,7 @@
             android:layout_height="22dp"
             android:layout_margin="5dp"
             android:layout_gravity="center_vertical"
-            android:background="@mipmap/ok"/>
+            android:background="@mipmap/ok" />
 
         <TextView
             android:id="@+id/tv_content"

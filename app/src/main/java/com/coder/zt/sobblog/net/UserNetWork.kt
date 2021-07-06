@@ -12,6 +12,8 @@ class UserNetWork: NetWorkBase() {
 
         suspend fun captcha(random:Int) = userService.captcha(random).await()
 
+        suspend fun checkToken() = userService.checkToken().await()
+
 
         companion object{
                 private var network: UserNetWork? = null

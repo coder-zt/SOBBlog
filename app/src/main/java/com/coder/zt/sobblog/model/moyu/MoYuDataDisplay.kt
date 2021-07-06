@@ -9,6 +9,7 @@ data class MoYuDataDisplay(
     ){
     //单条动态数据
     data class MiniFeed(
+        val id:String,//id
         val avatar:String,//头像
         val nickName:String,//昵称
         val content:String,//动态内容
@@ -21,6 +22,7 @@ data class MoYuDataDisplay(
         val createTime: String,//发布时间
     ){
         constructor(data:com.coder.zt.sobblog.model.moyu.MiniFeed,commentData:List<Comment>):this(
+            data.id,
             data.avatar,
             data.nickname,
             data.content,

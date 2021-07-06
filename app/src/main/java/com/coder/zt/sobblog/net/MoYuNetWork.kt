@@ -12,6 +12,8 @@ class MoYuNetWork: NetWorkBase() {
 
         suspend fun getMinifeedComment(commentId:String, page:Int) = moYuService.getMinifeedComment(commentId, page).await()
 
+        suspend fun thumbUp(momentId:String) = moYuService.thumbUp(momentId).await()
+
 
         companion object{
 

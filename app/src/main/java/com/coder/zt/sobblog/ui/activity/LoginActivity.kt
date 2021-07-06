@@ -1,5 +1,6 @@
 package com.coder.zt.sobblog.ui.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
@@ -11,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.coder.zt.sobblog.R
 import com.coder.zt.sobblog.SOBApp
 import com.coder.zt.sobblog.databinding.ActivityLoginBinding
+import com.coder.zt.sobblog.model.datamanager.UserDataMan
 import com.coder.zt.sobblog.model.user.LoginInfo
 import com.coder.zt.sobblog.ui.base.BaseActivity
 import com.coder.zt.sobblog.utils.Constants
@@ -40,6 +42,9 @@ class LoginActivity:BaseActivity() {
         userViewModel.loginResult.observe(this){
             if (it) {
                 ToastUtils.show(userViewModel.loginMessage.value!!)
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+                finish()
             }else{
                 ToastUtils.showError(userViewModel.loginMessage.value!!)
             }
@@ -77,5 +82,19 @@ class LoginActivity:BaseActivity() {
         })
     }
 
+    override fun onResume() {
+        super.onResume()
+        checkUserState()
+    }
+
+    private fun checkUserState() {
+        if (UserDataMan.getUserInfo() == null) {
+            userViewModel.checkToken()
+        }else{
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+    }
 
 }

@@ -49,5 +49,9 @@ class UserRepository {
     }
 
 
-
+    suspend fun checkToken(): ServerResponse {
+        val netWork = UserNetWork.getInstance().checkToken()
+        Log.d(TAG, "login: ${netWork.data}")
+        return netWork
+    }
 }
