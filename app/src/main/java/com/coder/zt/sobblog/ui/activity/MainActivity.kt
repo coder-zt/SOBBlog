@@ -1,24 +1,15 @@
 package com.coder.zt.sobblog.ui.activity
 
-import android.graphics.Color
-import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProvider
-import androidx.viewpager.widget.PagerAdapter
 import com.coder.zt.sobblog.R
 import com.coder.zt.sobblog.databinding.ActivityMainBinding
 import com.coder.zt.sobblog.ui.adapter.HomePagerAdapter
 import com.coder.zt.sobblog.ui.base.BaseActivity
 import com.coder.zt.sobblog.ui.fragment.IndexFragment
 import com.coder.zt.sobblog.ui.fragment.MineFragment
-import com.coder.zt.sobblog.ui.fragment.MoYuFragment
+import com.coder.zt.sobblog.ui.fragment.DiscoveryFragment
 import com.coder.zt.sobblog.ui.fragment.OtherFragment
-import com.coder.zt.sobblog.viewmodel.MoYuViewModel
-import com.google.android.material.tabs.TabLayout
 
 class MainActivity : BaseActivity() {
 
@@ -45,7 +36,7 @@ class MainActivity : BaseActivity() {
             addTab(newTab().setText("其他").setIcon(R.mipmap.ic_launcher))
             addTab(newTab().setText("我").setIcon(R.mipmap.ic_launcher))
         }
-        val adapter = HomePagerAdapter(supportFragmentManager, listOf(IndexFragment(),MoYuFragment(),OtherFragment(),MineFragment()))
+        val adapter = HomePagerAdapter(supportFragmentManager, listOf(IndexFragment(),DiscoveryFragment(),OtherFragment(),MineFragment()))
         data.viewPager.adapter = adapter
         data.viewPager.currentItem = 1
     }

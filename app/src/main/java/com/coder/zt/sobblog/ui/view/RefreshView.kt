@@ -38,7 +38,7 @@ class RefreshView(context:Context, attrs: AttributeSet): LinearLayout(context, a
     private val mTouchSlop:Int by lazy{
         ViewConfiguration.get(context).scaledTouchSlop
     }
-    private lateinit var contentListener: ()->Unit
+    private lateinit var contentListener: (distance:Int)->Unit
 
 
     override fun onFinishInflate() {
@@ -52,7 +52,8 @@ class RefreshView(context:Context, attrs: AttributeSet): LinearLayout(context, a
         contentView.addOnScrollListener(object: RecyclerView.OnScrollListener(){
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                contentListener.invoke()
+                Log.d(TAG, "onScrolled: dx:$dx    dy: $dy")
+                contentListener.invoke(dy)
                 touchBottom = !contentView.canScrollVertically(1)
                 touchTop = !contentView.canScrollVertically(-1)
                 Log.d(TAG, "onScrolled: touchBottom:$touchBottom    touchTop: $touchTop")
@@ -71,7 +72,7 @@ class RefreshView(context:Context, attrs: AttributeSet): LinearLayout(context, a
 
     override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
         if(state != RefreshState.ON_NULL){
-            contentListener.invoke()
+            contentListener.invoke(0)
             return true
         }
         when(ev?.action){
@@ -85,13 +86,13 @@ class RefreshView(context:Context, attrs: AttributeSet): LinearLayout(context, a
                 if(detlaY > 0){
                     if(getTopPosition() && detlaY > mTouchSlop){
                         ev.action = MotionEvent.ACTION_DOWN
-                        contentListener.invoke()
+                        contentListener.invoke(0)
                         return true
                     }
                 }else{
                     if(getBottomPosition() && abs(detlaY) > mTouchSlop){
                         ev.action = MotionEvent.ACTION_DOWN
-                        contentListener.invoke()
+                        contentListener.invoke(0)
                         return true
                     }
 
@@ -226,7 +227,7 @@ class RefreshView(context:Context, attrs: AttributeSet): LinearLayout(context, a
         requestLayout()
     }
 
-    fun setContentSlideListener(listener: ()->Unit){
+    fun setContentSlideListener(listener: (distance:Int)->Unit){
         contentListener = listener
     }
 

@@ -42,8 +42,6 @@ class ToastUtils {
                 inflate.llContainer.setBackgroundResource(R.drawable.toast_error_bg)
                 //图标
                 inflate.ivIcon.setBackgroundResource(R.mipmap.error)
-                //        <!--    67C23A-->
-                //        <!--    fe6c6c-->、
                 //字体颜色
                 inflate.tvContent.setTextColor(Color.parseColor("#fe6c6c"))
 

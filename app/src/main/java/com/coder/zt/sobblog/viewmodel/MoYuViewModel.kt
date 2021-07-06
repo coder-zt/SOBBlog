@@ -15,6 +15,7 @@ companion object{
     private const val TAG = "MoYuViewModel"
 }
     val moyuDisplayData:MutableLiveData<MoYuDataDisplay> = MutableLiveData()
+    val slideDistance:MutableLiveData<Int> = MutableLiveData()
 
     fun getRecommendMiniFeed(page:Int){
         viewModelScope.launch{

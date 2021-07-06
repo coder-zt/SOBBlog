@@ -1,25 +1,29 @@
-package com.coder.zt.sobblog.ui.fragment
+package com.coder.zt.sobblog.ui.activity
 
-import android.annotation.SuppressLint
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.coder.zt.sobblog.R
-import com.coder.zt.sobblog.databinding.FragmentMoyuBinding
+import com.coder.zt.sobblog.databinding.ActivityMoyuBinding
 import com.coder.zt.sobblog.ui.adapter.MoYuAdapter
+import com.coder.zt.sobblog.ui.base.BaseActivity
 import com.coder.zt.sobblog.ui.view.RefreshView
+import com.coder.zt.sobblog.utils.ScreenUtils
 import com.coder.zt.sobblog.viewmodel.MoYuViewModel
 import com.google.gson.Gson
 
-class MoYuFragment:Fragment() {
+class MoYuActivity:BaseActivity() {
+
 
     companion object{
-        private const val TAG = "MoYuFragment"
+        private const val TAG = "MoYuActivity"
+    }
+    
+
+    val dataBinding: ActivityMoyuBinding by lazy {
+        DataBindingUtil.setContentView(this, R.layout.activity_moyu)
     }
 
     val moyuViewModel: MoYuViewModel by lazy {
@@ -43,33 +47,21 @@ class MoYuFragment:Fragment() {
         }
     }
 
-
-
-    var dataBinding:FragmentMoyuBinding? = null
-    @SuppressLint("InflateParams")
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        Log.d(TAG, "onCreateView: ")
-        val view = inflater.inflate(R.layout.fragment_moyu, container, false)
-        dataBinding = DataBindingUtil.bind<FragmentMoyuBinding>(view)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         initView()
         initData()
-        return view
     }
 
     private fun initView() {
-        if (dataBinding != null) {
-            dataBinding?.rvMoyu?.adapter = adapter
-        }
-        dataBinding?.apply {
+        moyuViewModel.slideDistance.value = 0
+        dataBinding.rvMoyu.adapter = adapter
+        dataBinding.apply {
             this.pullView.setPullDownListener {
                 val distance = this.loadingView.setDistance(it.toFloat())
                 distance
             }
-            pullView.setOnRefreshListener(object:RefreshView.OnRefreshListener{
+            pullView.setOnRefreshListener(object: RefreshView.OnRefreshListener{
                 override fun onRefresh() {
                     pullView.postDelayed({
                         loadingView.loadingFinished()
@@ -86,20 +78,32 @@ class MoYuFragment:Fragment() {
             })
             pullView.setContentSlideListener {
                 adapter.checkChildrenState()
+                Log.d(TAG, "initView: $it")
+                var value = moyuViewModel.slideDistance.value
+                if (value != null) {
+                    value += it
+                    moyuViewModel.slideDistance.value = value
+                }
             }
         }
     }
 
     private fun initData() {
-        activity?.let { context ->
-            moyuViewModel.moyuDisplayData.observe(context){
-                Log.d(TAG, "initData: ${Gson().toJson(it)}")
-                adapter.setData(it.data)
-
-            }
+        moyuViewModel.moyuDisplayData.observe(this){
+            Log.d(TAG, "initData: ${Gson().toJson(it)}")
+            adapter.setData(it.data)
         }
-
-
+        moyuViewModel.slideDistance.observe(this){
+            val height = ScreenUtils.dp2px(320)
+            var a = 0
+            if(1.0f * it/height < 1){
+               a =  (1.0f * it/height * 255).toInt()
+            }else{
+                a =  255
+            }
+            dataBinding.topBarRl.setBackgroundColor(Color.argb(a,242,242,242))
+            dataBinding.titleTv.setTextColor(Color.argb(a,0,0,0))
+        }
     }
 
     override fun onResume() {

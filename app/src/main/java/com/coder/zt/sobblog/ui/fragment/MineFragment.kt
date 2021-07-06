@@ -6,12 +6,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.coder.zt.sobblog.R
-import com.coder.zt.sobblog.databinding.FragmentMoyuBinding
-import com.coder.zt.sobblog.viewmodel.MoYuViewModel
 
 class MineFragment:Fragment() {
 
