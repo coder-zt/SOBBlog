@@ -10,6 +10,7 @@ import com.coder.zt.sobblog.databinding.ActivityMoyuBinding
 import com.coder.zt.sobblog.ui.adapter.MoYuAdapter
 import com.coder.zt.sobblog.ui.base.BaseActivity
 import com.coder.zt.sobblog.ui.view.RefreshView
+import com.coder.zt.sobblog.utils.AndroidBug5497Workaround
 import com.coder.zt.sobblog.utils.ScreenUtils
 import com.coder.zt.sobblog.viewmodel.MoYuViewModel
 import com.google.gson.Gson
@@ -49,6 +50,7 @@ class MoYuActivity:BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        AndroidBug5497Workaround.assistActivity(this)
         initView()
         initData()
     }

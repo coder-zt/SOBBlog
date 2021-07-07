@@ -6,125 +6,162 @@
 
     </data>
 
-    <FrameLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
 
-        <com.coder.zt.sobblog.ui.view.RefreshView
-            android:id="@+id/pull_view"
+
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#2f2f2f"
-            android:orientation="vertical">
 
-            <View
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
+            <com.coder.zt.sobblog.ui.view.RefreshView
+                android:id="@+id/pull_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/text"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#2f2f2f"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:text="阳光沙滩"
+                    android:layout_marginTop="20dp"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="28sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="32dp"
+                    android:text="--让学习编程更加简单"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_moyu"
+                android:layout_width="match_parent"
+                android:nestedScrollingEnabled="false"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:text="阳光沙滩"
-                android:layout_marginTop="20dp"
-                android:layout_gravity="center_horizontal"
-                android:textSize="28sp"
-                android:textStyle="bold" />
+                android:background="@color/white"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="32dp"
-                android:text="--让学习编程更加简单"
-                android:layout_gravity="center_horizontal"
-                android:textSize="18sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:orientation="horizontal"
+                android:gravity="center">
 
-        </LinearLayout>
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_moyu"
-            android:layout_width="match_parent"
-            android:nestedScrollingEnabled="false"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+                <com.coder.zt.sobblog.ui.view.BottomLoadingView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@color/teal_700"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:orientation="horizontal"
-            android:gravity="center">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:layout_marginStart="12dp"
+                    android:text="正在加载。。。"
+                    android:gravity="center"/>
 
-            <com.coder.zt.sobblog.ui.view.BottomLoadingView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:background="@color/teal_700"/>
+            </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
+            </com.coder.zt.sobblog.ui.view.RefreshView>
+
+
+            <com.coder.zt.sobblog.ui.view.MinifeedLoadingView
+                android:id="@+id/loading_view"
+                android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:layout_marginStart="12dp"
-                android:text="正在加载。。。"
-                android:gravity="center"/>
+                android:layout_marginStart="30dp"/>
 
-        </LinearLayout>
+            <RelativeLayout
+                android:id="@+id/top_bar_rl"
+                android:layout_width="match_parent"
+                android:layout_height="74dp"
+                android:background="#00f2f2f2">
 
-        </com.coder.zt.sobblog.ui.view.RefreshView>
+                <ImageView
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="25dp"
+                    android:padding="15dp"
+                    android:src="@mipmap/back_white" />
 
+                <TextView
+                    android:id="@+id/title_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#00000000"
+                    android:text="猿村"
+                    android:layout_marginTop="34dp"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:layout_centerHorizontal="true"/>
 
-        <com.coder.zt.sobblog.ui.view.MinifeedLoadingView
-            android:id="@+id/loading_view"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginStart="30dp"/>
+                <ImageView
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:src="@mipmap/question"
+                    android:padding="15dp"
+                    android:layout_marginTop="25dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_alignParentRight="true"/>
 
-        <RelativeLayout
-            android:id="@+id/top_bar_rl"
+            </RelativeLayout>
+        </FrameLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="74dp"
-            android:background="#00f2f2f2">
+            android:layout_height="60dp"
+            android:orientation="horizontal"
+            android:background="#f2f2f2"
+            android:layout_marginBottom="0dp"
+            android:layout_alignParentBottom="true">
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="42dp"
+                android:layout_weight="1"
+                android:layout_margin="8dp"
+                android:background="@drawable/comment_inoput_pg"/>
 
             <ImageView
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_marginTop="25dp"
-                android:padding="15dp"
-                android:src="@mipmap/back_white" />
-
-            <TextView
-                android:id="@+id/title_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#00000000"
-                android:text="猿村"
-                android:layout_marginTop="34dp"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                android:layout_centerHorizontal="true"/>
-
-            <ImageView
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:src="@mipmap/question"
-                android:padding="15dp"
-                android:layout_marginTop="25dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_gravity="center_vertical"
-                android:layout_alignParentRight="true"/>
-
-        </RelativeLayout>
-
-
-    </FrameLayout>
-
-
+                android:src="@mipmap/coy"
+                android:scaleType="fitXY"
+                android:background="#eee"
+                />
+            <TextView
+                android:layout_width="60dp"
+                android:textColor="#aaaaaa"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:layout_height="match_parent"
+                android:layout_margin="12dp"
+                android:background="@drawable/send_btn_normal_bg"
+                android:text="发送"/>
+        </LinearLayout>
+    </RelativeLayout>
 
 </layout>
