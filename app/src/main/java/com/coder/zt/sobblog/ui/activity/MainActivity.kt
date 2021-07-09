@@ -11,15 +11,12 @@ import com.coder.zt.sobblog.ui.fragment.MineFragment
 import com.coder.zt.sobblog.ui.fragment.DiscoveryFragment
 import com.coder.zt.sobblog.ui.fragment.OtherFragment
 
-class MainActivity : BaseActivity() {
+class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     companion object{
         private const val TAG = "MainActivity"
     }
 
-    private val data:ActivityMainBinding by lazy {
-        DataBindingUtil.setContentView(this, R.layout.activity_main)
-    }
 
 
 
@@ -30,15 +27,15 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initView() {
-        data.tableBar.apply {
+        dataBinding.tableBar.apply {
             addTab(newTab().setText("首页").setIcon(R.mipmap.ic_launcher))
             addTab(newTab().setText("摸鱼").setIcon(R.mipmap.ic_launcher))
             addTab(newTab().setText("其他").setIcon(R.mipmap.ic_launcher))
             addTab(newTab().setText("我").setIcon(R.mipmap.ic_launcher))
         }
         val adapter = HomePagerAdapter(supportFragmentManager, listOf(IndexFragment(),DiscoveryFragment(),OtherFragment(),MineFragment()))
-        data.viewPager.adapter = adapter
-        data.viewPager.currentItem = 1
+        dataBinding.viewPager.adapter = adapter
+        dataBinding.viewPager.currentItem = 1
     }
 
     private fun initData() {
@@ -48,5 +45,9 @@ class MainActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
 
+    }
+
+    override fun getLayoutId(): Int {
+        return R.layout.activity_main
     }
 }

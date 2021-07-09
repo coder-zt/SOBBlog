@@ -15,17 +15,13 @@ import com.coder.zt.sobblog.utils.ScreenUtils
 import com.coder.zt.sobblog.viewmodel.MoYuViewModel
 import com.google.gson.Gson
 
-class MoYuActivity:BaseActivity() {
+class MoYuActivity:BaseActivity<ActivityMoyuBinding>() {
 
 
     companion object{
         private const val TAG = "MoYuActivity"
     }
-    
 
-    val dataBinding: ActivityMoyuBinding by lazy {
-        DataBindingUtil.setContentView(this, R.layout.activity_moyu)
-    }
 
     val moyuViewModel: MoYuViewModel by lazy {
         ViewModelProvider(this).get(MoYuViewModel::class.java)
@@ -111,5 +107,9 @@ class MoYuActivity:BaseActivity() {
     override fun onResume() {
         super.onResume()
         moyuViewModel.getRecommendMiniFeed(1)
+    }
+
+    override fun getLayoutId(): Int {
+        return R.layout.activity_moyu
     }
 }

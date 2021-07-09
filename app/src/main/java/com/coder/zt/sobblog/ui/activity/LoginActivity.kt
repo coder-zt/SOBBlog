@@ -24,14 +24,12 @@ import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 
 
-class LoginActivity:BaseActivity() {
+class LoginActivity:BaseActivity<ActivityLoginBinding>() {
 
     val userViewModel:UserViewModel by lazy {
         ViewModelProvider(this).get(UserViewModel::class.java)
     }
-    val dataBinding:ActivityLoginBinding by lazy{
-        DataBindingUtil.setContentView(this, R.layout.activity_login)
-    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initView()
@@ -95,6 +93,10 @@ class LoginActivity:BaseActivity() {
             startActivity(intent)
             finish()
         }
+    }
+
+    override fun getLayoutId(): Int {
+        return R.layout.activity_login
     }
 
 }
