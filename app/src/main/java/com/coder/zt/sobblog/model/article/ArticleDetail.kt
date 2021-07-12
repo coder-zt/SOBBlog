@@ -1,13 +1,6 @@
 package com.coder.zt.sobblog.model.article
 
-data class ArticleDetailResponse(
-    val code: Int,
-    val `data`: Data,
-    val message: String,
-    val success: Boolean
-)
-
-data class Data(
+data class ArticleDetail(
     val articleType: String,
     val avatar: String,
     val categoryId: String,

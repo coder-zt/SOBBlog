@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.webkit.WebView
+import java.lang.Math.abs
 
 class ArticleWebView(context: Context, attrs: AttributeSet):WebView(context, attrs) {
 
@@ -26,10 +27,39 @@ class ArticleWebView(context: Context, attrs: AttributeSet):WebView(context, att
         Log.d(TAG, "dispatchTouchEvent: ${super.dispatchTouchEvent(ev)}")
         return super.dispatchTouchEvent(ev)
     }
-    private  var perX:Float? = 0.0f
-    private  var perY:Float? = 0.0f
+    private  var startX:Float = 0.0f
+    private  var startY:Float = 0.0f
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-        Log.d(TAG, "onTouchEvent: ")
+        event?.let {
+            val currentX =event.x
+            val currentY = event.y
+                when (event.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        startX = currentX
+                        startY = currentY
+                    }
+                    MotionEvent.ACTION_MOVE -> {
+                        //纵向
+                        if(abs(currentX - startX)>abs(currentY - startY)){
+                            callback.invoke(false)
+                        //横向
+                        }else{
+                            callback.invoke(true)
+                        }
+                    }
+                    MotionEvent.ACTION_UP -> {
+                    }
+                    else -> {
+                    }
+                }
+        }
         return super.onTouchEvent(event)
     }
+
+    lateinit var callback: (vertical:Boolean)->Unit
+
+    fun setSlideListener(listener: (vertical:Boolean)->Unit){
+        callback = listener
+    }
+
 }

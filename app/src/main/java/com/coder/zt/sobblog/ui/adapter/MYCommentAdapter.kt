@@ -9,37 +9,58 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.coder.zt.sobblog.R
+import com.coder.zt.sobblog.databinding.RvMoyuCommentTopBinding
 import com.coder.zt.sobblog.databinding.RvMoyuInteractionBinding
 import com.coder.zt.sobblog.model.moyu.MoYuDataDisplay
 
-class MYCommentAdapter(val likeCount:Int, val comment: List<MoYuDataDisplay.MiniFeed.Comment>) : RecyclerView.Adapter<MYCommentAdapter.ItemView>() {
+class MYCommentAdapter( val callback:(code: MoYuAdapter.DO_TYPE, data:Any) -> Unit)
+    :RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
     companion object{
         private const val TAG = "MYCommentAdapter"
         private const val parentComment:String = "parent_comment"
     }
-    private val DATA_TYPE_LIKE:Int = 0
+    private val DATA_TYPE_TOP:Int = 0
     private val DATA_TYPE_COMMENT:Int = 1
     private val DATA_TYPE_REPLY:Int = 2
-    private val noLikes:Int = 0
+
     private val mCommentData:MutableList<CommentDataBean> = mutableListOf()
-    private var hasLikes = 0
-    init {
-        hasLikes = if(likeCount > 0){
-            1
-        }else{
-            0
-        }
-        for (comment in comment) {
+
+
+    fun setData(comments: List<MoYuDataDisplay.MiniFeed.Comment>){
+        Log.d(TAG, "setData: ${comments.size}")
+        for (comment in comments) {
             mCommentData.add(CommentDataBean(comment.nickname, parentComment, comment.content))
             for (subComment in comment.subComments) {
                 mCommentData.add(CommentDataBean(subComment.nickname, subComment.targetUserNickname, subComment.content))
             }
         }
+        notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):ItemView {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):RecyclerView.ViewHolder {
+         when (viewType) {
+            DATA_TYPE_TOP ->{
+                    val inflate = DataBindingUtil.inflate<RvMoyuCommentTopBinding>(
+                        LayoutInflater.from(parent.context),
+                        R.layout.rv_moyu_comment_top,
+                        parent,
+                        false
+                    )
+                    return TopView(inflate)
+                }
+            DATA_TYPE_REPLY,
+            DATA_TYPE_COMMENT -> {
+                val inflate = DataBindingUtil.inflate<RvMoyuInteractionBinding>(
+                    LayoutInflater.from(parent.context),
+                    R.layout.rv_moyu_interaction,
+                    parent,
+                    false
+                )
+                return ItemView(inflate)
+            }
+        }
         val inflate = DataBindingUtil.inflate<RvMoyuInteractionBinding>(
             LayoutInflater.from(parent.context),
             R.layout.rv_moyu_interaction,
@@ -49,43 +70,40 @@ class MYCommentAdapter(val likeCount:Int, val comment: List<MoYuDataDisplay.Mini
         return ItemView(inflate)
     }
 
-    override fun onBindViewHolder(holder: ItemView, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (getItemViewType(position)) {
-            DATA_TYPE_LIKE -> {
-                if(itemCount > 1){
-                    holder.setData(likeCount, CommentDataBean("有点赞","有评论","显示分割线"))
-                }else{
-                    holder.setData(likeCount, null)
-                }
+            DATA_TYPE_TOP -> {
+                (holder as TopView).setData(CommentDataBean("有点赞","有评论","显示分割线"), callback)
             }
             DATA_TYPE_REPLY,
             DATA_TYPE_COMMENT -> {
-                holder.setData(noLikes, mCommentData[position - hasLikes])
+                (holder as ItemView).setData(mCommentData[position - 1], callback)
             }
         }
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if(position == 0 && likeCount > 0){//当有人点赞时显示点赞情况
-            DATA_TYPE_LIKE
-        }else if(mCommentData[position - hasLikes].to == parentComment){
+        return if(position == 0){//当有人点赞时显示点赞情况
+            DATA_TYPE_TOP
+        }else if(mCommentData[position - 1].to == parentComment){
             DATA_TYPE_COMMENT
         }else{
             DATA_TYPE_COMMENT
         }
     }
     override fun getItemCount(): Int {
-        return mCommentData.size + hasLikes
+        Log.d(TAG, "getItemCount: ")
+        return mCommentData.size + 1
     }
 
    data class CommentDataBean(val from:String, val to:String, val content:String)
 
     class ItemView(val inflate: RvMoyuInteractionBinding?) : RecyclerView.ViewHolder(inflate!!.root) {
         @SuppressLint("SetTextI18n")
-        fun setData(likeCount: Int, commentDataBean: CommentDataBean?) {
+        fun setData(commentDataBean: CommentDataBean?,callback:(code: MoYuAdapter.DO_TYPE, data:Any) -> Unit) {
             inflate?.diver?.visibility = View.GONE
             //评论
-            if(likeCount == 0){
+            if(commentDataBean?.from != "有点赞"){
                 if(commentDataBean?.to == parentComment){
                     Log.d(TAG, "setData 父评论: $commentDataBean")
                     inflate?.content?.text = Html.fromHtml( "<font color=\"#294F6C\">${commentDataBean.from}</font><font color=\"#000000\">:${commentDataBean.content}</font>")
@@ -93,12 +111,17 @@ class MYCommentAdapter(val likeCount:Int, val comment: List<MoYuDataDisplay.Mini
                     Log.d(TAG, "setData 子评论: $commentDataBean")//
                     inflate?.content?.text = Html.fromHtml( "<font color=\"#294F6C\">${commentDataBean?.from}</font><font color=\"#000000\">回复</font><font color=\"#294F6C\">${commentDataBean?.to}</font><font color=\"#000000\">:${commentDataBean?.content}</font>")
                 }
-            //点赞人数
-            }else{
-                commentDataBean?.apply {
-                    inflate?.diver?.visibility = View.VISIBLE
-                }
-                inflate?.content?.text = "有${likeCount}个觉得很赞"
+            }
+        }
+
+
+    }
+
+    class TopView(val inflate: RvMoyuCommentTopBinding?) : RecyclerView.ViewHolder(inflate!!.root) {
+
+        fun setData(commentDataBean: CommentDataBean,callback:(code: MoYuAdapter.DO_TYPE, data:Any) -> Unit) {
+            inflate?.root?.setOnClickListener{
+                callback.invoke(MoYuAdapter.DO_TYPE.COMMENT, "ID")
             }
         }
 

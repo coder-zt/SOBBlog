@@ -44,10 +44,10 @@ class UserViewModel:ViewModel() {
     fun checkToken(){
         viewModelScope.launch {
             val response = UserRepository.getInstance().checkToken()
-            if(response.success && response.data != null){
-                val infoStr = GsonUtils.getInstance().toJson(response.data)
-                val userInfo = GsonUtils.getInstance().fromJson(infoStr, SobUserInfo::class.java)
-                UserDataMan.save(userInfo)
+            if(response.success){
+//                val infoStr = GsonUtils.getInstance().toJson(response.data)
+//                val userInfo = GsonUtils.getInstance().fromJson(infoStr, SobUserInfo::class.java)
+                UserDataMan.save(response.data)
             }
             loginMessage.postValue(response.message)
             loginResult.postValue(response.success)

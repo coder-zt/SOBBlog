@@ -1,21 +1,5 @@
 package com.coder.zt.sobblog.model.moyu
 
-data class MoYuList(
-    val code: Int,
-    val `data`: Data,
-    val message: String,
-    val success: Boolean
-)
-
-data class Data(
-    val currentPage: Int,
-    val hasNext: Boolean,
-    val hasPre: Boolean,
-    val list: List<MiniFeed>,
-    val pageSize: Int,
-    val total: Int,
-    val totalPage: Int
-)
 
 data class MiniFeed(
     val avatar: String,
@@ -33,7 +17,7 @@ data class MiniFeed(
     val thumbUpCount: Int,
     val thumbUpList: List<String>,
     val topicId: Any,
-    val topicName: Any,
+    val topicName: String,
     val userId: String,
     val vip: Boolean
 )

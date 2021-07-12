@@ -9,7 +9,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 object ServiceCreator {
 
     private val httpLoggingInterceptor =
-        HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BASIC }
+        HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BASIC
+        }
 
     val cookieJar by lazy {
         CookiesManager()

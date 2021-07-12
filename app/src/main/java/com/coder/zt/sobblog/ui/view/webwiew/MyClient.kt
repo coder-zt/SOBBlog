@@ -12,6 +12,6 @@ class MyClient:WebViewClient() {
     override fun onPageFinished(view: WebView?, url: String?) {
         super.onPageFinished(view, url)
         Log.d(TAG, "onPageFinished:${url} ")
-        view?.loadUrl("javascript:start()")
+        view?.loadUrl("javascript:addTouchListener()")
     }
 }

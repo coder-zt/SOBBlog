@@ -6,7 +6,7 @@
     <data>
 <variable
     name="data"
-    type="com.coder.zt.sobblog.model.article.Data" />
+    type="com.coder.zt.sobblog.model.article.ArticleDetail" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -37,6 +37,7 @@
         </LinearLayout>
 
         <com.coder.zt.sobblog.ui.view.WebViewScrollView
+            android:id="@+id/wbsv"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"

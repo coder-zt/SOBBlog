@@ -2,10 +2,10 @@ package com.coder.zt.sobblog.repository
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.os.FileUtils
 import android.util.Log
-import com.coder.zt.sobblog.model.base.ServerResponse
+import com.coder.zt.sobblog.model.base.ResponseData
 import com.coder.zt.sobblog.model.user.LoginInfo
+import com.coder.zt.sobblog.model.user.SobUserInfo
 import com.coder.zt.sobblog.net.UserNetWork
 import java.io.IOException
 import java.util.*
@@ -29,7 +29,7 @@ class UserRepository {
         }
 
     }
-    suspend fun login(captcha:String, loginInfo: LoginInfo): ServerResponse {
+    suspend fun login(captcha:String, loginInfo: LoginInfo): ResponseData<String> {
         val netWork = UserNetWork.getInstance().login(captcha, loginInfo)
         Log.d(TAG, "login: $netWork")
         return netWork
@@ -49,7 +49,7 @@ class UserRepository {
     }
 
 
-    suspend fun checkToken(): ServerResponse {
+    suspend fun checkToken(): ResponseData<SobUserInfo> {
         val netWork = UserNetWork.getInstance().checkToken()
         Log.d(TAG, "login: ${netWork.data}")
         return netWork

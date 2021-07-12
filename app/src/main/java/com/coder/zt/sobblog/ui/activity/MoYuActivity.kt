@@ -3,6 +3,8 @@ package com.coder.zt.sobblog.ui.activity
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.coder.zt.sobblog.R
@@ -22,8 +24,11 @@ class MoYuActivity:BaseActivity<ActivityMoyuBinding>() {
         private const val TAG = "MoYuActivity"
     }
 
+    lateinit var commentIdTemp:String
 
-    val moyuViewModel: MoYuViewModel by lazy {
+
+
+    private val moyuViewModel: MoYuViewModel by lazy {
         ViewModelProvider(this).get(MoYuViewModel::class.java)
     }
 
@@ -34,14 +39,28 @@ class MoYuActivity:BaseActivity<ActivityMoyuBinding>() {
                     moyuViewModel.thumbUP(any as String)
                 }
                 MoYuAdapter.DO_TYPE.COMMENT ->{
-                    moyuViewModel.thumbUP(any as String)
+                    commentMinifeed(any as String)
                 }
                 MoYuAdapter.DO_TYPE.REPLY ->{
                     moyuViewModel.thumbUP(any as String)
                 }
+                MoYuAdapter.DO_TYPE.GET_COMMENT ->{
+                    moyuViewModel.getMiniFeedComment(any as String)
+                }
             }
 
         }
+    }
+
+    /**
+     * 评论动态
+     */
+    private fun commentMinifeed(minifeedId: String) {
+        commentIdTemp = minifeedId
+        dataBinding.commentBarLl.visibility = View.VISIBLE
+        dataBinding.commentInputEt.requestFocus()
+        val imm =  getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.showSoftInput(dataBinding.commentInputEt, InputMethodManager.SHOW_IMPLICIT)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,18 +94,36 @@ class MoYuActivity:BaseActivity<ActivityMoyuBinding>() {
 
             })
             pullView.setContentSlideListener {
-                adapter.checkChildrenState()
+                Log.d(TAG, "initView: it ---> $it")
+                if(it != 0){
+//                    adapter.checkChildrenState()
+                    val imm =  getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                    val v = window.peekDecorView()
+                    if (null != v) {
+                        imm.hideSoftInputFromWindow(v.windowToken, 0)
+                    }
+                    dataBinding.commentBarLl.visibility = View.GONE
+                    commentIdTemp = ""
+                    moyuViewModel?.comment?.postValue("")
+                }
                 Log.d(TAG, "initView: $it")
-                var value = moyuViewModel.slideDistance.value
+                var value = moyuViewModel?.slideDistance?.value
                 if (value != null) {
                     value += it
-                    moyuViewModel.slideDistance.value = value
+                    moyuViewModel?.slideDistance?.value = value
                 }
+            }
+        }
+        dataBinding.commentSendTv.setOnClickListener {
+            val content = moyuViewModel.comment.value
+            if (!content.isNullOrBlank() && !commentIdTemp.isEmpty()) {
+                moyuViewModel.sendCommend(content!!, commentIdTemp)
             }
         }
     }
 
     private fun initData() {
+        dataBinding.moyuViewModel = moyuViewModel
         moyuViewModel.moyuDisplayData.observe(this){
             Log.d(TAG, "initData: ${Gson().toJson(it)}")
             adapter.setData(it.data)
@@ -101,6 +138,18 @@ class MoYuActivity:BaseActivity<ActivityMoyuBinding>() {
             }
             dataBinding.topBarRl.setBackgroundColor(Color.argb(a,242,242,242))
             dataBinding.titleTv.setTextColor(Color.argb(a,0,0,0))
+        }
+        moyuViewModel.comment.observe(this){
+            if(it.isNotEmpty()){
+                dataBinding.commentSendTv.setBackgroundResource(R.drawable.send_btn_active_bg)
+                dataBinding.commentSendTv.setTextColor(Color.WHITE)
+            }else{
+                dataBinding.commentSendTv.setBackgroundResource(R.drawable.send_btn_normal_bg)
+                dataBinding.commentSendTv.setTextColor(Color.GRAY)
+            }
+        }
+        moyuViewModel.feedComment.observe(this){
+            adapter.setComment(it)
         }
     }
 

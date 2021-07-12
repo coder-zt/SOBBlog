@@ -4,7 +4,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,10 +14,8 @@ import com.coder.zt.sobblog.R
 import com.coder.zt.sobblog.databinding.MoyoTopViewBinding
 import com.coder.zt.sobblog.databinding.RvMoyuBinding
 import com.coder.zt.sobblog.model.datamanager.UserDataMan
-import com.coder.zt.sobblog.model.moyu.MiniFeed
 import com.coder.zt.sobblog.model.moyu.MoYuDataDisplay
 import com.coder.zt.sobblog.utils.ScreenUtils
-import com.coder.zt.sobblog.utils.ToastUtils
 
 /**
  * 摸鱼板块的内容
@@ -34,6 +31,7 @@ class MoYuAdapter(val callback:(code:DO_TYPE, data:Any) -> Unit): RecyclerView.A
     enum class DO_TYPE{
         REPLY,
         COMMENT,
+        GET_COMMENT,
         THUMB_UP
     }
     private val TOP_VIEW:Int = 0
@@ -108,47 +106,38 @@ class MoYuAdapter(val callback:(code:DO_TYPE, data:Any) -> Unit): RecyclerView.A
         }
     }
 
+    fun setComment(it: MutableList<MoYuDataDisplay.MiniFeed.Comment>) {
+        for (contentView in contentViewSet) {
+            contentView.setComment(it)
+        }
+    }
+
     class ContentView(val inflate:RvMoyuBinding) :RecyclerView.ViewHolder(inflate.root){
 
         private var showExpansion = false
+        private var requestComment = false
+        private lateinit var adapter:MYCommentAdapter
         fun setData(miniFeed: MoYuDataDisplay.MiniFeed, position: Int,listener:()->Unit,callback:(code:DO_TYPE, data:Any) -> Unit) {
+            requestComment = false
             inflate.data = miniFeed
-            val picSize = miniFeed.images.size
-            inflate.doBtn.setOnClickListener(object:View.OnClickListener{
-                override fun onClick(v: View?) {
-                    inflate.doEll.apply {
-                        listener.invoke()
-                        showExpansion = switchShowState()
-                    }
-                }
-            })
+            Log.d(TAG, "setData:  $position ---> ${miniFeed.nickName} ===> like count ${miniFeed.thumbUpCount}")
+            //展示评论、点赞数量
             val userId = UserDataMan.getUserInfo()?.id
-            Log.d(TAG, "setData: $userId")
-            if (miniFeed.thumbUpList.contains(userId)) {
-                inflate.tvThumb.text = "已赞"
+            if(miniFeed.thumbUpList.contains(userId)){
+                inflate.zanIv.setImageResource(R.mipmap.ic_liked_blue)
             }else{
-                inflate.tvThumb.text = "赞"
+                inflate.zanIv.setImageResource(R.mipmap.zan_grey_feidian3)
             }
-            inflate.thumbBtnLl.setOnClickListener {
-                if(inflate.tvThumb.text == "已赞"){
-                    ToastUtils.showError("渣男！你是想取消点赞吗？")
-                }else{
-                    callback.invoke(DO_TYPE.THUMB_UP, miniFeed.id)
-                }
-            }
-            inflate.commentBtnLl.setOnClickListener {
-                callback.invoke(DO_TYPE.COMMENT, miniFeed.id)
-            }
-            Log.d(TAG, "setData:  $position ---> $picSize")
-            //展示评论数据
-            if(miniFeed.commentCount == 0 && miniFeed.thumbUpCount == 0){
-                inflate.rvComment.visibility = View.GONE
-                return
+            //话题
+            if (miniFeed.topic.isNullOrEmpty()) {
+                inflate.topicTv.visibility = View.GONE
             }else{
-                inflate.rvComment.visibility = View.VISIBLE
-                inflate.rvComment.adapter = MYCommentAdapter(miniFeed.thumbUpCount, miniFeed.comment)
+                inflate.topicTv.visibility = View.VISIBLE
             }
+
+            setListener(callback, miniFeed)
             // 设置动态图片显示的样式
+            val picSize = miniFeed.images.size
             if(picSize == 0){
                 inflate.recyclerView.visibility = View.GONE
                 return
@@ -163,13 +152,55 @@ class MoYuAdapter(val callback:(code:DO_TYPE, data:Any) -> Unit): RecyclerView.A
             inflate.recyclerView.layoutManager =
                 GridLayoutManager(inflate.root.context, span)
             inflate.recyclerView.adapter = GridImagesAdapter(picSize, miniFeed.images)
+
+
+        }
+
+        private fun setListener(
+            callback: (code: DO_TYPE, data: Any) -> Unit,
+            miniFeed: MoYuDataDisplay.MiniFeed
+        ) {
+            //设置点击事件
+            inflate.zanLl.setOnClickListener {
+                callback.invoke(DO_TYPE.THUMB_UP, miniFeed.id)
+            }
+            inflate.commentLl.setOnClickListener {
+                Log.d(TAG, "setListener: $showExpansion")
+                if(!showExpansion){
+                    inflate.rvComment.visibility = View.VISIBLE
+                    inflate.triangleView.visibility = View.VISIBLE
+                    adapter = MYCommentAdapter(callback)
+                    inflate.rvComment.adapter = adapter
+                    showExpansion = true
+                    if(miniFeed.commentCount > 0){
+                        requestComment = true
+                        callback.invoke(DO_TYPE.GET_COMMENT, miniFeed.id)
+                    }
+                    Log.d(TAG, "setListener visible: $showExpansion")
+                }else{
+                    inflate.rvComment.visibility = View.GONE
+                    inflate.triangleView.visibility = View.GONE
+                    showExpansion = false
+                    requestComment = false
+                    Log.d(TAG, "setListener gone: $showExpansion")
+                }
+
+            }
         }
 
         fun checkShowExpansion(){
+            Log.d(TAG, "checkShowExpansion: ")
             if (showExpansion) {
-                inflate.doEll.apply {
-                    showExpansion = switchShowState()
-                }
+                inflate.rvComment.visibility = View.GONE
+                inflate.triangleView.visibility = View.GONE
+                showExpansion = false
+            }
+        }
+
+        fun setComment(it: MutableList<MoYuDataDisplay.MiniFeed.Comment>) {
+            if (requestComment) {
+                adapter.setData(it)
+                requestComment = false
             }
         }
 
@@ -191,3 +222,5 @@ class MoYuAdapter(val callback:(code:DO_TYPE, data:Any) -> Unit): RecyclerView.A
     }
 
 }
+
+

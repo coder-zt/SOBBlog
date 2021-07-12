@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:id="@+id/comment_bar_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="60dp"
+        android:orientation="horizontal"
+        android:background="@color/white"
+        android:layout_marginBottom="0dp"
+        android:layout_alignParentBottom="true">
+
+        <TextView
+            android:id="@+id/comment_input_et"
+            android:layout_width="0dp"
+            android:minHeight="42dp"
+            android:padding="6dp"
+            android:gravity="center_vertical"
+            android:text="@string/str_comment_hint"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="8dp"
+            android:background="@drawable/comment_inoput_bg" />
+
+        <TextView
+            android:id="@+id/comment_send_tv"
+            android:layout_width="60dp"
+            android:textColor="#aaaaaa"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:layout_gravity="center_vertical"
+            android:layout_height="36dp"
+            android:layout_margin="12dp"
+            android:background="@drawable/send_btn_active_bg"
+            android:text="评论" />
+
+    </LinearLayout>
+</layout>

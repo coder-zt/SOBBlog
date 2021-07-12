@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
+        <variable
+            name="moyuViewModel"
+            type="com.coder.zt.sobblog.viewmodel.MoYuViewModel" />
     </data>
 
     <RelativeLayout
@@ -130,19 +132,27 @@
         </FrameLayout>
 
         <LinearLayout
+            android:id="@+id/comment_bar_ll"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
+            android:minHeight="60dp"
             android:orientation="horizontal"
             android:background="#f2f2f2"
+            android:visibility="gone"
             android:layout_marginBottom="0dp"
             android:layout_alignParentBottom="true">
 
             <EditText
+                android:id="@+id/comment_input_et"
                 android:layout_width="0dp"
-                android:layout_height="42dp"
+                android:minHeight="42dp"
+                android:padding="6dp"
+                android:hint="评论"
+                android:text="@={moyuViewModel.comment}"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_margin="8dp"
-                android:background="@drawable/comment_inoput_pg"/>
+                android:background="@drawable/comment_inoput_bg"/>
 
             <ImageView
                 android:layout_width="40dp"
@@ -150,14 +160,15 @@
                 android:layout_gravity="center_vertical"
                 android:src="@mipmap/coy"
                 android:scaleType="fitXY"
-                android:background="#eee"
                 />
             <TextView
+                android:id="@+id/comment_send_tv"
                 android:layout_width="60dp"
                 android:textColor="#aaaaaa"
                 android:gravity="center"
                 android:textSize="16sp"
-                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_height="36dp"
                 android:layout_margin="12dp"
                 android:background="@drawable/send_btn_normal_bg"
                 android:text="发送"/>
