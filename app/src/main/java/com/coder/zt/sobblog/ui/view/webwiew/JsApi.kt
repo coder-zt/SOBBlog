@@ -14,8 +14,7 @@ class JsApi(val callback:(code:EventCode)->Unit):Object() {
         Event_UP,
         Event_DOWN
     }
-    // 定义JS需要调用的方法
-    // 被JS调用的方法必须加入@JavascriptInterface注解
+
     @JavascriptInterface
     fun log(msg: String?) {
         Log.d(TAG, "log: $msg")
@@ -23,7 +22,7 @@ class JsApi(val callback:(code:EventCode)->Unit):Object() {
 
     @JavascriptInterface
     fun touchEvent(eventCode: Int) {
-        Log.d(TAG, "log: $eventCode")
+        Log.d(TAG, "touchEvent: $eventCode")
         when(eventCode){
             0 -> callback.invoke(EventCode.Event_DOWN)
             1 -> callback.invoke(EventCode.Event_MOVE)

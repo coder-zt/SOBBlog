@@ -19,7 +19,7 @@
             android:layout_width="0dp"
             android:layout_height="74dp"
             android:paddingTop="26dp"
-            android:background="@color/teal_700"
+            android:background="@color/theme_blue"
             android:gravity="center"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
@@ -166,34 +166,95 @@
                     android:gravity="center"
                     app:layout_constraintTop_toBottomOf="@+id/wv_article">
 
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:background="@drawable/gray_boroad_bg">
+
+                        <ImageView
+                            android:id="@+id/zan_iv"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginStart="6dp"
+                            android:background="@mipmap/zan_grey_feidian3"/>
+
+                        <TextView
+                            android:id="@+id/zan_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="6dp"
+                            android:text="@{data.thumbUp + `人觉得牛逼`}"
+                            android:textSize="16sp" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:layout_marginStart="12dp"
+                        android:background="@drawable/gray_boroad_bg">
+
+                        <ImageView
+                            android:id="@+id/collect_iv"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginStart="6dp"
+                            android:background="@mipmap/zan_grey_feidian3"/>
+
+                        <TextView
+                            android:id="@+id/collect_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="20dp"
+                            android:text="收藏"
+                            android:layout_margin="6dp"
+                            android:layout_marginStart="6dp"
+                            android:textSize="16sp" />
+
+                    </LinearLayout>
+
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-
-                        android:text="0人觉得牛逼"
-                        android:textSize="20sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="20dp"
-                        android:text="收藏"
-                        android:textSize="20sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="打赏"
-                        android:textSize="20sp" />
+                        android:text="$ 打赏"
+                        android:background="@drawable/gray_boroad_bg"
+                        android:layout_marginStart="12dp"
+                        android:padding="6dp"
+                        android:textSize="16sp" />
 
                 </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_reward"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="20dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
+
+                <View
+                    android:id="@+id/diver_1"
+                    android:layout_width="0dp"
+                    android:layout_height="36dp"
+                    android:background="@color/diver_line_color"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/rv_reward" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_comment"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/diver_1" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

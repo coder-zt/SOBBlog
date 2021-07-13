@@ -1,6 +1,8 @@
 package com.coder.zt.sobblog.repository
 
+import com.coder.zt.sobblog.model.article.ArticleComment
 import com.coder.zt.sobblog.model.article.ArticleDetail
+import com.coder.zt.sobblog.model.user.RewardUserInfo
 import com.coder.zt.sobblog.net.ArticleNetWork
 
 
@@ -25,5 +27,13 @@ class ArticleRepository {
 
     suspend fun getArticleDetail(id:String):ArticleDetail{
         return ArticleNetWork.getInstance().getArticleDetail(id).data
+    }
+
+    suspend fun getArticleReward(id: String): List<RewardUserInfo> {
+        return ArticleNetWork.getInstance().getArticleReward(id).data
+    }
+
+    suspend fun getArticleComment(id: String, page:Int): List<ArticleComment> {
+        return ArticleNetWork.getInstance().getArticleComment(id, page).data.content
     }
 }

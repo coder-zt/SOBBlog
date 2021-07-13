@@ -4,4 +4,7 @@
     <string name="str_comment">评论</string>
     <string name="str_share">分享</string>
     <string name="str_comment_hint">文明评论，让这个世界变得更美好些...</string>
+    <string name="str_reward_name">打赏人</string>
+    <string name="sunf">Sunf币</string>
+    <string name="time">时间</string>
 </resources>

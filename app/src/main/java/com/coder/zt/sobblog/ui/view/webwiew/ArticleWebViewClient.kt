@@ -4,7 +4,7 @@ import android.util.Log
 import android.webkit.WebView
 import android.webkit.WebViewClient
 
-class MyClient:WebViewClient() {
+class ArticleWebViewClient:WebViewClient() {
 
     companion object{
         private const val TAG = "MyClient"

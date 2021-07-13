@@ -1,6 +1,6 @@
 package com.coder.zt.sobblog.model.base
 
-import com.coder.zt.sobblog.model.moyu.MiniFeed
+
 
 data class ResponseList<T>(val code: Int,
                            val `data`: ResponseListData<T>,

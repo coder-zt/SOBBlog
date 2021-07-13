@@ -17,15 +17,6 @@ class WebViewScrollView(context: Context, attrs: AttributeSet):ScrollView(contex
         return super.onInterceptTouchEvent(ev) && isSlide
     }
 
-    override fun onTouchEvent(ev: MotionEvent?): Boolean {
-        Log.d(TAG, "onTouchEvent: ")
-        return super.onTouchEvent(ev)
-    }
-
-    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
-        Log.d(TAG, "dispatchTouchEvent: ${super.dispatchTouchEvent(ev)}")
-        return super.dispatchTouchEvent(ev)
-    }
 
     fun setSlide(slide: Boolean){
         isSlide = slide
