@@ -7,6 +7,8 @@ import com.coder.zt.sobblog.net.base.NetWorkBase
 class ArticleNetWork: NetWorkBase() {
     private val articleService = ServiceCreator.create(ArticleApi::class.java)
 
+    suspend fun getRecommendArticleList(page:Int) = articleService.recommendArticleList(page).await()
+
     suspend fun getArticleDetail(id:String) = articleService.articleDetail(id).await()
 
     suspend fun getArticleReward(id: String) = articleService.articleReward(id).await()

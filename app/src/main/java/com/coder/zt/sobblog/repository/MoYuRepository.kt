@@ -12,20 +12,20 @@ class MoYuRepository {
         val recommend = MoYuNetWork.getInstance().getRecommendMinifeed(page)
         return if (recommend.code == Constants.SUCCESS_CODE) {
             val displayMiniFeed = mutableListOf<MoYuDataDisplay.MiniFeed>()
-            for (miniFeed in recommend.data.list) {
+            for (miniFeed in recommend.data.c) {
                 val displayComments = mutableListOf<MoYuDataDisplay.MiniFeed.Comment>()
                 displayMiniFeed.add(MoYuDataDisplay.MiniFeed(miniFeed, displayComments))
             }
-            MoYuDataDisplay(recommend.data.currentPage, displayMiniFeed)
+            MoYuDataDisplay(1, displayMiniFeed)
         }else{
-            MoYuDataDisplay(recommend.data.currentPage, listOf())
+            MoYuDataDisplay(0, listOf())
         }
     }
 
     suspend fun getMinifeedComment(commentId:String, page:Int):List<MYComment>{
         val comment = MoYuNetWork.getInstance().getMinifeedComment(commentId, page)
         return if (comment.code == Constants.SUCCESS_CODE) {
-            comment.data.list
+            comment.data.data.list
         }else{
             listOf()
         }

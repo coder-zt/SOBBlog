@@ -1,10 +1,12 @@
 package com.coder.zt.sobblog.ui.adapter
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.coder.zt.sobblog.R
+import com.coder.zt.sobblog.SOBApp
 import com.coder.zt.sobblog.databinding.RvBlankCommentBinding
 import com.coder.zt.sobblog.databinding.RvChildCommentBinding
 import com.coder.zt.sobblog.databinding.RvParentCommentBinding
@@ -81,9 +83,9 @@ class ArticleCommentAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     fun setData(data:List<ArticleComment>){
         for (datum in data) {
-            mData.add(Comment(datum))
-            for(sub in datum.subComments){
-                mData.add(Comment(sub))
+            mData.add(Comment(datum, datum.subComments.isEmpty()))
+            for((index, sub) in datum.subComments.withIndex()){
+                mData.add(Comment(sub, index + 1 == datum.subComments.size))
             }
             mData.add(Comment())
         }
@@ -94,6 +96,11 @@ class ArticleCommentAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         fun setData(get: Comment) {
             data.data = get
+            if(get.finally){
+                data.root.setBackgroundResource(R.drawable.rv_comment_one_bg)
+            }else{
+                data.root.setBackgroundResource(R.drawable.rv_comment_top_bg)
+            }
         }
 
     }
@@ -101,6 +108,11 @@ class ArticleCommentAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     class ChildView(val data:RvChildCommentBinding):RecyclerView.ViewHolder(data.root) {
         fun setData(get: Comment) {
             data.data = get
+            if(get.finally){
+                data.root.setBackgroundResource(R.drawable.rv_comment_bottom_bg)
+            }else{
+                data.root.setBackgroundResource(R.drawable.rv_comment_middle_bg)
+            }
         }
 
     }
@@ -121,9 +133,11 @@ class ArticleCommentAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         val publishTime: String,
         val role: String,
         val userId: String,
-        val vip: Boolean
+        val vip: Boolean,
+        val first:Boolean,
+        val finally:Boolean
     ){
-        constructor(comment:ArticleComment):this(
+        constructor(comment:ArticleComment, finally: Boolean):this(
             PARENT,
             comment._id,
             comment.articleId,
@@ -136,9 +150,11 @@ class ArticleCommentAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             comment.role?:"",
             comment.userId,
             comment.vip,
+            true,
+            finally
         )
 
-        constructor(comment:ArticleComment.SubComment):this(
+        constructor(comment:ArticleComment.SubComment, finally: Boolean):this(
             CHILD,
             comment._id,
             comment.articleId,
@@ -151,6 +167,8 @@ class ArticleCommentAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             comment.yourRole?:"",
             comment.beUid,
             comment.vip,
+            false,
+            finally
         )
         constructor():this(
             BLANK,
@@ -164,6 +182,8 @@ class ArticleCommentAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             "-1",
             "-1",
             "-1",
+            false,
+            false,
             false,
         )
     }

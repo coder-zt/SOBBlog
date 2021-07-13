@@ -1,7 +1,9 @@
 package com.coder.zt.sobblog.repository
 
+import android.util.Log
 import com.coder.zt.sobblog.model.article.ArticleComment
 import com.coder.zt.sobblog.model.article.ArticleDetail
+import com.coder.zt.sobblog.model.article.ArticleInfo
 import com.coder.zt.sobblog.model.user.RewardUserInfo
 import com.coder.zt.sobblog.net.ArticleNetWork
 
@@ -23,6 +25,11 @@ class ArticleRepository {
             return instance!!
         }
 
+    }
+
+    suspend fun getRecommendArticleList(page:Int):List<ArticleInfo>{
+        val i = ArticleNetWork.getInstance().getRecommendArticleList(page).data.list
+        return i
     }
 
     suspend fun getArticleDetail(id:String):ArticleDetail{

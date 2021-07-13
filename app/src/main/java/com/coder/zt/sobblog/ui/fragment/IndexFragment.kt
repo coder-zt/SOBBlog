@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.coder.zt.sobblog.R
 import com.coder.zt.sobblog.databinding.FragmentIndexBinding
+import com.coder.zt.sobblog.viewmodel.ArticleViewModel
 import com.coder.zt.sobblog.viewmodel.MoYuViewModel
 
 class IndexFragment:Fragment() {
@@ -19,7 +20,10 @@ class IndexFragment:Fragment() {
         private const val TAG = "IndexFragment"
     }
 
-    var dataBinding:FragmentIndexBinding? = null
+    private val articleModelView:ArticleViewModel by lazy{
+        ViewModelProvider(this).get(ArticleViewModel::class.java)
+    }
+    lateinit var dataBinding:FragmentIndexBinding
 
     @SuppressLint("InflateParams")
     override fun onCreateView(
@@ -30,7 +34,7 @@ class IndexFragment:Fragment() {
         Log.d(TAG, "onCreateView: ")
 
         val view = inflater.inflate(R.layout.fragment_index, container, false)
-        dataBinding = DataBindingUtil.bind(view)
+        dataBinding = DataBindingUtil.bind(view)!!
         initView()
         initData()
         return view
@@ -41,9 +45,19 @@ class IndexFragment:Fragment() {
     }
 
     private fun initData() {
+        articleModelView.articleList.observe(viewLifecycleOwner){
+            for (articleInfo in it) {
+                Log.d(TAG, "initData: $articleInfo")
+            }
+//            Log.d(TAG, "initData: ${it.size}")
+        }
     }
+    
 
     override fun onResume() {
         super.onResume()
+        dataBinding.root.setOnClickListener{
+            articleModelView.getRecommendArticleList(1)
+        }
     }
 }

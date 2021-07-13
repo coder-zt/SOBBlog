@@ -8,8 +8,14 @@ import com.bumptech.glide.request.RequestOptions
 import com.coder.zt.sobblog.utils.ScreenUtils
 import com.google.android.material.shape.CornerTreatment
 
-class DataBindingAdapter {
+@BindingAdapter(value=["pic_url", "pic_corner"], requireAll = true)
+fun setImageViewCorner(iv: ImageView, pic_url:String, pic_corner: Int){
+    val corners = RoundedCorners(ScreenUtils.dp2px(pic_corner))
+    val override = RequestOptions.bitmapTransform(corners)
+    //.override(ScreenUtils.dp2px(30f), ScreenUtils.dp2px(30f));
+    Glide.with(iv.context).load(pic_url).apply(override).into(iv)
 }
+
 
 @BindingAdapter("url")
 fun setImageViewRes(iv: ImageView, url:String){
@@ -18,3 +24,4 @@ fun setImageViewRes(iv: ImageView, url:String){
         //.override(ScreenUtils.dp2px(30f), ScreenUtils.dp2px(30f));
     Glide.with(iv.context).load(url).apply(override).into(iv)
 }
+

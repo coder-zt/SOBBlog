@@ -12,7 +12,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white">
+        android:background="@color/theme_gray">
 
         <LinearLayout
             android:id="@+id/top_bar_ll"
@@ -41,7 +41,9 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/top_bar_ll">
+            app:layout_constraintTop_toBottomOf="@+id/top_bar_ll"
+            app:layout_constraintVertical_bias="0.0"
+            tools:layout_editor_absoluteX="-40dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -51,9 +53,10 @@
                     android:id="@+id/article_title"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:background="@color/white"
                     android:gravity="center_vertical"
-                    android:textColor="@color/black"
                     android:text="@{data.title}"
+                    android:textColor="@color/black"
                     android:textSize="24sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -65,6 +68,7 @@
                     android:layout_width="0dp"
                     android:layout_height="150dp"
                     android:layout_marginTop="12dp"
+                    android:background="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/article_title" />
@@ -84,6 +88,7 @@
                     android:layout_height="48dp"
                     android:layout_margin="12dp"
                     android:layout_marginStart="12dp"
+                    android:background="@color/white"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/view" />
 
@@ -96,14 +101,24 @@
                     app:layout_constraintEnd_toStartOf="@+id/article_time"
                     app:layout_constraintStart_toEndOf="@+id/user_avatar"
                     app:layout_constraintTop_toTopOf="@+id/user_avatar" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@color/white"
+                    app:layout_constraintBottom_toTopOf="@+id/view3"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/article_cover" />
+
                 <TextView
                     android:id="@+id/username_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
-                    android:textSize="16sp"
-                    android:textColor="@color/black"
                     android:text="@{data.nickname}"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
                     app:layout_constraintStart_toEndOf="@+id/user_avatar"
                     app:layout_constraintTop_toTopOf="@+id/user_avatar" />
 
@@ -112,8 +127,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:textSize="12sp"
                     android:text="@{`发表于 `+data.createTime}"
+                    android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="@+id/username_tv"
                     app:layout_constraintTop_toBottomOf="@+id/username_tv" />
 
@@ -132,8 +147,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="6dp"
-                    android:textSize="12sp"
                     android:text="@{data.viewCount +``}"
+                    android:textSize="12sp"
                     app:layout_constraintBottom_toBottomOf="@+id/article_time"
                     app:layout_constraintStart_toEndOf="@+id/imageView2"
                     app:layout_constraintTop_toTopOf="@+id/article_time" />
@@ -155,6 +170,7 @@
                     android:fadingEdge="none"
                     android:minHeight="200dp"
                     android:overScrollMode="never"
+                    android:background="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/view3" />
@@ -164,20 +180,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:gravity="center"
+                    android:background="@color/white"
                     app:layout_constraintTop_toBottomOf="@+id/wv_article">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:background="@drawable/gray_boroad_bg">
+                        android:background="@drawable/gray_boroad_bg"
+                        android:gravity="center_vertical">
 
                         <ImageView
                             android:id="@+id/zan_iv"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:layout_marginStart="6dp"
-                            android:background="@mipmap/zan_grey_feidian3"/>
+                            android:background="@mipmap/zan_grey_feidian3" />
 
                         <TextView
                             android:id="@+id/zan_tv"
@@ -193,25 +210,25 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
                         android:layout_marginStart="12dp"
-                        android:background="@drawable/gray_boroad_bg">
+                        android:background="@drawable/gray_boroad_bg"
+                        android:gravity="center_vertical">
 
                         <ImageView
                             android:id="@+id/collect_iv"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:layout_marginStart="6dp"
-                            android:background="@mipmap/zan_grey_feidian3"/>
+                            android:background="@mipmap/zan_grey_feidian3" />
 
                         <TextView
                             android:id="@+id/collect_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="20dp"
-                            android:text="收藏"
                             android:layout_margin="6dp"
+                            android:layout_marginHorizontal="20dp"
                             android:layout_marginStart="6dp"
+                            android:text="收藏"
                             android:textSize="16sp" />
 
                     </LinearLayout>
@@ -220,10 +237,10 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="$ 打赏"
-                        android:background="@drawable/gray_boroad_bg"
                         android:layout_marginStart="12dp"
+                        android:background="@drawable/gray_boroad_bg"
                         android:padding="6dp"
+                        android:text="$ 打赏"
                         android:textSize="16sp" />
 
                 </LinearLayout>
@@ -232,9 +249,9 @@
                     android:id="@+id/rv_reward"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginTop="20dp"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
 
@@ -251,8 +268,8 @@
                     android:id="@+id/rv_comment"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/diver_1" />
 
