@@ -28,4 +28,8 @@ open abstract class BaseActivity<T:ViewDataBinding>:AppCompatActivity() {
             window.statusBarColor = Color.TRANSPARENT
         }
     }
+
+     fun onBack(view:View) {
+        finish()
+    }
 }

@@ -18,6 +18,8 @@ class MoYuNetWork: NetWorkBase() {
 
     suspend fun comment(comment: MYCommentSender) = moYuService.comment(comment).await()
 
+    suspend fun minifeedTopics() = moYuService.minifeedTopics().await()
+
 
     companion object{
 

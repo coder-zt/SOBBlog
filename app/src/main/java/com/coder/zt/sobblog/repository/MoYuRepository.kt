@@ -4,6 +4,7 @@ import com.coder.zt.sobblog.model.base.ResponseData
 import com.coder.zt.sobblog.model.moyu.MYComment
 import com.coder.zt.sobblog.model.moyu.MYCommentSender
 import com.coder.zt.sobblog.model.moyu.MoYuDataDisplay
+import com.coder.zt.sobblog.model.moyu.TopicItem
 import com.coder.zt.sobblog.net.MoYuNetWork
 import com.coder.zt.sobblog.utils.Constants
 
@@ -39,6 +40,11 @@ class MoYuRepository {
     suspend fun comment(comment: MYCommentSender):ResponseData<String>{
         val comment = MoYuNetWork.getInstance().comment(comment)
         return comment
+    }
+
+    suspend fun minifeedTopics():List<TopicItem>{
+        val comment = MoYuNetWork.getInstance().minifeedTopics()
+        return comment.data
     }
 
     companion object {

@@ -10,6 +10,11 @@ data class ResponseContentData<T>(val code: Int,
                                val  message: String,
                                val success: Boolean):ResponseBase<ContentData<T>>(code, data, message, success)
 
+data class ResponseList<T>(val code: Int,
+                                  val `data`: List<T>,
+                                  val  message: String,
+                                      val success: Boolean):ResponseBase<List<T>>(code, data, message, success)
+
 data class ListData<T> (
     val list: List<T>,
     val first: Boolean,

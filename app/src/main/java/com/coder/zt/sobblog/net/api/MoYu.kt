@@ -1,10 +1,12 @@
 package com.coder.zt.sobblog.net.api
 
 import com.coder.zt.sobblog.model.base.ResponseData
+import com.coder.zt.sobblog.model.base.ResponseList
 import com.coder.zt.sobblog.model.base.ResponseListData
 import com.coder.zt.sobblog.model.moyu.MYComment
 import com.coder.zt.sobblog.model.moyu.MYCommentSender
 import com.coder.zt.sobblog.model.moyu.MiniFeed
+import com.coder.zt.sobblog.model.moyu.TopicItem
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -37,4 +39,10 @@ interface MoYu {
      */
     @POST("/ct/moyu/comment")
     fun comment(@Body comment:MYCommentSender): Call<ResponseData<String>>
+
+    /**
+     * 获取动态话题
+     */
+    @GET("/ct/moyu/topic")
+    fun minifeedTopics(): Call<ResponseList<TopicItem>>
 }

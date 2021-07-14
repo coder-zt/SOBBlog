@@ -105,7 +105,6 @@ class MoYuActivity:BaseActivity<ActivityMoyuBinding>() {
             pullView.setContentSlideListener {
                 Log.d(TAG, "initView: it ---> $it")
                 if(it != 0){
-//                    adapter.checkChildrenState()
                     val imm =  getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
                     val v = window.peekDecorView()
                     if (null != v) {

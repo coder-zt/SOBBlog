@@ -7,4 +7,6 @@
     <string name="str_reward_name">打赏人</string>
     <string name="sunf">Sunf币</string>
     <string name="time">时间</string>
+    <string name="str_link">链接</string>
+    <string name="str_topic">话题</string>
 </resources>
