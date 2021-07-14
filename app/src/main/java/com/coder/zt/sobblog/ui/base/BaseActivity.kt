@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.coder.zt.sobblog.R
 import com.coder.zt.sobblog.databinding.ActivityLoginBinding
+import com.coder.zt.sobblog.utils.AppRouter
 
 open abstract class BaseActivity<T:ViewDataBinding>:AppCompatActivity() {
 

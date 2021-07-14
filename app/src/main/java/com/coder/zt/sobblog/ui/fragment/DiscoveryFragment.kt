@@ -30,5 +30,9 @@ class DiscoveryFragment:BaseFragment<FragmentDiscoveryBinding>() {
         }
     }
 
+    override fun initView() {
+
+    }
+
 
 }

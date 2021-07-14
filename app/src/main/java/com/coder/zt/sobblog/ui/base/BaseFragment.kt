@@ -17,10 +17,13 @@ abstract class BaseFragment<T: ViewDataBinding>:Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        dataBinding = DataBindingUtil.inflate<T>(inflater, getLayoutId(), container, false)
+        dataBinding = DataBindingUtil.inflate(inflater, getLayoutId(), container, false)
+        initView()
         initData()
         return dataBinding.root
     }
+
+    abstract fun initView()
 
     abstract fun initData()
 

@@ -27,8 +27,17 @@ class ArticleRepository {
 
     }
 
-    suspend fun getRecommendArticleList(page:Int):List<ArticleInfo>{
-        val i = ArticleNetWork.getInstance().getRecommendArticleList(page).data.list
+    private var  articleInfoPage:Int = 1
+    suspend fun getRecommendArticleList(loadMore:Boolean):List<ArticleInfo>{
+        if(loadMore){
+            articleInfoPage++
+        }else{
+            articleInfoPage = 1
+        }
+        val i = ArticleNetWork.getInstance().getRecommendArticleList(articleInfoPage).data.list
+        if(i.isEmpty() && articleInfoPage != 1){
+            articleInfoPage--
+        }
         return i
     }
 

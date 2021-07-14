@@ -1,12 +1,12 @@
 package com.coder.zt.sobblog.utils
 
+import android.app.Activity
 import android.content.res.Resources
 
 
 
 
-class ScreenUtils {
-    companion object{
+object ScreenUtils {
         /**
          * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
          */
@@ -20,5 +20,16 @@ class ScreenUtils {
         fun getScreenWidth(): Int {
             return Resources.getSystem().displayMetrics.widthPixels
         }
+
+    fun setWindowBackground(activity:Activity, roate:Float){
+        val lp  = activity.window.attributes
+        lp.alpha = roate
+        activity.window.attributes = lp
+    }
+
+    fun resortWindowBackground(activity:Activity,){
+        val lp  = activity.window.attributes
+        lp.alpha =  1.0f
+        activity.window.attributes = lp
     }
 }

@@ -52,6 +52,7 @@
                 <TextView
                     android:id="@+id/article_title"
                     android:layout_width="0dp"
+                    android:padding="18dp"
                     android:layout_height="wrap_content"
                     android:background="@color/white"
                     android:gravity="center_vertical"
@@ -67,7 +68,6 @@
                     android:id="@+id/article_cover"
                     android:layout_width="0dp"
                     android:layout_height="150dp"
-                    android:layout_marginTop="12dp"
                     android:background="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -134,10 +134,10 @@
 
                 <ImageView
                     android:id="@+id/imageView2"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
+                    android:layout_width="18dp"
+                    android:layout_height="12dp"
                     android:layout_marginStart="12dp"
-                    android:background="@mipmap/adx"
+                    android:background="@mipmap/ic_look"
                     app:layout_constraintBottom_toBottomOf="@+id/article_time"
                     app:layout_constraintStart_toEndOf="@+id/article_time"
                     app:layout_constraintTop_toTopOf="@+id/article_time" />
@@ -250,6 +250,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
+                    android:background="@color/white"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
