@@ -1,6 +1,8 @@
 package com.coder.zt.sobblog.ui.activity
 
 import android.content.Intent
+import android.media.Image
+import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -13,6 +15,7 @@ import com.coder.zt.sobblog.R
 import com.coder.zt.sobblog.databinding.ActivityEditMinifeedBinding
 import com.coder.zt.sobblog.databinding.PopPullStyleBinding
 import com.coder.zt.sobblog.databinding.PopRvTopicBinding
+import com.coder.zt.sobblog.model.moyu.MinifeedSender
 import com.coder.zt.sobblog.model.moyu.TopicItem
 import com.coder.zt.sobblog.ui.adapter.AlbumPhotoAdapter
 import com.coder.zt.sobblog.ui.adapter.PopListAdapter
@@ -39,10 +42,11 @@ class EditMinifeedActivity:BaseActivity<ActivityEditMinifeedBinding>() {
     private val adapter: AlbumPhotoAdapter by lazy{
         AlbumPhotoAdapter(this)
     }
+
     override fun getLayoutId() = R.layout.activity_edit_minifeed
 
-    override fun onResume() {
-        super.onResume()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         initView()
         initData()
     }
@@ -52,13 +56,17 @@ class EditMinifeedActivity:BaseActivity<ActivityEditMinifeedBinding>() {
             topicData = it
         }
         viewModel.getTopicItems()
+        val images = ImageSelectManager.getImages()
+        for (image in images) {
+            viewModel.uploadImage(image)
+        }
     }
 
     private fun initView() {
         dataBinding.rvPicContainer.adapter = adapter
         adapter.setData(ImageSelectManager.getImages())
         adapter.setSelectListener {
-            showPullStyle(it)
+            PopWindowUtils.showTakePictureStyle(it, this, dataBinding.root)
         }
         dataBinding.tvTopic.setOnClickListener {
             if (topicData.isEmpty()) {
@@ -66,6 +74,17 @@ class EditMinifeedActivity:BaseActivity<ActivityEditMinifeedBinding>() {
             }else{
                 showTopicList(topicData)
             }
+        }
+        dataBinding.tvTopicDelete.setOnClickListener {
+            dataBinding.topicItem = null
+            dataBinding.llTopicContainer.visibility = View.GONE
+        }
+        dataBinding.tvPublish.setOnClickListener {
+            val imageUrls = ImageSelectManager.getImagesUrl()
+            imageUrls?.let {
+                    viewModel.publishMinifeed(
+                        MinifeedSender(dataBinding.content,imageUrls,dataBinding.topicItem.id))
+                }
         }
     }
 
@@ -75,42 +94,17 @@ class EditMinifeedActivity:BaseActivity<ActivityEditMinifeedBinding>() {
             override fun setData(inflate: PopRvTopicBinding, d: TopicItem) {
                 inflate.data = d
             }
+
+            override fun onClick(d: TopicItem) {
+                Log.d(TAG, "onClick: 选择话题为%${d.topicName}")
+                dataBinding.topicItem = d
+                dataBinding.llTopicContainer.visibility = View.VISIBLE
+            }
         })
 
     }
 
-    private fun showPullStyle(size:Int) {
-        val pop = PopupWindow(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-        val popBind = DataBindingUtil.inflate<PopPullStyleBinding>(
-            LayoutInflater.from(this),
-            R.layout.pop_pull_style, null ,false)
-        pop.isOutsideTouchable = true
-        pop.isFocusable = true
-        pop.contentView = popBind.root
-        popBind.tvCancel.setOnClickListener {
-            pop.dismiss()
-        }
-        popBind.tvCamera.setOnClickListener {
-            pop.dismiss()
-            PictureSelector.create(this)
-                .openCamera(PictureMimeType.ofImage())
-                .imageEngine(GlideEngine.createGlideEngine()) // 请参考Demo GlideEngine.java
-                .forResult(PictureConfig.REQUEST_CAMERA)
-        }
-        popBind.tvAlbum.setOnClickListener {
-            pop.dismiss()
-            PictureSelector.create(this)
-                .openGallery(PictureMimeType.ofImage())
-                .maxSelectNum(size)
-                .imageEngine(GlideEngine.createGlideEngine()) // 请参考Demo GlideEngine.java
-                .forResult(PictureConfig.CHOOSE_REQUEST)
-        }
-        pop.setOnDismissListener {
-            ScreenUtils.resortWindowBackground(this)
-        }
-        ScreenUtils.setWindowBackground(this, 0.3f)
-        pop.showAtLocation(dataBinding.root, Gravity.BOTTOM, 0 ,0 )
-    }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -118,7 +112,9 @@ class EditMinifeedActivity:BaseActivity<ActivityEditMinifeedBinding>() {
             when (requestCode) {
                 PictureConfig.REQUEST_CAMERA, PictureConfig.CHOOSE_REQUEST->{
                     val result:List<LocalMedia> = PictureSelector.obtainMultipleResult(data)
-                    ImageSelectManager.putImage(result)
+                    for (localMedia in ImageSelectManager.putImage(result)) {
+                        viewModel.uploadImage(localMedia)
+                    }
                 }
             }
         }

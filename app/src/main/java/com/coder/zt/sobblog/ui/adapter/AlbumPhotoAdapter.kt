@@ -11,12 +11,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.coder.zt.sobblog.R
 import com.coder.zt.sobblog.databinding.RvPictureItemBinding
 import com.coder.zt.sobblog.utils.GlideEngine
+import com.coder.zt.sobblog.utils.ImageSelectManager
 import com.luck.picture.lib.PictureSelector
 import com.luck.picture.lib.entity.LocalMedia
 
 class AlbumPhotoAdapter(val activity:Activity):RecyclerView.Adapter<AlbumPhotoAdapter.PictureView>(){
 
-    private val mData:MutableList<LocalMedia> = mutableListOf()
+    private val mData:MutableList<ImageSelectManager.UpLoadImage> = mutableListOf()
     private lateinit var selectListener:(size:Int)->Unit
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -40,9 +41,17 @@ class AlbumPhotoAdapter(val activity:Activity):RecyclerView.Adapter<AlbumPhotoAd
                     .themeStyle(R.style.picture_default_style)
                     .isNotPreviewDownload(true)
                     .imageEngine(GlideEngine.createGlideEngine())
-                    .openExternalPreview(position, mData)
+                    .openExternalPreview(position, getLocalMedias())
             }
         }
+    }
+
+    private fun getLocalMedias(): MutableList<LocalMedia> {
+        val list = mutableListOf<LocalMedia>()
+        for (mDatum in mData) {
+            list.add(mDatum.localMedia)
+        }
+        return list
     }
 
     override fun getItemCount(): Int {
@@ -54,7 +63,7 @@ class AlbumPhotoAdapter(val activity:Activity):RecyclerView.Adapter<AlbumPhotoAd
         }
     }
 
-    fun setData(images: List<LocalMedia>) {
+    fun setData(images: List<ImageSelectManager.UpLoadImage>) {
         mData.clear()
         if (images.isNotEmpty()) {
             mData.addAll(images)
@@ -63,7 +72,7 @@ class AlbumPhotoAdapter(val activity:Activity):RecyclerView.Adapter<AlbumPhotoAd
     }
 
 
-    fun addData(images: List<LocalMedia>) {
+    fun addData(images: List<ImageSelectManager.UpLoadImage>) {
         if (images.isNotEmpty()) {
             mData.addAll(images)
         }
@@ -77,13 +86,20 @@ class AlbumPhotoAdapter(val activity:Activity):RecyclerView.Adapter<AlbumPhotoAd
 
     class PictureView(val bind:RvPictureItemBinding):RecyclerView.ViewHolder(bind.root) {
 
-        fun setData(localMedia: LocalMedia,callback:()->Unit) {
-//            localMedia.path
-            val decodeFile = BitmapFactory.decodeFile(localMedia.realPath)
+        fun setData(localMedia: ImageSelectManager.UpLoadImage,callback:()->Unit) {
+            val decodeFile = BitmapFactory.decodeFile(localMedia.localMedia.fileName)
             bind.ivPicture.setImageBitmap(decodeFile)
-            bind.blvLoading.visibility = View.GONE
+            if(localMedia.upload){
+                bind.ivDelete.visibility = View.VISIBLE
+            }else{
+                bind.ivDelete.visibility = View.GONE
+            }
+            if(!localMedia.upload){
+                bind.blvLoading.visibility = View.VISIBLE
+            }else{
+                bind.blvLoading.visibility = View.GONE
+            }
             bind.ivAdd.visibility = View.GONE
-            bind.ivDelete.visibility = View.GONE
             bind.ivPicture.setOnClickListener{
                 callback()
             }

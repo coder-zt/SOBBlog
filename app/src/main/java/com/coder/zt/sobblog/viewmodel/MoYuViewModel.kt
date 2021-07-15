@@ -5,12 +5,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.coder.zt.sobblog.model.moyu.MYComment
-import com.coder.zt.sobblog.model.moyu.MYCommentSender
-import com.coder.zt.sobblog.model.moyu.MoYuDataDisplay
-import com.coder.zt.sobblog.model.moyu.TopicItem
+import com.coder.zt.sobblog.model.moyu.*
 import com.coder.zt.sobblog.repository.MoYuRepository
+import com.coder.zt.sobblog.utils.ImageSelectManager
 import com.coder.zt.sobblog.utils.ToastUtils
+import com.luck.picture.lib.entity.LocalMedia
 import kotlinx.coroutines.launch
 
 class MoYuViewModel: ViewModel() {
@@ -95,6 +94,24 @@ companion object{
     fun getTopicItems(){
         viewModelScope.launch{
             topicItem.value = MoYuRepository.getInstance().minifeedTopics()
+        }
+    }
+
+    /**
+     * 上传图片
+     */
+    fun uploadImage(media:ImageSelectManager.UpLoadImage){
+        viewModelScope.launch{
+            MoYuRepository.getInstance().uploadImage(media)
+        }
+    }
+
+    /**
+     * 发布动态
+     */
+    fun publishMinifeed(media:MinifeedSender){
+        viewModelScope.launch{
+            MoYuRepository.getInstance().publishMinifeed(media)
         }
     }
 

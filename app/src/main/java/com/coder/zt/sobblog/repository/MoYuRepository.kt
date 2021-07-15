@@ -1,12 +1,19 @@
 package com.coder.zt.sobblog.repository
 
+import android.util.Log
 import com.coder.zt.sobblog.model.base.ResponseData
-import com.coder.zt.sobblog.model.moyu.MYComment
-import com.coder.zt.sobblog.model.moyu.MYCommentSender
-import com.coder.zt.sobblog.model.moyu.MoYuDataDisplay
-import com.coder.zt.sobblog.model.moyu.TopicItem
+import com.coder.zt.sobblog.model.moyu.*
 import com.coder.zt.sobblog.net.MoYuNetWork
 import com.coder.zt.sobblog.utils.Constants
+import com.coder.zt.sobblog.utils.ImageSelectManager
+import com.luck.picture.lib.entity.LocalMedia
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.MultipartReader
+import okhttp3.RequestBody
+import java.io.File
+
 
 class MoYuRepository {
     suspend fun getRecommendMinifeed(page:Int):MoYuDataDisplay{
@@ -46,6 +53,22 @@ class MoYuRepository {
         val comment = MoYuNetWork.getInstance().minifeedTopics()
         return comment.data
     }
+
+    suspend fun uploadImage(media: ImageSelectManager.UpLoadImage){
+        val file = File(media.localMedia.realPath)
+        val request:RequestBody = RequestBody.create("image/jpg".toMediaTypeOrNull(), file)
+        val image = MultipartBody.Part.createFormData("image", file.name, request)
+        val comment = MoYuNetWork.getInstance().uploadImage(image)
+        Log.d("测试上传图片", "uploadImage: $comment")
+        media.upload = comment.success
+        media.url = comment.data
+    }
+
+    suspend fun publishMinifeed(minifeed: MinifeedSender):String{
+        val comment = MoYuNetWork.getInstance().publishMinifeed(minifeed)
+        return comment.data
+    }
+
 
     companion object {
 

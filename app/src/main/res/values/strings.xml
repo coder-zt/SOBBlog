@@ -9,4 +9,5 @@
     <string name="time">时间</string>
     <string name="str_link">链接</string>
     <string name="str_topic">话题</string>
+    <string name="str_send">发布</string>
 </resources>

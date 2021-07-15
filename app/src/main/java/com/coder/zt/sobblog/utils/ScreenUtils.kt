@@ -15,11 +15,18 @@ object ScreenUtils {
         }
 
         /**
-         * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
+         * 根据手机的宽
          */
         fun getScreenWidth(): Int {
             return Resources.getSystem().displayMetrics.widthPixels
         }
+
+    /**
+     * 根据手机的高
+     */
+    fun getScreenHeight(): Int {
+        return Resources.getSystem().displayMetrics.heightPixels
+    }
 
     fun setWindowBackground(activity:Activity, roate:Float){
         val lp  = activity.window.attributes

@@ -7,6 +7,10 @@
         <variable
             name="content"
             type="java.lang.String" />
+
+        <variable
+            name="topicItem"
+            type="com.coder.zt.sobblog.model.moyu.TopicItem" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -41,24 +45,27 @@
                 android:textColor="@color/black" />
 
             <TextView
-                android:layout_width="36dp"
-                android:layout_height="24dp"
+                android:id="@+id/tv_publish"
+                android:layout_width="42dp"
+                android:layout_height="28dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
                 android:layout_marginEnd="12dp"
                 android:layout_marginBottom="12dp"
-                android:background="@drawable/publish_btn_active_bg"
+                android:background="@drawable/publish_btn_normal_bg"
                 android:gravity="center"
-                android:text="发送"
-                android:textSize="14sp" />
+                android:text="@string/str_send"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
         </RelativeLayout>
 
         <EditText
             android:id="@+id/editText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@color/white"
+            android:background="@drawable/minifeed_input_bg"
             android:gravity="top"
+            android:layout_margin="6dp"
             android:hint="一起探讨先进的摸鱼技术"
             android:maxLines="4"
             android:text="@={content}"
@@ -74,10 +81,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{content.length() + `/1024`}"
             android:layout_margin="4dp"
+            android:text="@{content.length() + `/1024`}"
             app:layout_constraintBottom_toBottomOf="@+id/editText"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="@+id/editText" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_pic_container"
@@ -89,16 +96,50 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editText" />
 
+        <LinearLayout
+            android:id="@+id/ll_topic_container"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="12dp"
+            android:visibility="gone"
+            android:background="@drawable/topic_label_bg"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rv_pic_container">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:gravity="center"
+                android:layout_marginVertical="3dp"
+                android:layout_marginHorizontal="8dp"
+                android:layout_gravity="center_vertical"
+                android:text="@{topicItem.topicName}"
+                android:textColor="@color/theme_blue" />
+
+            <TextView
+                android:id="@+id/tv_topic_delete"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:text="X"
+                android:textColor="@color/theme_blue"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_marginEnd="8dp"/>
+
+        </LinearLayout>
+
         <ImageView
             android:id="@+id/imageView9"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:padding="4dp"
             android:layout_marginStart="12dp"
             android:layout_marginTop="12dp"
+            android:padding="4dp"
             android:src="@mipmap/ic_link"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/rv_pic_container" />
+            app:layout_constraintTop_toBottomOf="@+id/ll_topic_container" />
 
         <TextView
             android:id="@+id/textView13"

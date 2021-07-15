@@ -1,8 +1,11 @@
 package com.coder.zt.sobblog.net
 
 import com.coder.zt.sobblog.model.moyu.MYCommentSender
+import com.coder.zt.sobblog.model.moyu.MinifeedSender
 import com.coder.zt.sobblog.net.api.MoYu
 import com.coder.zt.sobblog.net.base.NetWorkBase
+import okhttp3.MultipartBody
+import okhttp3.MultipartReader
 
 
 class MoYuNetWork: NetWorkBase() {
@@ -19,6 +22,10 @@ class MoYuNetWork: NetWorkBase() {
     suspend fun comment(comment: MYCommentSender) = moYuService.comment(comment).await()
 
     suspend fun minifeedTopics() = moYuService.minifeedTopics().await()
+
+    suspend fun uploadImage(image: MultipartBody.Part) = moYuService.uploadImage(image).await()
+
+    suspend fun publishMinifeed(minifeed: MinifeedSender) = moYuService.minifeed(minifeed).await()
 
 
     companion object{

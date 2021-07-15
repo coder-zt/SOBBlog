@@ -10,4 +10,5 @@
     <color name="diver_line_color">#f2f2f2</color>
     <color name="theme_blue">#409eef</color>
     <color name="theme_gray">#f2f2f2</color>
+    <color name="theme_dark_gray">#757070</color>
 </resources>

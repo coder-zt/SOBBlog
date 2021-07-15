@@ -11,14 +11,21 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.coder.zt.sobblog.R
 import com.coder.zt.sobblog.databinding.PopListShowBinding
+import com.coder.zt.sobblog.databinding.PopPullStyleBinding
 import com.coder.zt.sobblog.ui.adapter.PopListAdapter
+import com.luck.picture.lib.PictureSelector
+import com.luck.picture.lib.config.PictureConfig
+import com.luck.picture.lib.config.PictureMimeType
 
 object PopWindowUtils {
 
     private const val TAG = "PopWindowUtils"
+    private const val heightRatio = 0.6f
+
     fun <T : ViewDataBinding, D> showListData(layoutId:Int, items:List<D>, activity:Activity,
                                               callback: PopListAdapter.ItemsListSetData<T,D>){
-        val pop = PopupWindow(ViewGroup.LayoutParams.MATCH_PARENT, ScreenUtils.dp2px(300))
+        val pop = PopupWindow(ViewGroup.LayoutParams.MATCH_PARENT,
+                    (ScreenUtils.getScreenHeight()*heightRatio).toInt())
         val popBind = DataBindingUtil.inflate<PopListShowBinding>(
             LayoutInflater.from(activity),
             R.layout.pop_list_show, null ,false)
@@ -29,8 +36,51 @@ object PopWindowUtils {
             Log.d(TAG, "showListData: Dismiss")
             ScreenUtils.resortWindowBackground(activity)
         }
-        popBind.rvContainer.adapter = PopListAdapter<T,D>(layoutId, items,callback)
+        popBind.rvContainer.adapter = PopListAdapter(layoutId, items,
+            object:PopListAdapter.ItemsListSetData<T, D>{
+                override fun setData(inflate: T, d: D) {
+                    callback.setData(inflate,d)
+                }
+
+                override fun onClick(d: D) {
+                    pop.dismiss()
+                    callback.onClick(d)
+                }
+            })
         ScreenUtils.setWindowBackground(activity , 0.3f)
         pop.showAtLocation(activity.window.decorView.rootView, Gravity.BOTTOM, 0 ,0 )
+    }
+
+    fun showTakePictureStyle(size:Int, activity:Activity,view:View) {
+        val pop = PopupWindow(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        val popBind = DataBindingUtil.inflate<PopPullStyleBinding>(
+            LayoutInflater.from(activity),
+            R.layout.pop_pull_style, null ,false)
+        pop.isOutsideTouchable = true
+        pop.isFocusable = true
+        pop.contentView = popBind.root
+        popBind.tvCancel.setOnClickListener {
+            pop.dismiss()
+        }
+        popBind.tvCamera.setOnClickListener {
+            pop.dismiss()
+            PictureSelector.create(activity)
+                .openCamera(PictureMimeType.ofImage())
+                .imageEngine(GlideEngine.createGlideEngine()) // 请参考Demo GlideEngine.java
+                .forResult(PictureConfig.REQUEST_CAMERA)
+        }
+        popBind.tvAlbum.setOnClickListener {
+            pop.dismiss()
+            PictureSelector.create(activity)
+                .openGallery(PictureMimeType.ofImage())
+                .maxSelectNum(size)
+                .imageEngine(GlideEngine.createGlideEngine()) // 请参考Demo GlideEngine.java
+                .forResult(PictureConfig.CHOOSE_REQUEST)
+        }
+        pop.setOnDismissListener {
+            ScreenUtils.resortWindowBackground(activity)
+        }
+        ScreenUtils.setWindowBackground(activity, 0.3f)
+        pop.showAtLocation(view, Gravity.BOTTOM, 0 ,0 )
     }
 }
