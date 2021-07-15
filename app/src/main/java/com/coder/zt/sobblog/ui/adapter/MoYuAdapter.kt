@@ -14,7 +14,8 @@ import com.coder.zt.sobblog.R
 import com.coder.zt.sobblog.databinding.MoyoTopViewBinding
 import com.coder.zt.sobblog.databinding.RvMoyuBinding
 import com.coder.zt.sobblog.model.datamanager.UserDataMan
-import com.coder.zt.sobblog.model.moyu.MoYuDataDisplay
+import com.coder.zt.sobblog.model.moyu.MYComment
+import com.coder.zt.sobblog.model.moyu.MiniFeed
 import com.coder.zt.sobblog.utils.ScreenUtils
 
 /**
@@ -41,7 +42,7 @@ class MoYuAdapter(val callback:(code:DO_TYPE, data:Any) -> Unit): RecyclerView.A
     }
     private val contentViewSet:MutableSet<ContentView> = mutableSetOf()
     val mData by lazy {
-        mutableListOf<MoYuDataDisplay.MiniFeed>()
+        mutableListOf<MiniFeed>()
     }
 
 
@@ -94,7 +95,7 @@ class MoYuAdapter(val callback:(code:DO_TYPE, data:Any) -> Unit): RecyclerView.A
         return mData.size + 1
     }
 
-    fun setData(data:List<MoYuDataDisplay.MiniFeed>){
+    fun setData(data:List<MiniFeed>){
         mData.clear()
         mData.addAll(data)
         notifyDataSetChanged()
@@ -106,7 +107,8 @@ class MoYuAdapter(val callback:(code:DO_TYPE, data:Any) -> Unit): RecyclerView.A
         }
     }
 
-    fun setComment(it: MutableList<MoYuDataDisplay.MiniFeed.Comment>) {
+    fun setComment(it: List<MYComment>) {
+        //
         for (contentView in contentViewSet) {
             contentView.setComment(it)
         }
@@ -117,10 +119,10 @@ class MoYuAdapter(val callback:(code:DO_TYPE, data:Any) -> Unit): RecyclerView.A
         private var showExpansion = false
         private var requestComment = false
         private lateinit var adapter:MYCommentAdapter
-        fun setData(miniFeed: MoYuDataDisplay.MiniFeed, position: Int,listener:()->Unit,callback:(code:DO_TYPE, data:Any) -> Unit) {
+        fun setData(miniFeed: MiniFeed, position: Int,listener:()->Unit,callback:(code:DO_TYPE, data:Any) -> Unit) {
             requestComment = false
             inflate.data = miniFeed
-            Log.d(TAG, "setData:  $position ---> ${miniFeed.nickName} ===> like count ${miniFeed.thumbUpCount}")
+            Log.d(TAG, "setData:  $position ---> ${miniFeed.nickname} ===> like count ${miniFeed.thumbUpCount}")
             //展示评论、点赞数量
             val userId = UserDataMan.getUserInfo()?.id
             if(miniFeed.thumbUpList.contains(userId)){
@@ -129,7 +131,7 @@ class MoYuAdapter(val callback:(code:DO_TYPE, data:Any) -> Unit): RecyclerView.A
                 inflate.zanIv.setImageResource(R.mipmap.zan_grey_feidian3)
             }
             //话题
-            if (miniFeed.topic.isNullOrEmpty()) {
+            if (miniFeed.topicName.isNullOrEmpty()) {
                 inflate.topicTv.visibility = View.GONE
             }else{
                 inflate.topicTv.visibility = View.VISIBLE
@@ -158,38 +160,37 @@ class MoYuAdapter(val callback:(code:DO_TYPE, data:Any) -> Unit): RecyclerView.A
 
         private fun setListener(
             callback: (code: DO_TYPE, data: Any) -> Unit,
-            miniFeed: MoYuDataDisplay.MiniFeed
+            miniFeed: MiniFeed
         ) {
             //设置点击事件
+            //点赞
             inflate.zanLl.setOnClickListener {
                 callback.invoke(DO_TYPE.THUMB_UP, miniFeed.id)
             }
+            //点击评论（显示与隐藏）
             inflate.commentLl.setOnClickListener {
-                Log.d(TAG, "setListener: $showExpansion")
                 if(!showExpansion){
                     inflate.rvComment.visibility = View.VISIBLE
                     inflate.triangleView.visibility = View.VISIBLE
                     adapter = MYCommentAdapter(callback)
                     inflate.rvComment.adapter = adapter
                     showExpansion = true
+                    //获取评论
                     if(miniFeed.commentCount > 0){
                         requestComment = true
                         callback.invoke(DO_TYPE.GET_COMMENT, miniFeed.id)
                     }
-                    Log.d(TAG, "setListener visible: $showExpansion")
                 }else{
                     inflate.rvComment.visibility = View.GONE
                     inflate.triangleView.visibility = View.GONE
                     showExpansion = false
                     requestComment = false
-                    Log.d(TAG, "setListener gone: $showExpansion")
                 }
 
             }
         }
 
         fun checkShowExpansion(){
-            Log.d(TAG, "checkShowExpansion: ")
             if (showExpansion) {
                 inflate.rvComment.visibility = View.GONE
                 inflate.triangleView.visibility = View.GONE
@@ -197,7 +198,7 @@ class MoYuAdapter(val callback:(code:DO_TYPE, data:Any) -> Unit): RecyclerView.A
             }
         }
 
-        fun setComment(it: MutableList<MoYuDataDisplay.MiniFeed.Comment>) {
+        fun setComment(it: List<MYComment>) {
             if (requestComment) {
                 adapter.setData(it)
                 requestComment = false

@@ -1,7 +1,6 @@
 package com.coder.zt.sobblog.viewmodel
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,17 +8,16 @@ import com.coder.zt.sobblog.model.moyu.*
 import com.coder.zt.sobblog.repository.MoYuRepository
 import com.coder.zt.sobblog.utils.ImageSelectManager
 import com.coder.zt.sobblog.utils.ToastUtils
-import com.luck.picture.lib.entity.LocalMedia
 import kotlinx.coroutines.launch
 
 class MoYuViewModel: ViewModel() {
 companion object{
     private const val TAG = "MoYuViewModel"
 }
-    val moyuDisplayData:MutableLiveData<MoYuDataDisplay> = MutableLiveData()
+    val moyuDisplayData:MutableLiveData<List<MiniFeed>> = MutableLiveData()
     val slideDistance:MutableLiveData<Int> = MutableLiveData()
     val comment:MutableLiveData<String> = MutableLiveData()
-    val feedComment:MutableLiveData<MutableList<MoYuDataDisplay.MiniFeed.Comment>> = MutableLiveData()
+    val feedComment:MutableLiveData<List<MYComment>> = MutableLiveData()
     val topicItem:MutableLiveData<List<TopicItem>> = MutableLiveData()
 
 
@@ -66,25 +64,7 @@ companion object{
     fun getMiniFeedComment(feedId: String) {
         viewModelScope.launch {
             val minifeedComment = MoYuRepository.getInstance().getMinifeedComment(feedId, 1)
-
-            val displayComments = mutableListOf<MoYuDataDisplay.MiniFeed.Comment>()
-            for (comment in minifeedComment) {
-                val childDisplayComment = mutableListOf<MoYuDataDisplay.MiniFeed.Comment.SubComment>()
-                //获取评论的子评论
-                for (subComment in comment.subComments) {
-                    childDisplayComment.add(MoYuDataDisplay.MiniFeed.Comment.SubComment(
-                            subComment
-                        )
-                    )
-                }
-                val displayComment = MoYuDataDisplay.MiniFeed.Comment(comment.content,
-                    comment.id,
-                    comment.nickname,
-                    childDisplayComment
-                )
-                displayComments.add(displayComment)
-            }
-            feedComment.value = displayComments
+            feedComment.value = minifeedComment
         }
     }
 

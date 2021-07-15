@@ -16,17 +16,12 @@ import java.io.File
 
 
 class MoYuRepository {
-    suspend fun getRecommendMinifeed(page:Int):MoYuDataDisplay{
+    suspend fun getRecommendMinifeed(page:Int):List<MiniFeed>{
         val recommend = MoYuNetWork.getInstance().getRecommendMinifeed(page)
         return if (recommend.code == Constants.SUCCESS_CODE) {
-            val displayMiniFeed = mutableListOf<MoYuDataDisplay.MiniFeed>()
-            for (miniFeed in recommend.data.list) {
-                val displayComments = mutableListOf<MoYuDataDisplay.MiniFeed.Comment>()
-                displayMiniFeed.add(MoYuDataDisplay.MiniFeed(miniFeed, displayComments))
-            }
-            MoYuDataDisplay(1, displayMiniFeed)
+           recommend.data.list
         }else{
-            MoYuDataDisplay(0, listOf())
+            listOf()
         }
     }
 

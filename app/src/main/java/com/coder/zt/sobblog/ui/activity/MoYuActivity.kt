@@ -53,7 +53,7 @@ class MoYuActivity:BaseActivity<ActivityMoyuBinding>() {
                 MoYuAdapter.DO_TYPE.REPLY ->{
                     moyuViewModel.thumbUP(any as String)
                 }
-                MoYuAdapter.DO_TYPE.GET_COMMENT ->{
+                MoYuAdapter.DO_TYPE.GET_COMMENT ->{//获取该动态的评论
                     moyuViewModel.getMiniFeedComment(any as String)
                 }
             }
@@ -176,7 +176,7 @@ class MoYuActivity:BaseActivity<ActivityMoyuBinding>() {
         dataBinding.moyuViewModel = moyuViewModel
         moyuViewModel.moyuDisplayData.observe(this){
             Log.d(TAG, "initData: ${Gson().toJson(it)}")
-            adapter.setData(it.data)
+            adapter.setData(it)
         }
         moyuViewModel.slideDistance.observe(this){
             val height = ScreenUtils.dp2px(320)
