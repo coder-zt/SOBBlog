@@ -1,9 +1,10 @@
 package com.coder.zt.sobblog.utils
 
+import android.util.Log
 import com.luck.picture.lib.entity.LocalMedia
 
 object ImageSelectManager {
-
+    private const val TAG = "ImageSelectManager"
     private val imageContainer = mutableListOf<UpLoadImage>()
     fun putImages(list:List<LocalMedia>){
         imageContainer.clear()
@@ -26,7 +27,7 @@ object ImageSelectManager {
         return addImages
     }
 
-    fun getImages():List<UpLoadImage>{
+    fun getImages():MutableList<UpLoadImage>{
         return imageContainer
     }
 
@@ -45,6 +46,30 @@ object ImageSelectManager {
         }
         return urlList
     }
+
+    val callbacks = mutableListOf<()->Unit>()
+    fun registerListener(function: () -> Unit) {
+        callbacks.add(function)
+    }
+
+    fun unregisterListener(function: () -> Unit){
+        var index = 0
+        for (callback in callbacks) {
+            if(callback == function){
+                break
+            }
+            index++
+        }
+        callbacks.removeAt(index)
+    }
+
+    fun update(){
+        Log.d(TAG, "update: 图片数据更新")
+        for (callback in callbacks) {
+            callback()
+        }
+    }
+
 
     class UpLoadImage(var upload:Boolean, val localMedia: LocalMedia, var url:String)
 }

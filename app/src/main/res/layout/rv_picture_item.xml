@@ -25,6 +25,7 @@
             android:scaleType="centerCrop"
             android:src="@mipmap/ic_add_pic"
             android:padding="48dp"
+            android:visibility="gone"
             android:background="@drawable/add_picture_bg"
             android:layout_centerInParent="true"/>
 

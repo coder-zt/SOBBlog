@@ -41,7 +41,7 @@ interface MoYu {
      * 发布动态
      */
     @POST("/ct/moyu")
-    fun minifeed(@Body miniFeed:MinifeedSender): Call<ResponseData<String>>
+    fun minifeed(@Body miniFeed:MinifeedSender): Call<ResponseData<MYPublishResponse>>
 
     /**
      * 获取单条摸鱼动态的评论

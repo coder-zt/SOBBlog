@@ -111,7 +111,8 @@ companion object{
      */
     fun publishMinifeed(media:MinifeedSender){
         viewModelScope.launch{
-            MoYuRepository.getInstance().publishMinifeed(media)
+            val message = MoYuRepository.getInstance().publishMinifeed(media)
+            ToastUtils.show(message)
         }
     }
 

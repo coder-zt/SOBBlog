@@ -62,11 +62,12 @@ class MoYuRepository {
         Log.d("测试上传图片", "uploadImage: $comment")
         media.upload = comment.success
         media.url = comment.data
+        ImageSelectManager.update()
     }
 
     suspend fun publishMinifeed(minifeed: MinifeedSender):String{
         val comment = MoYuNetWork.getInstance().publishMinifeed(minifeed)
-        return comment.data
+        return comment.message
     }
 
 

@@ -10,6 +10,7 @@ import com.coder.zt.sobblog.ui.fragment.IndexFragment
 import com.coder.zt.sobblog.ui.fragment.MineFragment
 import com.coder.zt.sobblog.ui.fragment.DiscoveryFragment
 import com.coder.zt.sobblog.ui.fragment.OtherFragment
+import com.google.android.material.tabs.TabLayout
 
 class MainActivity : BaseActivity<ActivityMainBinding>() {
 
@@ -35,7 +36,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         }
         val adapter = HomePagerAdapter(supportFragmentManager, listOf(IndexFragment(),DiscoveryFragment(),OtherFragment(),MineFragment()))
         dataBinding.viewPager.adapter = adapter
-        dataBinding.viewPager.currentItem = 1
+        dataBinding.viewPager.currentItem = 0
+
     }
 
     private fun initData() {

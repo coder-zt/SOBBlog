@@ -3,11 +3,13 @@ package com.coder.zt.sobblog.ui.adapter
 import android.app.Activity
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.request.target.BitmapImageViewTarget
 import com.coder.zt.sobblog.R
 import com.coder.zt.sobblog.databinding.RvPictureItemBinding
 import com.coder.zt.sobblog.utils.GlideEngine
@@ -17,7 +19,10 @@ import com.luck.picture.lib.entity.LocalMedia
 
 class AlbumPhotoAdapter(val activity:Activity):RecyclerView.Adapter<AlbumPhotoAdapter.PictureView>(){
 
-    private val mData:MutableList<ImageSelectManager.UpLoadImage> = mutableListOf()
+    companion object{
+        private const val TAG = "AlbumPhotoAdapter"
+    }
+    private lateinit var mData:MutableList<ImageSelectManager.UpLoadImage>
     private lateinit var selectListener:(size:Int)->Unit
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -63,24 +68,15 @@ class AlbumPhotoAdapter(val activity:Activity):RecyclerView.Adapter<AlbumPhotoAd
         }
     }
 
-    fun setData(images: List<ImageSelectManager.UpLoadImage>) {
-        mData.clear()
-        if (images.isNotEmpty()) {
-            mData.addAll(images)
-        }
-        notifyDataSetChanged()
-    }
-
-
-    fun addData(images: List<ImageSelectManager.UpLoadImage>) {
-        if (images.isNotEmpty()) {
-            mData.addAll(images)
-        }
-        notifyDataSetChanged()
-    }
 
     fun setSelectListener(callback:(size:Int)->Unit){
         selectListener = callback
+    }
+
+    fun update() {
+        Log.d(TAG, "update: 数据刷新")
+        mData = ImageSelectManager.getImages()
+        notifyDataSetChanged()
     }
 
 
@@ -91,15 +87,14 @@ class AlbumPhotoAdapter(val activity:Activity):RecyclerView.Adapter<AlbumPhotoAd
             bind.ivPicture.setImageBitmap(decodeFile)
             if(localMedia.upload){
                 bind.ivDelete.visibility = View.VISIBLE
+                bind.blvLoading.visibility = View.GONE
             }else{
                 bind.ivDelete.visibility = View.GONE
-            }
-            if(!localMedia.upload){
                 bind.blvLoading.visibility = View.VISIBLE
-            }else{
-                bind.blvLoading.visibility = View.GONE
             }
             bind.ivAdd.visibility = View.GONE
+            bind.ivPicture.visibility = View.VISIBLE
+            bind.ivPicture.setImageBitmap(BitmapFactory.decodeFile(localMedia.localMedia.realPath))
             bind.ivPicture.setOnClickListener{
                 callback()
             }
