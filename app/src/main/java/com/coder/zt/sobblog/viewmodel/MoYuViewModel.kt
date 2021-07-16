@@ -56,13 +56,6 @@ companion object{
     /**
      * 回复评论
      *
-     * commentId: "1412829969465319426"
-    content: "回复测试"
-    momentId: "1412324516285227010"
-    targetUserId: "1216830916760965120"
-
-
-    MYReplySender(commentId=1412829969465319426, content=回复测试, momentId=1412324516285227010, targetUserId=1216830916760965120)
      */
     fun sendReply(sender: MYReplySender) {
         viewModelScope.launch {

@@ -1,16 +1,20 @@
 package com.coder.zt.sobblog.repository
 
+import android.text.TextUtils
 import android.util.Log
+import com.coder.zt.sobblog.SOBApp
 import com.coder.zt.sobblog.model.base.ResponseData
 import com.coder.zt.sobblog.model.moyu.*
 import com.coder.zt.sobblog.net.MoYuNetWork
 import com.coder.zt.sobblog.utils.Constants
 import com.coder.zt.sobblog.utils.ImageSelectManager
+import com.luck.picture.lib.compress.CompressionPredicate
+import com.luck.picture.lib.compress.Luban
+import com.luck.picture.lib.compress.OnCompressListener
 import com.luck.picture.lib.entity.LocalMedia
-import okhttp3.MediaType
+import com.luck.picture.lib.tools.PictureFileUtils.getPath
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.MultipartReader
 import okhttp3.RequestBody
 import java.io.File
 
@@ -75,6 +79,7 @@ class MoYuRepository {
 
     suspend fun uploadImage(media: ImageSelectManager.UpLoadImage){
         val file = File(media.localMedia.realPath)
+        comparePicture(file)
         val request:RequestBody = RequestBody.create("image/jpg".toMediaTypeOrNull(), file)
         val image = MultipartBody.Part.createFormData("image", file.name, request)
         val comment = MoYuNetWork.getInstance().uploadImage(image)
@@ -82,6 +87,31 @@ class MoYuRepository {
         media.upload = comment.success
         media.url = comment.data
         ImageSelectManager.update()
+    }
+
+    private fun comparePicture(file: File) {
+        Luban.with(SOBApp._context)
+            .load(file)
+            .ignoreBy(100)
+//            .setTargetDir(getPath(SOBApp._context,))
+            .filter(object : CompressionPredicate {
+                override fun apply(path: String): Boolean {
+                    return !(TextUtils.isEmpty(path) || path.toLowerCase().endsWith(".gif"))
+                }
+            })
+            .setCompressListener(object : OnCompressListener {
+                override fun onStart() {
+                    TODO("Not yet implemented")
+                }
+
+                override fun onSuccess(list: MutableList<LocalMedia>?) {
+                    TODO("Not yet implemented")
+                }
+
+                override fun onError(e: Throwable?) {
+                    TODO("Not yet implemented")
+                }
+            }).launch()
     }
 
     suspend fun publishMinifeed(minifeed: MinifeedSender):String{
