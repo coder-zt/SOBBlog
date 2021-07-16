@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewConfiguration
 import android.widget.LinearLayout
 import android.widget.Scroller
+import androidx.core.view.children
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlin.math.abs
 
@@ -40,7 +42,6 @@ class RefreshView(context:Context, attrs: AttributeSet): LinearLayout(context, a
     }
     private lateinit var contentListener: (distance:Int)->Unit
 
-
     override fun onFinishInflate() {
         super.onFinishInflate()
 //        if (childCount != 3) {
@@ -52,12 +53,11 @@ class RefreshView(context:Context, attrs: AttributeSet): LinearLayout(context, a
         contentView.addOnScrollListener(object: RecyclerView.OnScrollListener(){
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                Log.d(TAG, "onScrolled: dx:$dx    dy: $dy")
-                contentListener.invoke(dy)
+                contentListener.invoke(contentView.computeVerticalScrollOffset())
                 touchBottom = !contentView.canScrollVertically(1)
                 touchTop = !contentView.canScrollVertically(-1)
-                Log.d(TAG, "onScrolled: touchBottom:$touchBottom    touchTop: $touchTop")
             }
+
         })
     }
 
@@ -192,17 +192,15 @@ class RefreshView(context:Context, attrs: AttributeSet): LinearLayout(context, a
     override fun computeScroll() {
         super.computeScroll()
         if (mScroller.computeScrollOffset()) {
+            Log.d(TAG, "computeScroll: ${mScroller.currY}")
             if(getTopPosition() && pullDownDistance >0){
                 pullDown(mScroller.currY)
             }
             if(getBottomPosition() && pullUpDistance >0){
-
                 pullUp(mScroller.currY)
             }
 
         }
-        Log.d(TAG, "computeScroll:pullUp getBottomPosition() ${getBottomPosition()}  pullUpDistance ${pullUpDistance} ")
-        Log.d(TAG, "computeScroll: currY:${mScroller.currY}")
     }
 
     private lateinit var callback : OnRefreshListener
@@ -222,6 +220,7 @@ class RefreshView(context:Context, attrs: AttributeSet): LinearLayout(context, a
     }
 
     fun loadedFinished(){
+        Log.d(TAG, "loadedFinished: 加载结束 ${bottomView.height}")
         state = RefreshState.ON_NULL
         mScroller.startScroll(0,bottomView.height,0, -bottomView.height , (400 * 1))
         requestLayout()

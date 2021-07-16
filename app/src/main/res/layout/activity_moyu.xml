@@ -20,7 +20,7 @@
 
 
             <com.coder.zt.sobblog.ui.view.RefreshView
-                android:id="@+id/pull_view"
+                android:id="@+id/refresh_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
@@ -63,8 +63,7 @@
                 android:layout_width="match_parent"
                 android:nestedScrollingEnabled="false"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+                android:background="@color/white"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -102,6 +101,7 @@
                 android:background="#00f2f2f2">
 
                 <ImageView
+                    android:id="@+id/iv_back"
                     android:layout_width="45dp"
                     android:layout_height="45dp"
                     android:layout_marginTop="25dp"
@@ -150,7 +150,8 @@
                 android:layout_width="0dp"
                 android:minHeight="42dp"
                 android:padding="6dp"
-                android:hint="评论"
+                android:textSize="14sp"
+                android:hint="@string/str_comment_hint"
                 android:text="@={moyuViewModel.comment}"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

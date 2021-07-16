@@ -117,8 +117,9 @@ class ArticleWebView(context: Context, attrs: AttributeSet):WebView(context, att
                 "language-java" -> "java"
                 "language-kotlin" -> "kotlin"
                 "language-xml" -> "xml"
+                "language-sql" -> "sql"
                 "language-json" -> "text"
-                else -> ""
+                else -> "text"
             }
         }
     }

@@ -46,7 +46,7 @@ class SPUtils {
         save(key, json)
     }
 
-    fun <T> getObject(key:String, obj:Class<T>):T? {
+    fun <T> getObject(key:String, obj:Class<T>):T?{
         val result = read(key)
         if(result.isNullOrEmpty()){
             return null

@@ -44,7 +44,9 @@ class LoginActivity:BaseActivity<ActivityLoginBinding>() {
                 startActivity(intent)
                 finish()
             }else{
+                //没有登录成功，重新获取数据
                 ToastUtils.showError(userViewModel.loginMessage.value!!)
+                userViewModel.captcha()
             }
         }
         userViewModel.captchaBitmap.observe(this){

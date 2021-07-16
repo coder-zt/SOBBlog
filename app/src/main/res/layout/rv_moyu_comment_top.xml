@@ -30,7 +30,7 @@
         <TextView
             android:id="@+id/comment_send_tv"
             android:layout_width="60dp"
-            android:textColor="#aaaaaa"
+            android:textColor="@color/white"
             android:gravity="center"
             android:textSize="16sp"
             android:layout_gravity="center_vertical"

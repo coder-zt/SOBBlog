@@ -5,6 +5,7 @@ import android.content.Intent
 import android.util.Log
 import com.coder.zt.sobblog.ui.activity.ArticleDetailActivity
 import com.coder.zt.sobblog.ui.activity.EditMinifeedActivity
+import com.coder.zt.sobblog.ui.activity.LoginActivity
 
 object AppRouter {
 
@@ -26,6 +27,11 @@ object AppRouter {
      */
     fun toEditMinifeedActivity(activity: Activity){
         val intent = Intent(activity, EditMinifeedActivity::class.java)
+        activity.startActivity(intent)
+    }
+
+    fun toLoginActivity(activity: Activity) {
+        val intent = Intent(activity, LoginActivity::class.java)
         activity.startActivity(intent)
     }
 

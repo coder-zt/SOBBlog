@@ -21,16 +21,13 @@ companion object{
     val topicItem:MutableLiveData<List<TopicItem>> = MutableLiveData()
 
 
-    init {
-        comment.value = "测试"
-    }
 
     /**
      * 获取摸鱼动态
      */
-    fun getRecommendMiniFeed(page:Int){
+    fun getRecommendMiniFeed(loadMore:Boolean){
         viewModelScope.launch{
-            moyuDisplayData.value = MoYuRepository.getInstance().getRecommendMinifeed(page)
+            moyuDisplayData.value = MoYuRepository.getInstance().getRecommendMinifeed(loadMore)
         }
     }
 
@@ -49,12 +46,33 @@ companion object{
     /**
      * 发送评论
      */
-    fun sendCommend(content: String, commentId: String) {
+    fun sendComment(content: String, commentId: String) {
         viewModelScope.launch {
-            Log.d(TAG, "sendCommend:content: $content   commentId: $commentId")
             val thumbUp = MoYuRepository.getInstance().comment(MYCommentSender(content, commentId))
-            Log.d(TAG, "sendCommend: $thumbUp")
             ToastUtils.show(thumbUp.message, !thumbUp.success)
+        }
+    }
+
+    /**
+     * 回复评论
+     *
+     * commentId: "1412829969465319426"
+    content: "回复测试"
+    momentId: "1412324516285227010"
+    targetUserId: "1216830916760965120"
+
+
+    MYReplySender(commentId=1412829969465319426, content=回复测试, momentId=1412324516285227010, targetUserId=1216830916760965120)
+     */
+    fun sendReply(sender: MYReplySender) {
+        viewModelScope.launch {
+            Log.d(TAG, "sendReply: $sender")
+            //commentId: "1415723837252743170"
+            //content: "可以了，做好了app内部升级就发出来大家体验体验"
+            //momentId: "1415701882357198850"
+//            targetUserId: "1139423796017500160"
+            val data = MoYuRepository.getInstance().reply(sender)
+            ToastUtils.show(data.message, !data.success)
         }
     }
 

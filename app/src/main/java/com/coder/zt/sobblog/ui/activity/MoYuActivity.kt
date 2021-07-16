@@ -2,28 +2,24 @@ package com.coder.zt.sobblog.ui.activity
 
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
-import android.widget.FrameLayout
-import android.widget.PopupWindow
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.coder.zt.sobblog.R
 import com.coder.zt.sobblog.databinding.ActivityMoyuBinding
-import com.coder.zt.sobblog.databinding.PopPullStyleBinding
+import com.coder.zt.sobblog.model.datamanager.UserDataMan
+import com.coder.zt.sobblog.model.moyu.MYReplySender
+import com.coder.zt.sobblog.ui.adapter.MYCommentAdapter
 import com.coder.zt.sobblog.ui.adapter.MoYuAdapter
+import com.coder.zt.sobblog.ui.adapter.SlideLayoutManager
 import com.coder.zt.sobblog.ui.base.BaseActivity
 import com.coder.zt.sobblog.ui.view.RefreshView
 import com.coder.zt.sobblog.utils.*
 import com.coder.zt.sobblog.viewmodel.MoYuViewModel
-import com.google.gson.Gson
 import com.luck.picture.lib.PictureSelector
 import com.luck.picture.lib.config.PictureConfig
-import com.luck.picture.lib.config.PictureMimeType
 import com.luck.picture.lib.entity.LocalMedia
 
 class MoYuActivity:BaseActivity<ActivityMoyuBinding>() {
@@ -33,28 +29,50 @@ class MoYuActivity:BaseActivity<ActivityMoyuBinding>() {
         private const val TAG = "MoYuActivity"
     }
 
-    lateinit var commentIdTemp:String
+    //动态的ID
+    lateinit var minifeedIdTemp:String
+    //回复评论的ID
+    private var commentIdTemp:String? = null
+    //被评论用户的ID
+    private var targetUserId:String? = null
+
+    private var loadMore:Boolean = false
 
 
 
-    private val moyuViewModel: MoYuViewModel by lazy {
+    private val viewModel: MoYuViewModel by lazy {
         ViewModelProvider(this).get(MoYuViewModel::class.java)
     }
 
     val adapter by lazy {
         MoYuAdapter(){ doType: MoYuAdapter.DO_TYPE, any: Any ->
             when(doType){
-                MoYuAdapter.DO_TYPE.THUMB_UP ->{
-                    moyuViewModel.thumbUP(any as String)
+                MoYuAdapter.DO_TYPE.THUMB_UP ->{//点赞
+                    viewModel.thumbUP(any as String)
                 }
-                MoYuAdapter.DO_TYPE.COMMENT ->{
-                    commentMinifeed(any as String)
+                MoYuAdapter.DO_TYPE.COMMENT ->{//评论动态
+                    if(UserDataMan.checkUserLoginState(this, "登录后才能评论")){
+                        minifeedIdTemp = any as String//动态id
+                        targetUserId = ""//被评论者的ID
+                        commentIdTemp = ""//评论ID
+                        showCommentInput("")
+                    }
                 }
-                MoYuAdapter.DO_TYPE.REPLY ->{
-                    moyuViewModel.thumbUP(any as String)
+                MoYuAdapter.DO_TYPE.REPLY ->{//回复评论
+
+                    if(UserDataMan.checkUserLoginState(this, "登录后才能评论")) {
+                        UserDataMan.getUserInfo()!!.let{
+                            val comment = any as MYCommentAdapter.CommentDataBean
+                            minifeedIdTemp = comment.momentId//动态ID
+                            targetUserId = comment.fromId//被评论者的ID
+                            commentIdTemp = comment.commentId//评论ID
+                            showCommentInput(comment.from)
+                        }
+                    }
+
                 }
                 MoYuAdapter.DO_TYPE.GET_COMMENT ->{//获取该动态的评论
-                    moyuViewModel.getMiniFeedComment(any as String)
+                    viewModel.getMiniFeedComment(any as String)
                 }
             }
 
@@ -62,12 +80,16 @@ class MoYuActivity:BaseActivity<ActivityMoyuBinding>() {
     }
 
     /**
-     * 评论动态
+     * 显示评论输入窗口
      */
-    private fun commentMinifeed(minifeedId: String) {
-        commentIdTemp = minifeedId
+    private fun showCommentInput(toName: String) {
         dataBinding.commentBarLl.visibility = View.VISIBLE
         dataBinding.commentInputEt.requestFocus()
+        if (toName.isNotEmpty()) {
+            dataBinding.commentInputEt.hint = "@$toName:"
+        }else{
+            dataBinding.commentInputEt.setHint(R.string.str_comment_hint)
+        }
         val imm =  getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         imm.showSoftInput(dataBinding.commentInputEt, InputMethodManager.SHOW_IMPLICIT)
     }
@@ -80,53 +102,51 @@ class MoYuActivity:BaseActivity<ActivityMoyuBinding>() {
     }
 
     private fun initView() {
-        moyuViewModel.slideDistance.value = 0
+        viewModel.slideDistance.value = 0
         dataBinding.rvMoyu.adapter = adapter
+        dataBinding.rvMoyu.layoutManager = SlideLayoutManager(this)
         dataBinding.apply {
-            this.pullView.setPullDownListener {
+            this.refreshView.setPullDownListener {
                 val distance = this.loadingView.setDistance(it.toFloat())
                 distance
             }
-            pullView.setOnRefreshListener(object: RefreshView.OnRefreshListener{
+            refreshView.setOnRefreshListener(object: RefreshView.OnRefreshListener{
                 override fun onRefresh() {
-                    pullView.postDelayed({
-                        loadingView.loadingFinished()
-                        pullView.refreshFinished()
-                    },1000)
+                    loadMore = false
+                    viewModel.getRecommendMiniFeed(loadMore)
                 }
 
                 override fun onLoading() {
-                    pullView.postDelayed({
-                        pullView.loadedFinished()
-                    },10000)
+                    loadMore = true
+//                    refreshView.postDelayed({
+//                        dataBinding.refreshView.loadedFinished()
+//                    },1000)
+
+                    viewModel.getRecommendMiniFeed(loadMore)
                 }
 
             })
-            pullView.setContentSlideListener {
-                Log.d(TAG, "initView: it ---> $it")
-                if(it != 0){
-                    val imm =  getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-                    val v = window.peekDecorView()
-                    if (null != v) {
-                        imm.hideSoftInputFromWindow(v.windowToken, 0)
-                    }
-                    dataBinding.commentBarLl.visibility = View.GONE
-                    commentIdTemp = ""
-                    moyuViewModel?.comment?.postValue("")
+            refreshView.setContentSlideListener {
+                if(it != moyuViewModel?.slideDistance?.value){
+                    closeCommentInput()
                 }
-                Log.d(TAG, "initView: $it")
-                var value = moyuViewModel?.slideDistance?.value
-                if (value != null) {
-                    value += it
-                    moyuViewModel?.slideDistance?.value = value
-                }
+                moyuViewModel?.slideDistance?.value = it
             }
         }
         dataBinding.commentSendTv.setOnClickListener {
-            val content = moyuViewModel.comment.value
-            if (!content.isNullOrBlank() && !commentIdTemp.isEmpty()) {
-                moyuViewModel.sendCommend(content!!, commentIdTemp)
+            val content = viewModel.comment.value
+            //发送评论
+            if (targetUserId.isNullOrEmpty()) {
+                if (!content.isNullOrBlank() && !minifeedIdTemp.isEmpty()) {
+                    viewModel.sendComment(content, minifeedIdTemp)
+                }
+            }else{//回复评论
+                if (!content.isNullOrBlank() && !minifeedIdTemp.isEmpty()) {
+                    viewModel.sendReply(MYReplySender(commentIdTemp!!,content,minifeedIdTemp,targetUserId!!))
+                }
             }
+
+            closeCommentInput()
         }
         dataBinding.ivCamera.setOnClickListener{
             //选择发布动态形式
@@ -139,48 +159,44 @@ class MoYuActivity:BaseActivity<ActivityMoyuBinding>() {
         }
     }
 
+    private fun closeCommentInput() {
+        dataBinding.commentInputEt.text.clear()
+        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        val v = window.peekDecorView()
+        if (null != v) {
+            imm.hideSoftInputFromWindow(v.windowToken, 0)
+        }
+        minifeedIdTemp = ""//动态ID
+        targetUserId = ""//被评论者的ID
+        commentIdTemp = ""//评论ID
+        dataBinding.commentBarLl.visibility = View.GONE
+    }
+
     private fun showPullStyle() {
-        Log.d(TAG, "showPullStyle: 显示pop")
-        val pop = PopupWindow(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT)
-        val popBind = DataBindingUtil.inflate<PopPullStyleBinding>(LayoutInflater.from(this),
-                                            R.layout.pop_pull_style, null ,false)
-        pop.isOutsideTouchable = true
-        pop.isFocusable = true
-        pop.contentView = popBind.root
-        popBind.tvCancel.setOnClickListener {
-            pop.dismiss()
-        }
-        popBind.tvCamera.setOnClickListener {
-            pop.dismiss()
-            PictureSelector.create(this)
-                .openCamera(PictureMimeType.ofImage())
-                .imageEngine(GlideEngine.createGlideEngine()) // 请参考Demo GlideEngine.java
-                .forResult(PictureConfig.REQUEST_CAMERA)
-        }
-        popBind.tvAlbum.setOnClickListener {
-            pop.dismiss()
-            PictureSelector.create(this)
-                .openGallery(PictureMimeType.ofImage())
-                .maxSelectNum(4)
-                .imageEngine(GlideEngine.createGlideEngine()) // 请参考Demo GlideEngine.java
-                .forResult(PictureConfig.CHOOSE_REQUEST)
-        }
-        pop.setOnDismissListener {
-            ScreenUtils.resortWindowBackground(this)
-        }
-        ScreenUtils.setWindowBackground(this, 0.3f)
-        pop.showAtLocation(dataBinding.pullView, Gravity.BOTTOM, 0 ,0 )
+        PopWindowUtils.showTakePictureStyle(4,this,dataBinding.ivCamera)
     }
 
     private fun initData() {
-        dataBinding.moyuViewModel = moyuViewModel
-        moyuViewModel.moyuDisplayData.observe(this){
-            Log.d(TAG, "initData: ${Gson().toJson(it)}")
-            adapter.setData(it)
+        dataBinding.moyuViewModel = viewModel
+        viewModel.moyuDisplayData.observe(this){
+            if (loadMore) {//加载结束
+                Log.d(TAG, "initData: 获取数据添加")
+                dataBinding.refreshView.postDelayed({
+                    adapter.addData(it)
+                },100)
+
+                dataBinding.refreshView.loadedFinished()
+
+            }else{//刷新结束
+                dataBinding.refreshView.refreshFinished()
+                dataBinding.loadingView.loadingFinished()
+                adapter.setData(it)
+            }
         }
-        moyuViewModel.slideDistance.observe(this){
+        viewModel.slideDistance.observe(this){
             val height = ScreenUtils.dp2px(320)
             var a = 0
+            Log.d(TAG, "initData: $it")
             if(1.0f * it/height < 1){
                a =  (1.0f * it/height * 255).toInt()
             }else{
@@ -188,8 +204,13 @@ class MoYuActivity:BaseActivity<ActivityMoyuBinding>() {
             }
             dataBinding.topBarRl.setBackgroundColor(Color.argb(a,242,242,242))
             dataBinding.titleTv.setTextColor(Color.argb(a,0,0,0))
+            if(a>127){
+                dataBinding.ivBack.setImageResource(R.mipmap.ic_back_dark)
+            }else{
+                dataBinding.ivBack.setImageResource(R.mipmap.back_white)
+            }
         }
-        moyuViewModel.comment.observe(this){
+        viewModel.comment.observe(this){
             if(it.isNotEmpty()){
                 dataBinding.commentSendTv.setBackgroundResource(R.drawable.send_btn_active_bg)
                 dataBinding.commentSendTv.setTextColor(Color.WHITE)
@@ -198,14 +219,14 @@ class MoYuActivity:BaseActivity<ActivityMoyuBinding>() {
                 dataBinding.commentSendTv.setTextColor(Color.GRAY)
             }
         }
-        moyuViewModel.feedComment.observe(this){
+        viewModel.feedComment.observe(this){
             adapter.setComment(it)
         }
     }
 
     override fun onResume() {
         super.onResume()
-        moyuViewModel.getRecommendMiniFeed(1)
+        viewModel.getRecommendMiniFeed(loadMore)
     }
 
     override fun getLayoutId(): Int {
@@ -218,10 +239,6 @@ class MoYuActivity:BaseActivity<ActivityMoyuBinding>() {
             when (requestCode) {
                 PictureConfig.REQUEST_CAMERA, PictureConfig.CHOOSE_REQUEST->{
                     val result:List<LocalMedia> = PictureSelector.obtainMultipleResult(data)
-                    for (localMedia in result) {
-                        Log.d(TAG, "相册：onActivityResult: ${localMedia.path}")
-
-                    }
                     ImageSelectManager.putImages(result)
                     AppRouter.toEditMinifeedActivity(this)
                 }

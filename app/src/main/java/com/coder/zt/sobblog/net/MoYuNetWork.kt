@@ -1,6 +1,7 @@
 package com.coder.zt.sobblog.net
 
 import com.coder.zt.sobblog.model.moyu.MYCommentSender
+import com.coder.zt.sobblog.model.moyu.MYReplySender
 import com.coder.zt.sobblog.model.moyu.MinifeedSender
 import com.coder.zt.sobblog.net.api.MoYu
 import com.coder.zt.sobblog.net.base.NetWorkBase
@@ -20,6 +21,8 @@ class MoYuNetWork: NetWorkBase() {
     suspend fun thumbUp(momentId:String) = moYuService.thumbUp(momentId).await()
 
     suspend fun comment(comment: MYCommentSender) = moYuService.comment(comment).await()
+
+    suspend fun reply(reply: MYReplySender) = moYuService.reply(reply).await()
 
     suspend fun minifeedTopics() = moYuService.minifeedTopics().await()
 

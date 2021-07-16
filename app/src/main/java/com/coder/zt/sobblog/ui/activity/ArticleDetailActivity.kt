@@ -62,7 +62,6 @@ companion object{
             val override = RequestOptions.bitmapTransform(corners)
             Glide.with(this).load(it.avatar).apply(override).into(dataBinding.userAvatar)
             Glide.with(this).load(it.covers[0]).into(dataBinding.articleCover)
-            Glide.with(this).load(it.avatar).into(dataBinding.userAvatar)
             val articleContent = it.content
             dataBinding.wvArticle.loadArticle(articleContent)
         }
@@ -76,17 +75,7 @@ companion object{
         loadArticle(articleId)
     }
 
-
-
-
-
-    @SuppressLint("SetJavaScriptEnabled")
-    override fun onResume() {
-        super.onResume()
-    }
-
     private fun loadArticle(articleId:String) {
-        Log.d(TAG, "loadArticle: $articleId")
         if (articleId.isEmpty()) {
             ToastUtils.showError("找不到该文章信息")
             return

@@ -16,10 +16,29 @@ import java.io.File
 
 
 class MoYuRepository {
+
+
+    private var moyuMinifeedPage = 1
+
+    suspend fun getRecommendMinifeed(loadMore:Boolean):List<MiniFeed>{
+        if(loadMore){
+            moyuMinifeedPage++
+        }else{
+            moyuMinifeedPage = 1
+        }
+        val recommend = MoYuNetWork.getInstance().getRecommendMinifeed(moyuMinifeedPage)
+        return if (recommend.code == Constants.SUCCESS_CODE) {
+           recommend.data.list
+        }else{
+            moyuMinifeedPage--
+            listOf()
+        }
+    }
+
     suspend fun getRecommendMinifeed(page:Int):List<MiniFeed>{
         val recommend = MoYuNetWork.getInstance().getRecommendMinifeed(page)
         return if (recommend.code == Constants.SUCCESS_CODE) {
-           recommend.data.list
+            recommend.data.list
         }else{
             listOf()
         }
@@ -42,6 +61,11 @@ class MoYuRepository {
     suspend fun comment(comment: MYCommentSender):ResponseData<String>{
         val comment = MoYuNetWork.getInstance().comment(comment)
         return comment
+    }
+
+    suspend fun reply(reply: MYReplySender):ResponseData<String>{
+
+        return MoYuNetWork.getInstance().reply(reply)
     }
 
     suspend fun minifeedTopics():List<TopicItem>{

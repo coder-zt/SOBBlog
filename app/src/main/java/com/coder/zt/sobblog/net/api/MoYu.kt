@@ -62,6 +62,11 @@ interface MoYu {
     fun comment(@Body comment:MYCommentSender): Call<ResponseData<String>>
 
     /**
+     * 回复评论
+     */
+    @POST("/ct/moyu/sub-comment")
+    fun reply(@Body comment:MYReplySender): Call<ResponseData<String>>
+    /**
      * 获取动态话题
      */
     @GET("/ct/moyu/topic")

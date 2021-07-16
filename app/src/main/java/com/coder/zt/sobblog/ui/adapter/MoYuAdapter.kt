@@ -97,7 +97,17 @@ class MoYuAdapter(val callback:(code:DO_TYPE, data:Any) -> Unit): RecyclerView.A
 
     fun setData(data:List<MiniFeed>){
         mData.clear()
-        mData.addAll(data)
+        if (data.isNotEmpty()) {
+            mData.addAll(data)
+        }
+        notifyDataSetChanged()
+    }
+
+    fun addData(data:List<MiniFeed>){
+        if (data.isNotEmpty()) {
+            Log.d(TAG, "addData: 获取数据添加 ${data.size}")
+            mData.addAll(data)
+        }
         notifyDataSetChanged()
     }
 
@@ -122,7 +132,6 @@ class MoYuAdapter(val callback:(code:DO_TYPE, data:Any) -> Unit): RecyclerView.A
         fun setData(miniFeed: MiniFeed, position: Int,listener:()->Unit,callback:(code:DO_TYPE, data:Any) -> Unit) {
             requestComment = false
             inflate.data = miniFeed
-            Log.d(TAG, "setData:  $position ---> ${miniFeed.nickname} ===> like count ${miniFeed.thumbUpCount}")
             //展示评论、点赞数量
             val userId = UserDataMan.getUserInfo()?.id
             if(miniFeed.thumbUpList.contains(userId)){
@@ -172,7 +181,7 @@ class MoYuAdapter(val callback:(code:DO_TYPE, data:Any) -> Unit): RecyclerView.A
                 if(!showExpansion){
                     inflate.rvComment.visibility = View.VISIBLE
                     inflate.triangleView.visibility = View.VISIBLE
-                    adapter = MYCommentAdapter(callback)
+                    adapter = MYCommentAdapter(miniFeed.id, callback)
                     inflate.rvComment.adapter = adapter
                     showExpansion = true
                     //获取评论
@@ -190,6 +199,9 @@ class MoYuAdapter(val callback:(code:DO_TYPE, data:Any) -> Unit): RecyclerView.A
             }
         }
 
+        /**
+         * 检查该条动态的评论是否已经展开
+         */
         fun checkShowExpansion(){
             if (showExpansion) {
                 inflate.rvComment.visibility = View.GONE
@@ -198,10 +210,15 @@ class MoYuAdapter(val callback:(code:DO_TYPE, data:Any) -> Unit): RecyclerView.A
             }
         }
 
+        /**
+         * 设置该条动态的评论
+         */
         fun setComment(it: List<MYComment>) {
-            if (requestComment) {
-                adapter.setData(it)
-                requestComment = false
+            if (!it.isNullOrEmpty()) {
+                if (inflate.data?.id == it[0].momentId && requestComment) {
+                    adapter.setData(it)
+                    requestComment = false
+                }
             }
         }
 

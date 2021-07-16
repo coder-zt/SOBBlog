@@ -13,7 +13,7 @@ import com.coder.zt.sobblog.databinding.RvMoyuCommentTopBinding
 import com.coder.zt.sobblog.databinding.RvMoyuInteractionBinding
 import com.coder.zt.sobblog.model.moyu.MYComment
 
-class MYCommentAdapter( val callback:(code: MoYuAdapter.DO_TYPE, data:Any) -> Unit)
+class MYCommentAdapter(val minifeedId:String, val callback:(code: MoYuAdapter.DO_TYPE, data:Any) -> Unit)
     :RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
@@ -31,9 +31,10 @@ class MYCommentAdapter( val callback:(code: MoYuAdapter.DO_TYPE, data:Any) -> Un
     fun setData(comments: List<MYComment>){
         Log.d(TAG, "setData: ${comments.size}")
         for (comment in comments) {
-            mCommentData.add(CommentDataBean(comment.nickname, parentComment, comment.content))
+            Log.d(TAG, "setData: comment $comment")
+            mCommentData.add(CommentDataBean(comment.momentId,comment.id,comment.nickname,comment.userId, parentComment, comment.content))
             for (subComment in comment.subComments) {
-                mCommentData.add(CommentDataBean(subComment.nickname, subComment.targetUserNickname, subComment.content))
+                mCommentData.add(CommentDataBean(comment.momentId,comment.id,subComment.nickname,comment.userId, subComment.targetUserNickname, subComment.content))
             }
         }
         notifyDataSetChanged()
@@ -73,7 +74,7 @@ class MYCommentAdapter( val callback:(code: MoYuAdapter.DO_TYPE, data:Any) -> Un
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (getItemViewType(position)) {
             DATA_TYPE_TOP -> {
-                (holder as TopView).setData( callback)
+                (holder as TopView).setData( minifeedId, callback)
             }
             DATA_TYPE_REPLY,
             DATA_TYPE_COMMENT -> {
@@ -99,32 +100,43 @@ class MYCommentAdapter( val callback:(code: MoYuAdapter.DO_TYPE, data:Any) -> Un
         return mCommentData.size + 1
     }
 
-   data class CommentDataBean(val from:String, val to:String, val content:String)
+   data class CommentDataBean(
+       val momentId:String, //动态ID
+       val commentId:String, //评论ID
+       val from:String, //评论者的名字
+       val fromId:String, //评论者的ID
+       val to:String, //被评论者的名字
+       val content:String//评论的内容
+       )
 
-    class ItemView(val inflate: RvMoyuInteractionBinding?) : RecyclerView.ViewHolder(inflate!!.root) {
+    class ItemView(val inflate: RvMoyuInteractionBinding) : RecyclerView.ViewHolder(inflate!!.root) {
         @SuppressLint("SetTextI18n")
-        fun setData(commentDataBean: CommentDataBean?,callback:(code: MoYuAdapter.DO_TYPE, data:Any) -> Unit) {
-            inflate?.diver?.visibility = View.GONE
+        fun setData(commentDataBean: CommentDataBean,callback:(code: MoYuAdapter.DO_TYPE, data:Any) -> Unit) {
+            inflate.diver.visibility = View.GONE
             //评论
-            if(commentDataBean?.from != "有点赞"){
-                if(commentDataBean?.to == parentComment){
+            if(commentDataBean.from != "有点赞"){
+                if(commentDataBean.to == parentComment){
                     Log.d(TAG, "setData 父评论: $commentDataBean")
-                    inflate?.content?.text = Html.fromHtml( "<font color=\"#294F6C\">${commentDataBean.from}</font><font color=\"#000000\">:${commentDataBean.content}</font>")
+                    inflate.content.text = Html.fromHtml( "<font color=\"#294F6C\">${commentDataBean.from}</font><font color=\"#000000\">:${commentDataBean.content}</font>")
                 }else{
                     Log.d(TAG, "setData 子评论: $commentDataBean")//
-                    inflate?.content?.text = Html.fromHtml( "<font color=\"#294F6C\">${commentDataBean?.from}</font><font color=\"#000000\">回复</font><font color=\"#294F6C\">${commentDataBean?.to}</font><font color=\"#000000\">:${commentDataBean?.content}</font>")
+                    inflate.content.text = Html.fromHtml( "<font color=\"#294F6C\">${commentDataBean?.from}</font><font color=\"#000000\">回复</font><font color=\"#294F6C\">${commentDataBean?.to}</font><font color=\"#000000\">:${commentDataBean?.content}</font>")
                 }
+                inflate.root.setOnClickListener{
+                    callback(MoYuAdapter.DO_TYPE.REPLY, commentDataBean)
+                }
+
             }
         }
 
 
     }
 
-    class TopView(val inflate: RvMoyuCommentTopBinding?) : RecyclerView.ViewHolder(inflate!!.root) {
+    class TopView(val inflate: RvMoyuCommentTopBinding) : RecyclerView.ViewHolder(inflate!!.root) {
 
-        fun setData(callback:(code: MoYuAdapter.DO_TYPE, data:Any) -> Unit) {
-            inflate?.root?.setOnClickListener{
-                callback.invoke(MoYuAdapter.DO_TYPE.COMMENT, "ID")
+        fun setData(minifeedId: String, callback:(code: MoYuAdapter.DO_TYPE, data:Any) -> Unit) {
+            inflate.root.setOnClickListener{
+                callback.invoke(MoYuAdapter.DO_TYPE.COMMENT, minifeedId)
             }
         }
 

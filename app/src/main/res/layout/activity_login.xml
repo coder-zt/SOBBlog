@@ -137,7 +137,6 @@
 
         <ImageView
             android:id="@+id/iv_human_code"
-            url='@{`https://api.sunofbeach.net/uc/ut/captcha?code=` + randomCode }'
             android:layout_width="120dp"
             android:layout_height="40dp"
             app:layout_constraintBottom_toBottomOf="@+id/linearLayout3"
