@@ -69,6 +69,16 @@ class EditMinifeedActivity:BaseActivity<ActivityEditMinifeedBinding>() {
         for (image in images) {
             viewModel.uploadImage(image)
         }
+
+        viewModel.eventObserver.observe(this){
+            when(it.first){
+                MoYuViewModel.EVENT_PUBLISH->{
+                    if(it.second){
+                        finish()
+                    }
+                }
+            }
+        }
     }
 
     private fun initView() {

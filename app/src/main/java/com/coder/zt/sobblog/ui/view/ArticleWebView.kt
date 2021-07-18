@@ -98,7 +98,7 @@ class ArticleWebView(context: Context, attrs: AttributeSet):WebView(context, att
             for (child in e.children()) {
                 Log.d(TAG, "verseChild: ${child.tagName()}")
                 if (child.tagName() == "code") {
-                    child.parent().attributes().add("class", "brush: ${getLanguageTye(child.attr("class"))}; toolbar:false; code")
+                    child.parent().attributes().add("class", "brush: ${getLanguageTye(child.attr("class"))}; toolbar:false; quick-code:false; code")
                     child.parent().appendText(child.text())
                     child.remove()
                 }

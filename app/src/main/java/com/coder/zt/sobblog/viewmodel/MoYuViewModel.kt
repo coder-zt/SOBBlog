@@ -1,25 +1,40 @@
 package com.coder.zt.sobblog.viewmodel
 
+import android.graphics.BitmapFactory
+import android.graphics.Paint
+import android.os.Environment
+import android.text.TextUtils
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.coder.zt.sobblog.SOBApp
 import com.coder.zt.sobblog.model.moyu.*
 import com.coder.zt.sobblog.repository.MoYuRepository
 import com.coder.zt.sobblog.utils.ImageSelectManager
 import com.coder.zt.sobblog.utils.ToastUtils
+import com.luck.picture.lib.compress.Luban
+import com.luck.picture.lib.compress.OnCompressListener
+import com.luck.picture.lib.entity.LocalMedia
 import kotlinx.coroutines.launch
+import me.shouheng.compress.Compress
+import me.shouheng.compress.listener.CompressListener
+import me.shouheng.compress.strategy.Configuration
+import me.shouheng.compress.strategy.Strategies
+import java.io.File
+
 
 class MoYuViewModel: ViewModel() {
 companion object{
     private const val TAG = "MoYuViewModel"
+    const val EVENT_PUBLISH = 111
 }
     val moyuDisplayData:MutableLiveData<List<MiniFeed>> = MutableLiveData()
     val slideDistance:MutableLiveData<Int> = MutableLiveData()
     val comment:MutableLiveData<String> = MutableLiveData()
     val feedComment:MutableLiveData<List<MYComment>> = MutableLiveData()
     val topicItem:MutableLiveData<List<TopicItem>> = MutableLiveData()
-
+    val eventObserver:MutableLiveData<Pair<Int, Boolean>> = MutableLiveData()
 
 
     /**
@@ -59,11 +74,6 @@ companion object{
      */
     fun sendReply(sender: MYReplySender) {
         viewModelScope.launch {
-            Log.d(TAG, "sendReply: $sender")
-            //commentId: "1415723837252743170"
-            //content: "可以了，做好了app内部升级就发出来大家体验体验"
-            //momentId: "1415701882357198850"
-//            targetUserId: "1139423796017500160"
             val data = MoYuRepository.getInstance().reply(sender)
             ToastUtils.show(data.message, !data.success)
         }
@@ -92,9 +102,35 @@ companion object{
      * 上传图片
      */
     fun uploadImage(media:ImageSelectManager.UpLoadImage){
-        viewModelScope.launch{
-            MoYuRepository.getInstance().uploadImage(media)
+        compressPicture(File(media.localMedia.realPath)){
+
+            viewModelScope.launch{
+                MoYuRepository.getInstance().uploadImage(media,it)
+            }
+
         }
+
+    }
+
+    
+    private fun compressPicture(file: File, callback:(path:File)->Unit) {
+       Compress.with(SOBApp._context, file)
+            .setQuality(70)
+            .setCompressListener(object : CompressListener {
+                override fun onStart() {
+                }
+
+                override fun onSuccess(result: File?) {
+                    result?.let {
+                        callback(it)
+                    }
+                    }
+
+                override fun onError(throwable: Throwable?) {
+                }
+            })
+            .strategy(Strategies.luban())
+            .launch()
     }
 
     /**
@@ -103,8 +139,10 @@ companion object{
     fun publishMinifeed(media:MinifeedSender){
         viewModelScope.launch{
             val message = MoYuRepository.getInstance().publishMinifeed(media)
-            ToastUtils.show(message)
+            ToastUtils.show(message.message)
+            eventObserver.value = Pair(EVENT_PUBLISH, message.success)
         }
     }
+
 
 }

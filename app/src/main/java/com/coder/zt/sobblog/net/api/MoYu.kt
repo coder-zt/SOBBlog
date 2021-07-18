@@ -46,7 +46,7 @@ interface MoYu {
     /**
      * 获取单条摸鱼动态的评论
      */
-    @GET("/ct/moyu/comment/{commentId}/{page}")
+    @GET("/ct/moyu/comment/{commentId}/{page}?sort=1")
     fun getMinifeedComment(@Path("commentId") commentId:String, @Path("page") page:Int): Call<ResponseListData<MYComment>>
 
     /**

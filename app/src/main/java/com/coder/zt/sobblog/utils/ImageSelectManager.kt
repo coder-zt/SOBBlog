@@ -64,10 +64,16 @@ object ImageSelectManager {
     }
 
     fun update(){
-        Log.d(TAG, "update: 图片数据更新")
+//        Log.d(TAG, "update: 图片数据更新")
         for (callback in callbacks) {
             callback()
         }
+    }
+
+
+    fun deleteImage(localMedia: UpLoadImage) {
+        imageContainer.remove(localMedia)
+        update()
     }
 
 

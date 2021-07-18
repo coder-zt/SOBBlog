@@ -98,6 +98,10 @@ class AlbumPhotoAdapter(val activity:Activity):RecyclerView.Adapter<AlbumPhotoAd
             bind.ivPicture.setOnClickListener{
                 callback()
             }
+            bind.ivDelete.setOnClickListener{
+                ImageSelectManager.deleteImage(localMedia)
+            }
+
         }
 
 

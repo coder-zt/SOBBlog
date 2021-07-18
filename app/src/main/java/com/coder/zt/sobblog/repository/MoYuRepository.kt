@@ -1,5 +1,6 @@
 package com.coder.zt.sobblog.repository
 
+import android.net.Uri
 import android.text.TextUtils
 import android.util.Log
 import com.coder.zt.sobblog.SOBApp
@@ -77,50 +78,26 @@ class MoYuRepository {
         return comment.data
     }
 
-    suspend fun uploadImage(media: ImageSelectManager.UpLoadImage){
-        val file = File(media.localMedia.realPath)
-        comparePicture(file)
-        val request:RequestBody = RequestBody.create("image/jpg".toMediaTypeOrNull(), file)
+    suspend fun uploadImage(media:ImageSelectManager.UpLoadImage, file: File){
+        val request: RequestBody = RequestBody.create("image/jpg".toMediaTypeOrNull(), file)
         val image = MultipartBody.Part.createFormData("image", file.name, request)
         val comment = MoYuNetWork.getInstance().uploadImage(image)
-        Log.d("测试上传图片", "uploadImage: $comment")
-        media.upload = comment.success
         media.url = comment.data
+        media.upload = true
         ImageSelectManager.update()
     }
 
-    private fun comparePicture(file: File) {
-        Luban.with(SOBApp._context)
-            .load(file)
-            .ignoreBy(100)
-//            .setTargetDir(getPath(SOBApp._context,))
-            .filter(object : CompressionPredicate {
-                override fun apply(path: String): Boolean {
-                    return !(TextUtils.isEmpty(path) || path.toLowerCase().endsWith(".gif"))
-                }
-            })
-            .setCompressListener(object : OnCompressListener {
-                override fun onStart() {
-                    TODO("Not yet implemented")
-                }
 
-                override fun onSuccess(list: MutableList<LocalMedia>?) {
-                    TODO("Not yet implemented")
-                }
 
-                override fun onError(e: Throwable?) {
-                    TODO("Not yet implemented")
-                }
-            }).launch()
-    }
-
-    suspend fun publishMinifeed(minifeed: MinifeedSender):String{
+    suspend fun publishMinifeed(minifeed: MinifeedSender):ResponseData<MYPublishResponse>{
         val comment = MoYuNetWork.getInstance().publishMinifeed(minifeed)
-        return comment.message
+        return comment
     }
 
 
     companion object {
+
+        private const val TAG = "MoYuRepository"
 
         private var instance: MoYuRepository? = null
 
