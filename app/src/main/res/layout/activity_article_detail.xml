@@ -186,8 +186,10 @@
                     app:layout_constraintTop_toBottomOf="@+id/wv_article">
 
                     <LinearLayout
+                        android:id="@+id/ll_zan_container"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:paddingHorizontal= "4dp"
                         android:background="@drawable/gray_boroad_bg"
                         android:gravity="center_vertical">
 
@@ -203,7 +205,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="6dp"
-                            android:text="@{data.thumbUp + `人觉得牛逼`}"
+                            android:text="@{data.thumbUp==0?`赞`:data.thumbUp+``}"
                             android:textSize="16sp" />
 
                     </LinearLayout>
@@ -213,6 +215,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
+                        android:paddingHorizontal= "4dp"
                         android:background="@drawable/gray_boroad_bg"
                         android:gravity="center_vertical">
 
@@ -221,7 +224,7 @@
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:layout_marginStart="6dp"
-                            android:background="@mipmap/zan_grey_feidian3" />
+                            android:background="@mipmap/ic_collect" />
 
                         <TextView
                             android:id="@+id/collect_tv"
@@ -236,14 +239,31 @@
                     </LinearLayout>
 
 
-                    <TextView
+                    <LinearLayout
+                        android:id="@+id/ll_reward_container"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
+                        android:paddingHorizontal= "4dp"
                         android:background="@drawable/gray_boroad_bg"
-                        android:padding="6dp"
-                        android:text="$ 打赏"
-                        android:textSize="16sp" />
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginStart="6dp"
+                            android:background="@mipmap/ic_reward" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="6dp"
+                            android:layout_marginHorizontal="20dp"
+                            android:layout_marginStart="6dp"
+                            android:text="打赏"
+                            android:textSize="16sp" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 

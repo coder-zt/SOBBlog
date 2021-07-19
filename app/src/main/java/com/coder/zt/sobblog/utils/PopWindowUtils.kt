@@ -22,13 +22,18 @@ object PopWindowUtils {
     private const val TAG = "PopWindowUtils"
     private const val heightRatio = 0.6f
 
-    fun <T : ViewDataBinding, D> showListData(layoutId:Int, items:List<D>, activity:Activity,
-                                              callback: PopListAdapter.ItemsListSetData<T,D>){
-        val pop = PopupWindow(ViewGroup.LayoutParams.MATCH_PARENT,
-                    (ScreenUtils.getScreenHeight()*heightRatio).toInt())
+    fun <T : ViewDataBinding, D> showListData(
+        layoutId: Int, items: List<D>, activity: Activity,
+        callback: PopListAdapter.ItemsListSetData<T, D>
+    ) {
+        val pop = PopupWindow(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            (ScreenUtils.getScreenHeight() * heightRatio).toInt()
+        )
         val popBind = DataBindingUtil.inflate<PopListShowBinding>(
             LayoutInflater.from(activity),
-            R.layout.pop_list_show, null ,false)
+            R.layout.pop_list_show, null, false
+        )
         pop.isOutsideTouchable = true
         pop.isFocusable = true
         pop.contentView = popBind.root
@@ -37,9 +42,9 @@ object PopWindowUtils {
             ScreenUtils.resortWindowBackground(activity)
         }
         popBind.rvContainer.adapter = PopListAdapter(layoutId, items,
-            object:PopListAdapter.ItemsListSetData<T, D>{
+            object : PopListAdapter.ItemsListSetData<T, D> {
                 override fun setData(inflate: T, d: D) {
-                    callback.setData(inflate,d)
+                    callback.setData(inflate, d)
                 }
 
                 override fun onClick(d: D) {
@@ -47,15 +52,17 @@ object PopWindowUtils {
                     callback.onClick(d)
                 }
             })
-        ScreenUtils.setWindowBackground(activity , 0.3f)
-        pop.showAtLocation(activity.window.decorView.rootView, Gravity.BOTTOM, 0 ,0 )
+        ScreenUtils.setWindowBackground(activity, 0.3f)
+        pop.showAtLocation(activity.window.decorView.rootView, Gravity.BOTTOM, 0, 0)
     }
 
-    fun showTakePictureStyle(size:Int, activity:Activity,view:View) {
-        val pop = PopupWindow(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+    fun showTakePictureStyle(size: Int, activity: Activity, view: View) {
+        val pop =
+            PopupWindow(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         val popBind = DataBindingUtil.inflate<PopPullStyleBinding>(
             LayoutInflater.from(activity),
-            R.layout.pop_pull_style, null ,false)
+            R.layout.pop_pull_style, null, false
+        )
         pop.isOutsideTouchable = true
         pop.isFocusable = true
         pop.contentView = popBind.root
@@ -81,6 +88,7 @@ object PopWindowUtils {
             ScreenUtils.resortWindowBackground(activity)
         }
         ScreenUtils.setWindowBackground(activity, 0.3f)
-        pop.showAtLocation(view, Gravity.BOTTOM, 0 ,0 )
+        pop.showAtLocation(view, Gravity.BOTTOM, 0, 0)
     }
+
 }

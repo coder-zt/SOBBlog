@@ -17,8 +17,8 @@
 
             <ImageView
                 android:id="@+id/iv_avatar"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_marginStart="12dp"/>
 
             <TextView
@@ -27,14 +27,15 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textSize="16sp"
+                android:textColor="#909399"
                 android:layout_marginStart="12dp"
                 android:gravity="center_vertical"
                 android:text="打赏人" />
 
             <View
                 android:id="@+id/iv_blank"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_marginStart="12dp"/>
 
             <TextView
@@ -43,6 +44,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textSize="16sp"
+                android:textColor="#909399"
                 android:layout_marginStart="12dp"
                 android:gravity="center"
                 android:text="Sob币" />
@@ -50,6 +52,7 @@
             <TextView
                 android:id="@+id/tv_time"
                 android:layout_width="0dp"
+                android:textColor="#909399"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginStart="12dp"

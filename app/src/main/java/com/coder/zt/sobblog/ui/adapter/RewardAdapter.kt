@@ -1,7 +1,11 @@
 package com.coder.zt.sobblog.ui.adapter
 
+import android.graphics.Color
 import android.opengl.Visibility
 import android.util.Log
+import android.util.TypedValue
+import android.util.TypedValue.COMPLEX_UNIT_SP
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -61,16 +65,26 @@ class RewardAdapter:RecyclerView.Adapter<RewardAdapter.ItemView>() {
             Log.d(TAG, "setData: ${rewardUserInfo.sob}")
             if (rewardUserInfo.sob != -1) {
                 inflate.tvSob.text = "${rewardUserInfo.sob}"
+                inflate.tvSob.setTextColor(Color.parseColor("#FC8255"))
                 inflate.nicknameTv.text = rewardUserInfo.nickname
                 inflate.tvTime.text = rewardUserInfo.createTime.substring(0,10)
                 inflate.ivAvatar.visibility = View.VISIBLE
+                inflate.nicknameTv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14F)
+                inflate.tvTime.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14F)
+                inflate.tvSob.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14F)
+                inflate.nicknameTv.gravity = Gravity.CENTER_VERTICAL
                 inflate.ivBlank.visibility = View.GONE
-                val corners = RoundedCorners(ScreenUtils.dp2px(14))
+                val corners = RoundedCorners(ScreenUtils.dp2px(10))
                 val override = RequestOptions.bitmapTransform(corners)
                 Glide.with(inflate.ivAvatar.context).load(rewardUserInfo.avatar).apply(override).into(inflate.ivAvatar)
             }else{
+                inflate.nicknameTv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18F)
+                inflate.tvTime.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18F)
+                inflate.tvSob.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18F)
+                inflate.tvSob.setTextColor(Color.parseColor("#909399"))
                 inflate.ivAvatar.visibility = View.GONE
                 inflate.ivBlank.visibility = View.VISIBLE
+                inflate.nicknameTv.gravity = Gravity.CENTER
             }
         }
 

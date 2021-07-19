@@ -7,8 +7,11 @@ import androidx.lifecycle.viewModelScope
 import com.coder.zt.sobblog.model.article.ArticleComment
 import com.coder.zt.sobblog.model.article.ArticleDetail
 import com.coder.zt.sobblog.model.article.ArticleInfo
+import com.coder.zt.sobblog.model.article.ArticleReward
+import com.coder.zt.sobblog.model.base.ResponseData
 import com.coder.zt.sobblog.model.user.RewardUserInfo
 import com.coder.zt.sobblog.repository.ArticleRepository
+import com.luck.picture.lib.tools.ToastUtils
 import kotlinx.coroutines.launch
 
 class ArticleViewModel:ViewModel() {
@@ -20,6 +23,7 @@ class ArticleViewModel:ViewModel() {
     val articleDetail:MutableLiveData<ArticleDetail> = MutableLiveData()
     val rewardInfo:MutableLiveData<List<RewardUserInfo>> = MutableLiveData()
     val commentInfo:MutableLiveData<List<ArticleComment>> = MutableLiveData()
+    val checkThumbUp:MutableLiveData<ResponseData<String>> = MutableLiveData()
 
 
     fun loadRecommendArticle() {
@@ -58,6 +62,35 @@ class ArticleViewModel:ViewModel() {
     fun getArticleComment(id: String) {
         viewModelScope.launch {
             commentInfo.value = ArticleRepository.getInstance().getArticleComment(id, 1)
+        }
+    }
+    /**
+     * 点赞文章
+     */
+    fun articleThumbUp(id: String) {
+        viewModelScope.launch {
+            val message = ArticleRepository.getInstance().articleThumbUp(id)
+            com.coder.zt.sobblog.utils.ToastUtils.show(message.message, message.success)
+            articleCheckThumbUp(id)
+        }
+    }
+
+    /**
+     * 查询我是否已经点赞文章
+     */
+    fun articleCheckThumbUp(id: String) {
+        viewModelScope.launch {
+            checkThumbUp.value = ArticleRepository.getInstance().articleCheckThumbUp(id)
+        }
+    }
+
+    /**
+     * 查询我是否已经点赞文章
+     */
+    fun articleReward(reward: ArticleReward) {
+        viewModelScope.launch {
+            checkThumbUp.value = ArticleRepository.getInstance().articleReward(reward)
+            getArticleReward(reward.articleId)
         }
     }
 

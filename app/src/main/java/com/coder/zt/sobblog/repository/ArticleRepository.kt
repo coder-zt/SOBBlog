@@ -4,6 +4,8 @@ import android.util.Log
 import com.coder.zt.sobblog.model.article.ArticleComment
 import com.coder.zt.sobblog.model.article.ArticleDetail
 import com.coder.zt.sobblog.model.article.ArticleInfo
+import com.coder.zt.sobblog.model.article.ArticleReward
+import com.coder.zt.sobblog.model.base.ResponseData
 import com.coder.zt.sobblog.model.user.RewardUserInfo
 import com.coder.zt.sobblog.net.ArticleNetWork
 
@@ -51,5 +53,17 @@ class ArticleRepository {
 
     suspend fun getArticleComment(id: String, page:Int): List<ArticleComment> {
         return ArticleNetWork.getInstance().getArticleComment(id, page).data.content
+    }
+
+    suspend fun articleThumbUp(id: String): ResponseData<String> {
+        return ArticleNetWork.getInstance().articleThumbUp(id)
+    }
+
+    suspend fun articleCheckThumbUp(id: String):ResponseData<String> {
+        return ArticleNetWork.getInstance().articleCheckThumbUp(id)
+    }
+
+    suspend fun articleReward(reward: ArticleReward):ResponseData<String> {
+        return ArticleNetWork.getInstance().articleReward(reward)
     }
 }

@@ -131,6 +131,9 @@ class MoYuAdapter(val callback:(code:DO_TYPE, data:Any) -> Unit): RecyclerView.A
         private lateinit var adapter:MYCommentAdapter
         fun setData(miniFeed: MiniFeed, position: Int,listener:()->Unit,callback:(code:DO_TYPE, data:Any) -> Unit) {
             requestComment = false
+            showExpansion = false
+            inflate.rvComment.visibility = View.GONE
+            inflate.triangleView.visibility = View.GONE
             inflate.data = miniFeed
             //展示评论、点赞数量
             val userId = UserDataMan.getUserInfo()?.id

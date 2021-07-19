@@ -3,13 +3,14 @@ package com.coder.zt.sobblog.net.api
 import com.coder.zt.sobblog.model.article.ArticleComment
 import com.coder.zt.sobblog.model.article.ArticleDetail
 import com.coder.zt.sobblog.model.article.ArticleInfo
+import com.coder.zt.sobblog.model.article.ArticleReward
 import com.coder.zt.sobblog.model.base.ResponseContentData
 import com.coder.zt.sobblog.model.base.ResponseData
 import com.coder.zt.sobblog.model.base.ResponseListData
 import com.coder.zt.sobblog.model.user.RewardUserInfo
 import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.Path
+import retrofit2.http.*
+
 //文章作者打赏：https://api.sunofbeach.net/ast/prise-qr-code/1139423796017500160
 //查询自己是否点赞文章https://api.sunofbeach.net/ct/article/check-thumb-up/1410937277084966914
 interface ArticleApi {
@@ -32,7 +33,7 @@ interface ArticleApi {
      *  获取文章赞赏列表
      */
     @GET("/ast/prise/article/{articleId}")
-    fun articleReward(@Path("articleId") articleId: String):Call<ResponseData<List<RewardUserInfo>>>
+    fun getArticleReward(@Path("articleId") articleId: String):Call<ResponseData<List<RewardUserInfo>>>
 
 
     /**
@@ -40,4 +41,22 @@ interface ArticleApi {
      */
     @GET("/ct/article/comment/{articleId}/{page}")
     fun articleComment(@Path("articleId") articleId: String, @Path("page") page:Int):Call<ResponseContentData<ArticleComment>>
+
+    /**
+     * 文章点赞
+     */
+    @PUT("ct/article/thumb-up/{articleId}")
+    fun articleThumbUp(@Path("articleId") articleId: String):Call<ResponseData<String>>
+
+    /**
+     * 查询我是否给该文章点赞
+     */
+    @GET("ct/article/check-thumb-up/{articleId}")
+    fun articleCheckThumbUp(@Path("articleId") articleId: String):Call<ResponseData<String>>
+
+    /**
+     * 文章打赏
+     */
+    @POST("ast/prise/article")
+    fun articleReward(@Body reward: ArticleReward):Call<ResponseData<String>>
 }

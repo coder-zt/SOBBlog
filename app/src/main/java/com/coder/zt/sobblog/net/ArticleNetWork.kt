@@ -1,5 +1,6 @@
 package com.coder.zt.sobblog.net
 
+import com.coder.zt.sobblog.model.article.ArticleReward
 import com.coder.zt.sobblog.net.api.ArticleApi
 import com.coder.zt.sobblog.net.base.NetWorkBase
 
@@ -11,9 +12,15 @@ class ArticleNetWork: NetWorkBase() {
 
     suspend fun getArticleDetail(id:String) = articleService.articleDetail(id).await()
 
-    suspend fun getArticleReward(id: String) = articleService.articleReward(id).await()
+    suspend fun getArticleReward(id: String) = articleService.getArticleReward(id).await()
 
     suspend fun getArticleComment(id: String, page:Int) = articleService.articleComment(id, page).await()
+
+    suspend fun articleThumbUp(id: String) = articleService.articleThumbUp(id).await()
+
+    suspend fun articleCheckThumbUp(id: String) = articleService.articleCheckThumbUp(id).await()
+
+    suspend fun articleReward(reward: ArticleReward) = articleService.articleReward(reward).await()
 
 
     companion object{
