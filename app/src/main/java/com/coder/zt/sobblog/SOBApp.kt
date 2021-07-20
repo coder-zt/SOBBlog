@@ -8,6 +8,7 @@ import com.xuexiang.xupdate.XUpdate
 import com.xuexiang.xupdate.entity.UpdateError.ERROR.CHECK_NO_NEW_VERSION
 import com.xuexiang.xupdate.utils.UpdateUtils
 
+import com.umeng.commonsdk.UMConfigure
 
 class SOBApp:Application() {
 
@@ -45,9 +46,11 @@ class SOBApp:Application() {
             //实现日志记录功能
             Log.d(TAG, "initAppUpdate: $message")
         }
+        UMConfigure.init(this, 111,"60f5c062a6f90557b7bed448")
     }
 
     companion object {
+
         private const val TAG = "SOBApp"
 
         var _context: Application? = null

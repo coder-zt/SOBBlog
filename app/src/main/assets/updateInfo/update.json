@@ -1,0 +1,12 @@
+{
+  "Code": 0,
+  "Msg": "",
+  "UpdateStatus": 1,
+  "VersionCode": 14,
+  "VersionName": "1.0.7.beta",
+  "UploadTime": "2018-07-10 17:28:41",
+  "ModifyContent": "\r\n1、升级多个官方组件\r\n2、修复已知未知bug，把程序员哥哥打了一顿\r\n3、如果发现bug希望反馈给我哦",
+  "DownloadUrl": "http://mp.moonlightshadow.cn/apk/release_v_1.0.7.beta.apk",
+  "ApkSize": 13060,
+  "ApkMd5": "36d7bbad4a253b2658674fb530c7e391"
+}

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import com.umeng.analytics.MobclickAgent
 
 abstract class BaseFragment<T: ViewDataBinding>:Fragment() {
 
@@ -28,4 +29,14 @@ abstract class BaseFragment<T: ViewDataBinding>:Fragment() {
     abstract fun initData()
 
     abstract fun getLayoutId():Int
+
+    override fun onResume() {
+        super.onResume()
+        MobclickAgent.onResume(activity)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        MobclickAgent.onPause(activity)
+    }
 }

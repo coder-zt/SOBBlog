@@ -11,6 +11,7 @@ import androidx.databinding.ViewDataBinding
 import com.coder.zt.sobblog.R
 import com.coder.zt.sobblog.databinding.ActivityLoginBinding
 import com.coder.zt.sobblog.utils.AppRouter
+import com.umeng.analytics.MobclickAgent
 import com.coder.zt.sobblog.utils.Constants
 import com.xuexiang.xupdate.XUpdate
 
@@ -31,11 +32,17 @@ open abstract class BaseActivity<T:ViewDataBinding>:AppCompatActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-    }
-
      fun onBack(view:View) {
         finish()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        MobclickAgent.onResume(this)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        MobclickAgent.onPause(this)
     }
 }
