@@ -4,10 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.coder.zt.sobblog.model.article.ArticleComment
-import com.coder.zt.sobblog.model.article.ArticleDetail
-import com.coder.zt.sobblog.model.article.ArticleInfo
-import com.coder.zt.sobblog.model.article.ArticleReward
+import com.coder.zt.sobblog.model.article.*
 import com.coder.zt.sobblog.model.base.ResponseData
 import com.coder.zt.sobblog.model.user.RewardUserInfo
 import com.coder.zt.sobblog.repository.ArticleRepository
@@ -24,6 +21,7 @@ class ArticleViewModel:ViewModel() {
     val rewardInfo:MutableLiveData<List<RewardUserInfo>> = MutableLiveData()
     val commentInfo:MutableLiveData<List<ArticleComment>> = MutableLiveData()
     val checkThumbUp:MutableLiveData<ResponseData<String>> = MutableLiveData()
+    val collects:MutableLiveData<List<ArticleCollect>> = MutableLiveData()
 
 
     fun loadRecommendArticle() {
@@ -91,6 +89,15 @@ class ArticleViewModel:ViewModel() {
         viewModelScope.launch {
             checkThumbUp.value = ArticleRepository.getInstance().articleReward(reward)
             getArticleReward(reward.articleId)
+        }
+    }
+
+    /**
+     * 查询用户的收藏目录
+     */
+    fun getCollect() {
+        viewModelScope.launch {
+            collects.value = ArticleRepository.getInstance().getCollect(1)
         }
     }
 

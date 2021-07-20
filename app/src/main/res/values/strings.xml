@@ -11,4 +11,5 @@
     <string name="str_topic">话题</string>
     <string name="str_send">发布</string>
     <string name="publish_empty_tips">动态内容不能为空！</string>
+    <string name="str_collect">收藏</string>
 </resources>

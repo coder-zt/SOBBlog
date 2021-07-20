@@ -1,10 +1,7 @@
 package com.coder.zt.sobblog.repository
 
 import android.util.Log
-import com.coder.zt.sobblog.model.article.ArticleComment
-import com.coder.zt.sobblog.model.article.ArticleDetail
-import com.coder.zt.sobblog.model.article.ArticleInfo
-import com.coder.zt.sobblog.model.article.ArticleReward
+import com.coder.zt.sobblog.model.article.*
 import com.coder.zt.sobblog.model.base.ResponseData
 import com.coder.zt.sobblog.model.user.RewardUserInfo
 import com.coder.zt.sobblog.net.ArticleNetWork
@@ -65,5 +62,9 @@ class ArticleRepository {
 
     suspend fun articleReward(reward: ArticleReward):ResponseData<String> {
         return ArticleNetWork.getInstance().articleReward(reward)
+    }
+
+    suspend fun getCollect(page: Int):List<ArticleCollect> {
+        return ArticleNetWork.getInstance().collect(page).data.content
     }
 }

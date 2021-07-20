@@ -1,9 +1,6 @@
 package com.coder.zt.sobblog.net.api
 
-import com.coder.zt.sobblog.model.article.ArticleComment
-import com.coder.zt.sobblog.model.article.ArticleDetail
-import com.coder.zt.sobblog.model.article.ArticleInfo
-import com.coder.zt.sobblog.model.article.ArticleReward
+import com.coder.zt.sobblog.model.article.*
 import com.coder.zt.sobblog.model.base.ResponseContentData
 import com.coder.zt.sobblog.model.base.ResponseData
 import com.coder.zt.sobblog.model.base.ResponseListData
@@ -59,4 +56,10 @@ interface ArticleApi {
      */
     @POST("ast/prise/article")
     fun articleReward(@Body reward: ArticleReward):Call<ResponseData<String>>
+
+    /**
+     * 获取收藏
+     */
+    @GET("ct/collection/list/{page}")
+    fun collect(@Path("page") page: Int):Call<ResponseContentData<ArticleCollect>>
 }

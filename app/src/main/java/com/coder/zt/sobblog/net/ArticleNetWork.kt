@@ -22,6 +22,8 @@ class ArticleNetWork: NetWorkBase() {
 
     suspend fun articleReward(reward: ArticleReward) = articleService.articleReward(reward).await()
 
+    suspend fun collect(page:Int) = articleService.collect(page).await()
+
 
     companion object{
                 private var network: ArticleNetWork? = null

@@ -1,13 +1,16 @@
 package com.coder.zt.sobblog.ui.activity
 
 import android.os.Bundle
+import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.coder.zt.sobblog.R
 import com.coder.zt.sobblog.databinding.ActivityArticleDetailBinding
+import com.coder.zt.sobblog.databinding.PopRvCollectBinding
 import com.coder.zt.sobblog.databinding.PopRvReawrdBinding
+import com.coder.zt.sobblog.model.article.ArticleCollect
 import com.coder.zt.sobblog.model.article.ArticleReward
 import com.coder.zt.sobblog.ui.adapter.ArticleCommentAdapter
 import com.coder.zt.sobblog.ui.adapter.PopListAdapter
@@ -58,6 +61,9 @@ companion object{
         dataBinding.llZanContainer.setOnClickListener {
             viewModel.articleThumbUp(articleId)
         }
+        dataBinding.llCollectContainer.setOnClickListener {
+            viewModel.getCollect()
+        }
         dataBinding.llRewardContainer.setOnClickListener {
             val rewardList:List<Int> = listOf<Int>(2,8,16)
             PopWindowUtils.showListData<PopRvReawrdBinding, Int>(R.layout.pop_rv_reawrd,rewardList,this,
@@ -103,6 +109,19 @@ companion object{
                 dataBinding.zanIv.setImageResource(R.mipmap.zan_grey_feidian3)
                 dataBinding.zanTv.setTextColor(resources.getColor(R.color.diver_line_color))
             }
+        }
+        viewModel.collects.observe(this){
+            PopWindowUtils.showListData(R.layout.pop_rv_collect,it,this,
+                object:PopListAdapter.ItemsListSetData<PopRvCollectBinding, ArticleCollect>{
+                    override fun setData(inflate: PopRvCollectBinding, d: ArticleCollect) {
+                        inflate.data = d
+                    }
+
+                    override fun onClick(d: ArticleCollect) {
+//                        viewModel.articleReward(ArticleReward(articleId,d))
+                    }
+
+                })
         }
         articleId = intent.getStringExtra(AppRouter.param_id)?:""
         loadArticle(articleId)
