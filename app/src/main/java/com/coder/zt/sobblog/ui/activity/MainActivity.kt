@@ -10,7 +10,9 @@ import com.coder.zt.sobblog.ui.fragment.IndexFragment
 import com.coder.zt.sobblog.ui.fragment.MineFragment
 import com.coder.zt.sobblog.ui.fragment.DiscoveryFragment
 import com.coder.zt.sobblog.ui.fragment.OtherFragment
+import com.coder.zt.sobblog.utils.Constants
 import com.google.android.material.tabs.TabLayout
+import com.xuexiang.xupdate.XUpdate
 
 class MainActivity : BaseActivity<ActivityMainBinding>() {
 
@@ -46,7 +48,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     override fun onResume() {
         super.onResume()
-
+//        XUpdate.newBuild(this)
+//            .updateUrl(Constants.UPDATE_URL)
+//            .update()
     }
 
     override fun getLayoutId(): Int {

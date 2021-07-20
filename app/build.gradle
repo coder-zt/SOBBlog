@@ -72,4 +72,7 @@ dependencies {
     implementation 'io.github.lucksiege:pictureselector:v2.7.3-rc05'
     //图片压缩
     implementation 'me.shouheng.compressor:compressor:0.0.1'
+    //app内升级
+    implementation 'com.github.xuexiangjys:XUpdate:2.0.8'
+    implementation 'com.zhy:okhttputils:2.6.2'
 }
