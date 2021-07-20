@@ -12,6 +12,7 @@ import com.coder.zt.sobblog.databinding.PopRvCollectBinding
 import com.coder.zt.sobblog.databinding.PopRvReawrdBinding
 import com.coder.zt.sobblog.model.article.ArticleCollect
 import com.coder.zt.sobblog.model.article.ArticleReward
+import com.coder.zt.sobblog.model.datamanager.UserDataMan
 import com.coder.zt.sobblog.ui.adapter.ArticleCommentAdapter
 import com.coder.zt.sobblog.ui.adapter.PopListAdapter
 import com.coder.zt.sobblog.ui.adapter.RewardAdapter
@@ -21,6 +22,7 @@ import com.coder.zt.sobblog.utils.PopWindowUtils
 import com.coder.zt.sobblog.utils.ScreenUtils
 import com.coder.zt.sobblog.utils.ToastUtils
 import com.coder.zt.sobblog.viewmodel.ArticleViewModel
+import com.coder.zt.sobblog.viewmodel.UserViewModel
 
 class ArticleDetailActivity:BaseActivity<ActivityArticleDetailBinding>(){
 
@@ -59,24 +61,30 @@ companion object{
             dataBinding.rvComment.isNestedScrollingEnabled = it
         }
         dataBinding.llZanContainer.setOnClickListener {
-            viewModel.articleThumbUp(articleId)
+            if(UserDataMan.checkUserLoginState(this, getString(R.string.check_login_thumb_up_tips))) {
+                viewModel.articleThumbUp(articleId)
+            }
         }
         dataBinding.llCollectContainer.setOnClickListener {
-            viewModel.getCollect()
+            if(UserDataMan.checkUserLoginState(this, getString(R.string.check_login_collect_tips))) {
+                viewModel.getCollect()
+            }
         }
         dataBinding.llRewardContainer.setOnClickListener {
-            val rewardList:List<Int> = listOf<Int>(2,8,16)
-            PopWindowUtils.showListData<PopRvReawrdBinding, Int>(R.layout.pop_rv_reawrd,rewardList,this,
-                object:PopListAdapter.ItemsListSetData<PopRvReawrdBinding, Int>{
-                    override fun setData(inflate: PopRvReawrdBinding, d: Int) {
-                        inflate.data = d
-                    }
+            if(UserDataMan.checkUserLoginState(this, getString(R.string.check_login_reward_tips))) {
+                val rewardList:List<Int> = listOf<Int>(2,8,16)
+                PopWindowUtils.showListData<PopRvReawrdBinding, Int>(R.layout.pop_rv_reawrd,rewardList,this,
+                    object:PopListAdapter.ItemsListSetData<PopRvReawrdBinding, Int>{
+                        override fun setData(inflate: PopRvReawrdBinding, d: Int) {
+                            inflate.data = d
+                        }
 
-                    override fun onClick(d: Int) {
-                        viewModel.articleReward(ArticleReward(articleId,d))
-                    }
+                        override fun onClick(d: Int) {
+                            viewModel.articleReward(ArticleReward(articleId,d))
+                        }
 
-                })
+                    })
+            }
         }
     }
 

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SOBBlog</string>
+    <string name="app_name">阳光沙滩(Beta)</string>
     <string name="str_zan">赞</string>
     <string name="str_comment">评论</string>
     <string name="str_share">分享</string>
@@ -12,4 +12,9 @@
     <string name="str_send">发布</string>
     <string name="publish_empty_tips">动态内容不能为空！</string>
     <string name="str_collect">收藏</string>
+    <string name="check_login_publish_tips">登录后才能发布动态</string>
+    <string name="check_login_comment_tips">登录后才能评论</string>
+    <string name="check_login_thumb_up_tips">登录后才能点赞</string>
+    <string name="check_login_reward_tips">登录后才能打赏</string>
+    <string name="check_login_collect_tips">登录后才能收藏</string>
 </resources>

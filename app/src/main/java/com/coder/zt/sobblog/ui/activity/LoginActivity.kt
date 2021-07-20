@@ -45,7 +45,7 @@ class LoginActivity:BaseActivity<ActivityLoginBinding>() {
                 finish()
             }else{
                 //没有登录成功，重新获取数据
-                ToastUtils.showError(userViewModel.loginMessage.value!!)
+//                ToastUtils.showError(userViewModel.loginMessage.value!!)
                 userViewModel.captcha()
             }
         }
@@ -82,20 +82,12 @@ class LoginActivity:BaseActivity<ActivityLoginBinding>() {
         })
     }
 
+
     override fun onResume() {
         super.onResume()
-        checkUserState()
+        userViewModel.captcha()
     }
 
-    private fun checkUserState() {
-        if (UserDataMan.getUserInfo() == null) {
-            userViewModel.checkToken()
-        }else{
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
-    }
 
     override fun getLayoutId(): Int {
         return R.layout.activity_login

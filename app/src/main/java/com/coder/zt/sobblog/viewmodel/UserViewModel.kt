@@ -45,8 +45,6 @@ class UserViewModel:ViewModel() {
         viewModelScope.launch {
             val response = UserRepository.getInstance().checkToken()
             if(response.success){
-//                val infoStr = GsonUtils.getInstance().toJson(response.data)
-//                val userInfo = GsonUtils.getInstance().fromJson(infoStr, SobUserInfo::class.java)
                 UserDataMan.save(response.data)
             }
             loginMessage.postValue(response.message)

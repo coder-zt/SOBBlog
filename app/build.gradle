@@ -6,17 +6,25 @@ plugins {
 
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 28
     buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "com.coder.zt.sobblog"
         minSdkVersion 21
-        targetSdkVersion 30
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    signingConfigs {
+        release {
+            storeFile file("E:\\Coding\\keyStoe\\sobblog.jks")
+            storePassword "123456"
+            keyAlias "key0"
+            keyPassword "123456"
+            v2SigningEnabled false
+        }
     }
 
     buildTypes {
@@ -24,6 +32,14 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+
+    android.applicationVariants.all {
+        variant ->
+            variant.outputs.all {
+                //在这里修改apk文件名
+                outputFileName = "阳光沙滩-体验版-${variant.name}-v${variant.versionName}.apk"
+            }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8

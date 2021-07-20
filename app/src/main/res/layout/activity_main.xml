@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         tools:context=".ui.activity.MainActivity">
 
-        <androidx.viewpager.widget.ViewPager
+        <com.coder.zt.sobblog.ui.view.NoScrollViewPager
             android:id="@+id/viewPager"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -23,10 +23,12 @@
             app:layout_constraintTop_toTopOf="parent" />
 
 
-        <com.google.android.material.tabs.TabLayout
+        <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/table_bar"
+            android:background="@color/white"
             android:layout_width="match_parent"
             android:layout_height="60dp"
+            app:menu="@menu/main_nav"
             app:layout_constraintBottom_toBottomOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

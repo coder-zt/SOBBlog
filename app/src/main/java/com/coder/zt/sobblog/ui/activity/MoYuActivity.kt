@@ -48,10 +48,12 @@ class MoYuActivity:BaseActivity<ActivityMoyuBinding>() {
         MoYuAdapter(){ doType: MoYuAdapter.DO_TYPE, any: Any ->
             when(doType){
                 MoYuAdapter.DO_TYPE.THUMB_UP ->{//点赞
-                    viewModel.thumbUP(any as String)
+                    if(UserDataMan.checkUserLoginState(this, getString(R.string.check_login_thumb_up_tips))) {
+                        viewModel.thumbUP(any as String)
+                    }
                 }
                 MoYuAdapter.DO_TYPE.COMMENT ->{//评论动态
-                    if(UserDataMan.checkUserLoginState(this, "登录后才能评论")){
+                    if(UserDataMan.checkUserLoginState(this, getString(R.string.check_login_comment_tips))){
                         minifeedIdTemp = any as String//动态id
                         targetUserId = ""//被评论者的ID
                         commentIdTemp = ""//评论ID
@@ -60,7 +62,7 @@ class MoYuActivity:BaseActivity<ActivityMoyuBinding>() {
                 }
                 MoYuAdapter.DO_TYPE.REPLY ->{//回复评论
 
-                    if(UserDataMan.checkUserLoginState(this, "登录后才能评论")) {
+                    if(UserDataMan.checkUserLoginState(this, getString(R.string.check_login_comment_tips))) {
                         UserDataMan.getUserInfo()!!.let{
                             val comment = any as MYCommentAdapter.CommentDataBean
                             minifeedIdTemp = comment.momentId//动态ID
@@ -149,12 +151,17 @@ class MoYuActivity:BaseActivity<ActivityMoyuBinding>() {
             closeCommentInput()
         }
         dataBinding.ivCamera.setOnClickListener{
-            //选择发布动态形式
-            showPullStyle()
+            if(UserDataMan.checkUserLoginState(this, getString(R.string.check_login_publish_tips))){
+                //选择发布动态形式
+                showPullStyle()
+            }
+
         }
         dataBinding.ivCamera.setOnLongClickListener {
-            //直接跳转到编辑动态页面
-            AppRouter.toEditMinifeedActivity(this)
+            if(UserDataMan.checkUserLoginState(this, getString(R.string.check_login_publish_tips))){
+                //直接跳转到编辑动态页面
+                AppRouter.toEditMinifeedActivity(this)
+            }
             true
         }
     }
