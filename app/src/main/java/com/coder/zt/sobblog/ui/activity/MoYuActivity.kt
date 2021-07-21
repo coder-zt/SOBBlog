@@ -7,6 +7,8 @@ import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.coder.zt.sobblog.R
 import com.coder.zt.sobblog.databinding.ActivityMoyuBinding
 import com.coder.zt.sobblog.model.datamanager.UserDataMan
@@ -106,7 +108,7 @@ class MoYuActivity:BaseActivity<ActivityMoyuBinding>() {
     private fun initView() {
         viewModel.slideDistance.value = 0
         dataBinding.rvMoyu.adapter = adapter
-        dataBinding.rvMoyu.layoutManager = SlideLayoutManager(this)
+        dataBinding.rvMoyu.layoutManager = LinearLayoutManager(this)
         dataBinding.apply {
             this.refreshView.setPullDownListener {
                 val distance = this.loadingView.setDistance(it.toFloat())
@@ -120,10 +122,6 @@ class MoYuActivity:BaseActivity<ActivityMoyuBinding>() {
 
                 override fun onLoading() {
                     loadMore = true
-//                    refreshView.postDelayed({
-//                        dataBinding.refreshView.loadedFinished()
-//                    },1000)
-
                     viewModel.getRecommendMiniFeed(loadMore)
                 }
 

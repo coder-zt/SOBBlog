@@ -14,6 +14,8 @@ class UserNetWork: NetWorkBase() {
 
         suspend fun checkToken() = userService.checkToken().await()
 
+        suspend fun achievement() = userService.achievement().await()
+
 
         companion object{
                 private var network: UserNetWork? = null

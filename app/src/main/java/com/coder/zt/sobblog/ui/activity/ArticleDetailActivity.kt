@@ -17,10 +17,7 @@ import com.coder.zt.sobblog.ui.adapter.ArticleCommentAdapter
 import com.coder.zt.sobblog.ui.adapter.PopListAdapter
 import com.coder.zt.sobblog.ui.adapter.RewardAdapter
 import com.coder.zt.sobblog.ui.base.BaseActivity
-import com.coder.zt.sobblog.utils.AppRouter
-import com.coder.zt.sobblog.utils.PopWindowUtils
-import com.coder.zt.sobblog.utils.ScreenUtils
-import com.coder.zt.sobblog.utils.ToastUtils
+import com.coder.zt.sobblog.utils.*
 import com.coder.zt.sobblog.viewmodel.ArticleViewModel
 import com.coder.zt.sobblog.viewmodel.UserViewModel
 
@@ -56,7 +53,6 @@ companion object{
         dataBinding.wvArticle.setWebViewScrollView(dataBinding.wbsv)
         dataBinding.rvReward.adapter = rewardAdapter
         dataBinding.rvComment.adapter = commentAdapter
-        dataBinding.rvComment.adapter = commentAdapter
         dataBinding.wbsv.setOverScrollListener {
             dataBinding.rvComment.isNestedScrollingEnabled = it
         }
@@ -83,7 +79,7 @@ companion object{
                             viewModel.articleReward(ArticleReward(articleId,d))
                         }
 
-                    })
+                    },false)
             }
         }
     }
@@ -119,7 +115,7 @@ companion object{
             }
         }
         viewModel.collects.observe(this){
-            PopWindowUtils.showListData(R.layout.pop_rv_collect,it,this,
+            DialogUtils.showListData(R.layout.pop_rv_collect,it,this,
                 object:PopListAdapter.ItemsListSetData<PopRvCollectBinding, ArticleCollect>{
                     override fun setData(inflate: PopRvCollectBinding, d: ArticleCollect) {
                         inflate.data = d

@@ -1,38 +1,42 @@
 package com.coder.zt.sobblog.ui.fragment
 
-import android.annotation.SuppressLint
-import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import androidx.core.util.Pair
+import androidx.lifecycle.ViewModelProvider
 import com.coder.zt.sobblog.R
+import com.coder.zt.sobblog.databinding.FragmentMineBinding
+import com.coder.zt.sobblog.model.datamanager.UserDataMan
+import com.coder.zt.sobblog.ui.adapter.MiniMuenAdapter
+import com.coder.zt.sobblog.ui.base.BaseFragment
+import com.coder.zt.sobblog.viewmodel.UserViewModel
 
-class MineFragment:Fragment() {
+class MineFragment:BaseFragment<FragmentMineBinding>() {
+
+    private val userViewModel: UserViewModel by lazy{
+        ViewModelProvider(this).get(UserViewModel::class.java)
+
+    }
 
     companion object{
         private const val TAG = "MineFragment"
+        private val menuList = listOf<Pair<Int, String>>(
+            Pair(R.mipmap.tab_home,"点赞"),
+            Pair(R.mipmap.tab_activity,"消息"),
+            Pair(R.mipmap.tab_find,"收藏"),
+            Pair(R.mipmap.tab_profile,"设置"))
+    }
+
+    override fun getLayoutId() = R.layout.fragment_mine
+
+
+    override fun initView() {
+        dataBinding.data = UserDataMan.getUserInfo()
+        dataBinding.rvMiniMenu.adapter = MiniMuenAdapter(menuList){
+        }
+    }
+
+    override fun initData() {
+        userViewModel.getAchievement()
     }
 
 
-    @SuppressLint("InflateParams")
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        Log.d(TAG, "onCreateView: ")
-        val view = inflater.inflate(R.layout.fragment_mine, container, false)
-
-        initData()
-        return view
-    }
-
-    private fun initData() {
-    }
-
-    override fun onResume() {
-        super.onResume()
-    }
 }

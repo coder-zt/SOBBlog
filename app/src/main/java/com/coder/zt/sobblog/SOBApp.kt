@@ -21,7 +21,6 @@ class SOBApp:Application() {
     }
 
     private fun initAppUpdate() {
-
         XUpdate.get()
             .debug(BuildConfig.DEBUG)
             .isWifiOnly(false) // By default, only version updates are checked under WiFi
@@ -46,7 +45,9 @@ class SOBApp:Application() {
             //实现日志记录功能
             Log.d(TAG, "initAppUpdate: $message")
         }
-        UMConfigure.init(this, 111,"60f5c062a6f90557b7bed448")
+        UMConfigure.preInit(this,"60f5c062a6f90557b7bed448", "beta")
+//        UMConfigure.init(this,UMConfigure.DEVICE_TYPE_PHONE,"60f5c062a6f90557b7bed448")
+        UMConfigure.init(this, "60f5c062a6f90557b7bed448", "Umeng", UMConfigure.DEVICE_TYPE_PHONE, null)
     }
 
     companion object {

@@ -135,11 +135,10 @@ class EditMinifeedActivity:BaseActivity<ActivityEditMinifeedBinding>() {
             }
 
             override fun onClick(d: TopicItem) {
-                Log.d(TAG, "onClick: 选择话题为%${d.topicName}")
                 dataBinding.topicItem = d
                 dataBinding.llTopicContainer.visibility = View.VISIBLE
             }
-        })
+        },true)
 
     }
 

@@ -52,4 +52,11 @@ class UserViewModel:ViewModel() {
         }
     }
 
+    fun getAchievement(){
+        viewModelScope.launch {
+            val response = UserRepository.getInstance().getAchievement()
+            Log.d(TAG, "getAchievement: ${response.data}")
+        }
+    }
+
 }

@@ -17,4 +17,5 @@
     <string name="check_login_thumb_up_tips">登录后才能点赞</string>
     <string name="check_login_reward_tips">登录后才能打赏</string>
     <string name="check_login_collect_tips">登录后才能收藏</string>
+    <string name="get_thumb_up">获赞总量</string>
 </resources>

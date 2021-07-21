@@ -6,6 +6,7 @@ import android.util.Log
 import com.coder.zt.sobblog.model.base.ResponseData
 import com.coder.zt.sobblog.model.user.LoginInfo
 import com.coder.zt.sobblog.model.user.SobUserInfo
+import com.coder.zt.sobblog.model.user.UserAchievement
 import com.coder.zt.sobblog.net.UserNetWork
 import java.io.IOException
 import java.util.*
@@ -51,6 +52,12 @@ class UserRepository {
 
     suspend fun checkToken(): ResponseData<SobUserInfo> {
         val netWork = UserNetWork.getInstance().checkToken()
+        Log.d(TAG, "login: ${netWork.data}")
+        return netWork
+    }
+
+    suspend fun getAchievement(): ResponseData<UserAchievement> {
+        val netWork = UserNetWork.getInstance().achievement()
         Log.d(TAG, "login: ${netWork.data}")
         return netWork
     }

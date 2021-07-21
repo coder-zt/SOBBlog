@@ -50,6 +50,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         val adapter = HomePagerAdapter(supportFragmentManager, listOf(IndexFragment(),DiscoveryFragment(),OtherFragment(),MineFragment()))
         dataBinding.viewPager.adapter = adapter
         dataBinding.viewPager.currentItem = 0
+        dataBinding.viewPager.offscreenPageLimit = 4
     }
 
     private fun initData() {

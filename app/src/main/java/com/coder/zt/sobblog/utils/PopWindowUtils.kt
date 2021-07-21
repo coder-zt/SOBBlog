@@ -16,6 +16,7 @@ import com.coder.zt.sobblog.ui.adapter.PopListAdapter
 import com.luck.picture.lib.PictureSelector
 import com.luck.picture.lib.config.PictureConfig
 import com.luck.picture.lib.config.PictureMimeType
+import kotlin.math.min
 
 object PopWindowUtils {
 
@@ -24,23 +25,18 @@ object PopWindowUtils {
 
     fun <T : ViewDataBinding, D> showListData(
         layoutId: Int, items: List<D>, activity: Activity,
-        callback: PopListAdapter.ItemsListSetData<T, D>
+        callback: PopListAdapter.ItemsListSetData<T, D>,fixHeight: Boolean
     ) {
-        val pop = PopupWindow(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            (ScreenUtils.getScreenHeight() * heightRatio).toInt()
-        )
         val popBind = DataBindingUtil.inflate<PopListShowBinding>(
             LayoutInflater.from(activity),
             R.layout.pop_list_show, null, false
         )
-        pop.isOutsideTouchable = true
-        pop.isFocusable = true
-        pop.contentView = popBind.root
-        pop.setOnDismissListener {
-            Log.d(TAG, "showListData: Dismiss")
-            ScreenUtils.resortWindowBackground(activity)
-        }
+        Log.d(TAG, "showListData: ")
+        val height = (ScreenUtils.getScreenHeight() * heightRatio).toInt()
+        val pop = PopupWindow(
+            ViewGroup.LayoutParams.MATCH_PARENT, if(fixHeight){height}
+                                                else{ViewGroup.LayoutParams.WRAP_CONTENT}
+        )
         popBind.rvContainer.adapter = PopListAdapter(layoutId, items,
             object : PopListAdapter.ItemsListSetData<T, D> {
                 override fun setData(inflate: T, d: D) {
@@ -52,6 +48,15 @@ object PopWindowUtils {
                     callback.onClick(d)
                 }
             })
+
+        pop.isOutsideTouchable = true
+        pop.isFocusable = true
+        pop.contentView = popBind.root
+        pop.setOnDismissListener {
+            Log.d(TAG, "showListData: Dismiss")
+            ScreenUtils.resortWindowBackground(activity)
+        }
+
         ScreenUtils.setWindowBackground(activity, 0.3f)
         pop.showAtLocation(activity.window.decorView.rootView, Gravity.BOTTOM, 0, 0)
     }

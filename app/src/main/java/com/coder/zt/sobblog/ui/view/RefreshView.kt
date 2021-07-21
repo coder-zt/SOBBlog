@@ -34,6 +34,8 @@ class RefreshView(context:Context, attrs: AttributeSet): LinearLayout(context, a
     private var touchBottom:Boolean = false
     private var touchTop:Boolean = false
     private var canRefresh:Boolean = false
+    private var canPullDown:Boolean = false
+    private var canPullUp:Boolean = false
     private val mScroller:Scroller by lazy {//DecelerateInterpolator()
         Scroller(context)
     }
@@ -54,17 +56,19 @@ class RefreshView(context:Context, attrs: AttributeSet): LinearLayout(context, a
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 contentListener.invoke(contentView.computeVerticalScrollOffset())
-                touchBottom = !contentView.canScrollVertically(1)
-                touchTop = !contentView.canScrollVertically(-1)
+                touchBottom = !recyclerView.canScrollVertically(1)
+                touchTop = !recyclerView.canScrollVertically(-1)
+                if(!touchBottom){
+                    canPullDown = true
+                    canPullUp = true
+                }
             }
-
         })
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
         val topViewHeight:Int = topView.measuredHeight
         val bottomViewHeight:Int = bottomView.measuredHeight
-        Log.d(TAG, "onLayout: bottomViewHeight $bottomViewHeight")
         topView.layout(l, -topViewHeight + pullDownDistance, r, t + pullDownDistance)
         contentView.layout(l, t + pullDownDistance-pullUpDistance , r, b- pullUpDistance)
         bottomView.layout(l, b - pullUpDistance, r, b + bottomViewHeight- pullUpDistance)
@@ -82,7 +86,6 @@ class RefreshView(context:Context, attrs: AttributeSet): LinearLayout(context, a
             MotionEvent.ACTION_MOVE ->{
                 val moveY = ev.y.toInt()
                 val detlaY = moveY - startY
-                Log.d(TAG, "onInterceptTouchEvent: $detlaY")
                 if(detlaY > 0){
                     if(getTopPosition() && detlaY > mTouchSlop){
                         ev.action = MotionEvent.ACTION_DOWN
@@ -90,6 +93,7 @@ class RefreshView(context:Context, attrs: AttributeSet): LinearLayout(context, a
                         return true
                     }
                 }else{
+                    Log.d(TAG, "onInterceptTouchEvent: ${getBottomPosition()}")
                     if(getBottomPosition() && abs(detlaY) > mTouchSlop){
                         ev.action = MotionEvent.ACTION_DOWN
                         contentListener.invoke(0)
@@ -109,9 +113,15 @@ class RefreshView(context:Context, attrs: AttributeSet): LinearLayout(context, a
 
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
+        Log.d(TAG, "onTouchEvent: ")
         if(state != RefreshState.ON_NULL){
             return true
         }
+        if(!canPullDown && !canPullUp){
+            Log.d(TAG, "onTouchEvent: 当前禁止刷新控件滑动")
+            return true
+        }
+        Log.d(TAG, "onTouchEvent: ")
         when(event?.action){
             MotionEvent.ACTION_DOWN ->{
                 startY = event.y.toInt()

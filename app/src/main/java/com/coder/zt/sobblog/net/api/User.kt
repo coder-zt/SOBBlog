@@ -4,6 +4,7 @@ package com.coder.zt.sobblog.net.api
 import com.coder.zt.sobblog.model.base.ResponseData
 import com.coder.zt.sobblog.model.user.LoginInfo
 import com.coder.zt.sobblog.model.user.SobUserInfo
+import com.coder.zt.sobblog.model.user.UserAchievement
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
@@ -28,4 +29,12 @@ interface User {//
      */
     @GET("/uc/user/checkToken")
     fun checkToken():  Call<ResponseData<SobUserInfo>>
+
+    /**
+     * 获取个人成就
+     */
+    @GET("ast/ucenter/achievement")
+    fun achievement():  Call<ResponseData<UserAchievement>>
+
+
 }
