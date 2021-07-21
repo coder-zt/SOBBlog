@@ -93,7 +93,6 @@ class RefreshView(context:Context, attrs: AttributeSet): LinearLayout(context, a
                         return true
                     }
                 }else{
-                    Log.d(TAG, "onInterceptTouchEvent: ${getBottomPosition()}")
                     if(getBottomPosition() && abs(detlaY) > mTouchSlop){
                         ev.action = MotionEvent.ACTION_DOWN
                         contentListener.invoke(0)
@@ -156,15 +155,11 @@ class RefreshView(context:Context, attrs: AttributeSet): LinearLayout(context, a
             mScroller.startScroll(0,pullDownDistance,0, -pullDownDistance, (400 * i) .toInt())
             if(canRefresh  && state != RefreshState.ON_REFRESH){
                 state = RefreshState.ON_REFRESH
-                Log.d(TAG, "returnView: 刷新数据")
                 callback.onRefresh()
             }
             requestLayout()
         }else if(getBottomPosition() && pullUpDistance >0){
-            Log.d(TAG, "returnView: getBottomPosition() ${getBottomPosition()}  pullUpDistance $pullUpDistance ")
-//            val i = (pullUpDistance)*1.0 / (bottomView.height)
             val showDistance = if(pullUpDistance >= bottomView.height && state != RefreshState.ON_LOADING){
-                Log.d(TAG, "returnView: 加载更多数据")
                 callback.onLoading()
                 state = RefreshState.ON_LOADING
                 bottomView.height
@@ -202,15 +197,20 @@ class RefreshView(context:Context, attrs: AttributeSet): LinearLayout(context, a
     override fun computeScroll() {
         super.computeScroll()
         if (mScroller.computeScrollOffset()) {
-            Log.d(TAG, "computeScroll: ${mScroller.currY}")
+           
             if(getTopPosition() && pullDownDistance >0){
                 pullDown(mScroller.currY)
             }
             if(getBottomPosition() && pullUpDistance >0){
                 pullUp(mScroller.currY)
+                Log.d(TAG, "computeScroll: ${mScroller.currY}")
+                if (mScroller.isFinished || mScroller.currY == 0) {
+                    Log.d(TAG, "computeScroll: isFinished")
+                    touchBottom = false
+                }
             }
-
         }
+
     }
 
     private lateinit var callback : OnRefreshListener
@@ -232,6 +232,7 @@ class RefreshView(context:Context, attrs: AttributeSet): LinearLayout(context, a
     fun loadedFinished(){
         Log.d(TAG, "loadedFinished: 加载结束 ${bottomView.height}")
         state = RefreshState.ON_NULL
+        touchBottom = true
         mScroller.startScroll(0,bottomView.height,0, -bottomView.height , (400 * 1))
         requestLayout()
     }

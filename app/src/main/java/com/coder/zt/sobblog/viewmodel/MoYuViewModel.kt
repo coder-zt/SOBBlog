@@ -1,9 +1,5 @@
 package com.coder.zt.sobblog.viewmodel
 
-import android.graphics.BitmapFactory
-import android.graphics.Paint
-import android.os.Environment
-import android.text.TextUtils
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,15 +7,12 @@ import androidx.lifecycle.viewModelScope
 import com.coder.zt.sobblog.SOBApp
 import com.coder.zt.sobblog.model.moyu.*
 import com.coder.zt.sobblog.repository.MoYuRepository
+import com.coder.zt.sobblog.ui.adapter.MoYuAdapter
 import com.coder.zt.sobblog.utils.ImageSelectManager
 import com.coder.zt.sobblog.utils.ToastUtils
-import com.luck.picture.lib.compress.Luban
-import com.luck.picture.lib.compress.OnCompressListener
-import com.luck.picture.lib.entity.LocalMedia
 import kotlinx.coroutines.launch
 import me.shouheng.compress.Compress
 import me.shouheng.compress.listener.CompressListener
-import me.shouheng.compress.strategy.Configuration
 import me.shouheng.compress.strategy.Strategies
 import java.io.File
 
@@ -35,6 +28,7 @@ companion object{
     val feedComment:MutableLiveData<List<MYComment>> = MutableLiveData()
     val topicItem:MutableLiveData<List<TopicItem>> = MutableLiveData()
     val eventObserver:MutableLiveData<Pair<Int, Boolean>> = MutableLiveData()
+    val changeItemId:MutableLiveData<Pair<String,MoYuAdapter.DO_TYPE>> = MutableLiveData()
 
 
     /**
@@ -55,6 +49,9 @@ companion object{
             val thumbUp = MoYuRepository.getInstance().thumbUp(momentId)
             Log.d(TAG, "thumbUP: $thumbUp")
             ToastUtils.show(thumbUp.message, !thumbUp.success)
+            if(thumbUp.success){
+                changeItemId.value = Pair(momentId, MoYuAdapter.DO_TYPE.THUMB_UP)
+            }
         }
     }
 

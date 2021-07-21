@@ -7,6 +7,7 @@ import com.coder.zt.sobblog.databinding.FragmentMineBinding
 import com.coder.zt.sobblog.model.datamanager.UserDataMan
 import com.coder.zt.sobblog.ui.adapter.MiniMuenAdapter
 import com.coder.zt.sobblog.ui.base.BaseFragment
+import com.coder.zt.sobblog.utils.AppRouter
 import com.coder.zt.sobblog.viewmodel.UserViewModel
 
 class MineFragment:BaseFragment<FragmentMineBinding>() {
@@ -31,6 +32,10 @@ class MineFragment:BaseFragment<FragmentMineBinding>() {
     override fun initView() {
         dataBinding.data = UserDataMan.getUserInfo()
         dataBinding.rvMiniMenu.adapter = MiniMuenAdapter(menuList){
+            when(it){
+                "设置"->AppRouter.toSettingActivity(requireActivity())
+
+            }
         }
     }
 

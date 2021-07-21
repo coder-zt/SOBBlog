@@ -9,13 +9,19 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
 
-interface User {//
+interface User {
 
     /**
      * 登录
      */
     @POST("/uc/user/login/{captcha}")
     fun login(@Path("captcha") captcha:String, @Body loginInfo: LoginInfo): Call<ResponseData<String>>
+
+    /**
+     * 注销登录
+     */
+    @POST("/uc/user/logout")
+    fun logout(): Call<ResponseData<String>>
 
 
     /**

@@ -8,7 +8,7 @@ import com.coder.zt.sobblog.model.article.*
 import com.coder.zt.sobblog.model.base.ResponseData
 import com.coder.zt.sobblog.model.user.RewardUserInfo
 import com.coder.zt.sobblog.repository.ArticleRepository
-import com.luck.picture.lib.tools.ToastUtils
+import com.coder.zt.sobblog.utils.ToastUtils
 import kotlinx.coroutines.launch
 
 class ArticleViewModel:ViewModel() {
@@ -68,7 +68,8 @@ class ArticleViewModel:ViewModel() {
     fun articleThumbUp(id: String) {
         viewModelScope.launch {
             val message = ArticleRepository.getInstance().articleThumbUp(id)
-            com.coder.zt.sobblog.utils.ToastUtils.show(message.message, message.success)
+            Log.d(TAG, "articleThumbUp: $message")
+            ToastUtils.show(message.message, !message.success)
             articleCheckThumbUp(id)
         }
     }

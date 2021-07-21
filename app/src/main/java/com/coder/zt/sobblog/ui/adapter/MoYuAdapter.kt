@@ -124,6 +124,19 @@ class MoYuAdapter(val callback:(code:DO_TYPE, data:Any) -> Unit): RecyclerView.A
         }
     }
 
+    fun updateThumbUp(first: String) {
+        for ((i, mDatum) in mData.withIndex()) {
+            if(mDatum.id == first){
+                Log.d(TAG, "updateThumbUp: 点赞后更新数据")
+                mDatum.thumbUpCount++
+                val userId = UserDataMan.getUserInfo()?.id
+                mDatum.thumbUpList.add(userId?:"")
+                notifyDataSetChanged()
+            }
+        }
+
+    }
+
     class ContentView(val inflate:RvMoyuBinding) :RecyclerView.ViewHolder(inflate.root){
 
         private var showExpansion = false

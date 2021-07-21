@@ -6,6 +6,7 @@ import android.util.Log
 import com.coder.zt.sobblog.ui.activity.ArticleDetailActivity
 import com.coder.zt.sobblog.ui.activity.EditMinifeedActivity
 import com.coder.zt.sobblog.ui.activity.LoginActivity
+import com.coder.zt.sobblog.ui.activity.SettingActivity
 
 object AppRouter {
 
@@ -30,10 +31,20 @@ object AppRouter {
         activity.startActivity(intent)
     }
 
+    /**
+     * 跳转到登录页面
+     */
     fun toLoginActivity(activity: Activity) {
         val intent = Intent(activity, LoginActivity::class.java)
         activity.startActivity(intent)
     }
 
+    /**
+     * 跳转到设置页面
+     */
+    fun toSettingActivity(activity: Activity){
+        val intent = Intent(activity, SettingActivity::class.java)
+        activity.startActivity(intent)
+    }
 
 }

@@ -21,6 +21,7 @@ class UserViewModel:ViewModel() {
         private const val TAG = "UserViewModel"
     }
     val loginResult = MutableLiveData<Boolean>()
+    val logoutResult = MutableLiveData<Pair<Boolean, String>>()
     val loginMessage = MutableLiveData<String>()
     val captchaBitmap = MutableLiveData<Bitmap>()
 
@@ -34,6 +35,15 @@ class UserViewModel:ViewModel() {
         }
     }
 
+    fun logout(){
+        viewModelScope.launch {
+            val logout = UserRepository.getInstance().logout()
+            Log.d(TAG, "login: $logout")
+            logoutResult.postValue(Pair(logout.success, logout.message))
+        }
+    }
+
+
     fun captcha(){
         viewModelScope.launch {
             val login = UserRepository.getInstance().captcha()
@@ -46,9 +56,9 @@ class UserViewModel:ViewModel() {
             val response = UserRepository.getInstance().checkToken()
             if(response.success){
                 UserDataMan.save(response.data)
+            }else{
+                UserDataMan.clear()
             }
-            loginMessage.postValue(response.message)
-            loginResult.postValue(response.success)
         }
     }
 

@@ -1,27 +1,16 @@
 package com.coder.zt.sobblog.ui.activity
 
-import android.content.Intent
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.View
-import android.widget.ImageView
-import android.widget.Toast
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
-import com.bumptech.glide.Glide
 import com.coder.zt.sobblog.R
-import com.coder.zt.sobblog.SOBApp
 import com.coder.zt.sobblog.databinding.ActivityLoginBinding
 import com.coder.zt.sobblog.model.datamanager.UserDataMan
 import com.coder.zt.sobblog.model.user.LoginInfo
 import com.coder.zt.sobblog.ui.base.BaseActivity
-import com.coder.zt.sobblog.utils.Constants
 import com.coder.zt.sobblog.utils.MdUtils
 import com.coder.zt.sobblog.utils.ToastUtils
 import com.coder.zt.sobblog.viewmodel.UserViewModel
-import okhttp3.internal.and
-import java.security.MessageDigest
-import java.security.NoSuchAlgorithmException
 
 
 class LoginActivity:BaseActivity<ActivityLoginBinding>() {
@@ -40,12 +29,11 @@ class LoginActivity:BaseActivity<ActivityLoginBinding>() {
         userViewModel.loginResult.observe(this){
             if (it) {
                 ToastUtils.show(userViewModel.loginMessage.value!!)
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
+                userViewModel.checkToken()
                 finish()
             }else{
                 //没有登录成功，重新获取数据
-//                ToastUtils.showError(userViewModel.loginMessage.value!!)
+                ToastUtils.showError(userViewModel.loginMessage.value!!)
                 userViewModel.captcha()
             }
         }

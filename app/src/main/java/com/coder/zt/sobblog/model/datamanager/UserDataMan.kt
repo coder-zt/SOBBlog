@@ -24,15 +24,12 @@ object UserDataMan {
 
     fun save(info:SobUserInfo){
         userInfo = info
+        loginState = LoginState.LOGINED
         saveUserInfo(info)
     }
 
     fun getUserInfo():SobUserInfo?{
-        val user = readUserInfo()
-        if (user != null) {
-            loginState = LoginState.LOGINED
-        }
-        return user
+        return userInfo
     }
 
     private fun readUserInfo():SobUserInfo?{
@@ -54,6 +51,10 @@ object UserDataMan {
         }else{
             true
         }
+    }
+
+    fun clear() {
+        userInfo = null
     }
 
 }

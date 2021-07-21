@@ -3,15 +3,12 @@ package com.coder.zt.sobblog.utils
 import android.graphics.Color
 import android.view.Gravity
 import android.view.LayoutInflater
-import android.widget.TextView
 
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.coder.zt.sobblog.R
 import com.coder.zt.sobblog.SOBApp
 import com.coder.zt.sobblog.databinding.ToastContentViewBinding
-import okhttp3.CookieJar
-import org.w3c.dom.Text
 
 
 class ToastUtils {
@@ -22,6 +19,17 @@ class ToastUtils {
             show(msg, false)
         }
 
+        /**
+         * 展示网络操作结果
+         */
+        fun showResult(pair: Pair<Boolean, String>){
+            show(pair.second, pair.first)
+        }
+
+
+        /**
+         * 提示错误信息
+         */
         fun showError(msg:String){
             show(msg, true)
         }

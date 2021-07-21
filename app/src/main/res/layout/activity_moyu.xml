@@ -114,7 +114,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="#00000000"
-                    android:text="猿村"
+                    android:text="摸鱼"
                     android:layout_marginTop="34dp"
                     android:textSize="18sp"
                     android:textStyle="bold"

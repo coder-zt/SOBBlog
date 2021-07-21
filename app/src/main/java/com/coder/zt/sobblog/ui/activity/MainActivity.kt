@@ -54,11 +54,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     private fun initData() {
+        checkUserState()
     }
 
     override fun onResume() {
         super.onResume()
-        checkUserState()
         XUpdate.newBuild(this)
             .updateUrl(Constants.UPDATE_URL)
             .update()
@@ -66,9 +66,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     private fun checkUserState() {
-        if (UserDataMan.getUserInfo() == null) {
-            userViewModel.checkToken()
-        }
+        userViewModel.checkToken()
+
     }
 
     override fun getLayoutId(): Int {

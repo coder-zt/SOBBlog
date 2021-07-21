@@ -36,6 +36,10 @@ class UserRepository {
         return netWork
     }
 
+    suspend fun logout(): ResponseData<String> {
+        return UserNetWork.getInstance().logout()
+    }
+
     suspend fun captcha(): Bitmap? {
         val netWork = UserNetWork.getInstance().captcha(Random().nextInt())
         var bitmap: Bitmap? = null

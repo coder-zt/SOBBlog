@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.coder.zt.sobblog.R
 import com.coder.zt.sobblog.databinding.RvMiniMenuBinding
 
-class MiniMuenAdapter(val menuList: List<androidx.core.util.Pair<Int, String>>, val callback:()->Unit):RecyclerView.Adapter<MiniMuenAdapter.ItemView>() {
+class MiniMuenAdapter(val menuList: List<androidx.core.util.Pair<Int, String>>, val callback:(title:String)->Unit):RecyclerView.Adapter<MiniMuenAdapter.ItemView>() {
 
     companion object{
         private const val TAG = "PopListAdapter"
@@ -32,9 +32,12 @@ class MiniMuenAdapter(val menuList: List<androidx.core.util.Pair<Int, String>>, 
 
 
     class ItemView(val inflate:RvMiniMenuBinding):RecyclerView.ViewHolder(inflate.root) {
-        fun setData(data: androidx.core.util.Pair<Int, String>, callback:()->Unit) {
+        fun setData(data: androidx.core.util.Pair<Int, String>, callback:(title:String)->Unit) {
             inflate.data = data
             inflate.ivIcon.setImageResource(data.first)
+            inflate.root.setOnClickListener {
+                callback(data.second)
+            }
         }
     }
 

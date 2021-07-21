@@ -63,7 +63,6 @@ class MoYuActivity:BaseActivity<ActivityMoyuBinding>() {
                     }
                 }
                 MoYuAdapter.DO_TYPE.REPLY ->{//回复评论
-
                     if(UserDataMan.checkUserLoginState(this, getString(R.string.check_login_comment_tips))) {
                         UserDataMan.getUserInfo()!!.let{
                             val comment = any as MYCommentAdapter.CommentDataBean
@@ -135,6 +134,10 @@ class MoYuActivity:BaseActivity<ActivityMoyuBinding>() {
         }
         dataBinding.commentSendTv.setOnClickListener {
             val content = viewModel.comment.value
+            if (content.isNullOrEmpty()) {
+                ToastUtils.showError(getString(R.string.comment_empty_tips))
+                return@setOnClickListener
+            }
             //发送评论
             if (targetUserId.isNullOrEmpty()) {
                 if (!content.isNullOrBlank() && !minifeedIdTemp.isEmpty()) {
@@ -145,7 +148,6 @@ class MoYuActivity:BaseActivity<ActivityMoyuBinding>() {
                     viewModel.sendReply(MYReplySender(commentIdTemp!!,content,minifeedIdTemp,targetUserId!!))
                 }
             }
-
             closeCommentInput()
         }
         dataBinding.ivCamera.setOnClickListener{
@@ -226,6 +228,20 @@ class MoYuActivity:BaseActivity<ActivityMoyuBinding>() {
         }
         viewModel.feedComment.observe(this){
             adapter.setComment(it)
+        }
+        viewModel.changeItemId.observe(this){
+            when(it.second){
+                MoYuAdapter.DO_TYPE.THUMB_UP ->{//点赞
+                    Log.d(TAG, "initData: 点赞后更新数据")
+                    adapter.updateThumbUp(it.first)
+                }
+                MoYuAdapter.DO_TYPE.COMMENT ->{//评论动态
+
+                }
+                MoYuAdapter.DO_TYPE.REPLY ->{//回复评论
+
+                }
+            }
         }
     }
 

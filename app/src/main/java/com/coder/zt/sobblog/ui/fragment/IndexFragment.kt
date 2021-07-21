@@ -23,7 +23,6 @@ class IndexFragment:BaseFragment<FragmentIndexBinding>() {
 
     private val adapter: ArticleInfoAdapter by lazy{
             ArticleInfoAdapter(){
-                Log.d(TAG, "$it")
                 AppRouter.toArticleDetailActivity(requireActivity(), it)
             }
     }
