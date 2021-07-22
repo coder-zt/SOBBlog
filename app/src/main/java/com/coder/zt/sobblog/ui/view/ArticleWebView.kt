@@ -105,29 +105,10 @@ class ArticleWebView(context: Context, attrs: AttributeSet):WebView(context, att
         e?.let {
             for (child in e.children()) {
                 if (child.tagName() == "code") {
-                    if(child.attributes().size() > 0){
                         //给代码父标签添加属性，可以自定义样式
                         child.parent().attributes().add("class", "code_block")
                         child.attributes().put("class", "brush: ${getLanguageType(child.attr("class"))}; toolbar:false; quick-code:false;")
                     }
-                    else{
-//                        val text = child.text()
-//                        var text1 = child.parent().toString()
-//                        val parttern = Regex("<code>(.*?)</code>")
-//                        val results = parttern.findAll(text1)
-//                        for (result in results) {
-//                            var keyString:String = result.value
-//                            keyString = keyString.replace("<code>","<span class=\"key_word\">")
-//                            keyString = keyString.replace("</code>","</span>")
-//                            Log.d(TAG, "verseChild: $keyString")
-//                            text1 = text1.replace(result.value, keyString)
-//                            child.parent().
-//                        }
-//                        child.remove()
-
-
-                    }
-                }
                 verseChild(child)
             }
         }
