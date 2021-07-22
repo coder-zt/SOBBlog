@@ -57,4 +57,6 @@ object UserDataMan {
         userInfo = null
     }
 
+    fun isLogin() = loginState != LoginState.LOGINED
+
 }

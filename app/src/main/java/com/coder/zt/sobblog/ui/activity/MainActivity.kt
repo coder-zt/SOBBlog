@@ -25,6 +25,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         private const val TAG = "MainActivity"
     }
 
+
+
     val userViewModel: UserViewModel by lazy {
         ViewModelProvider(this).get(UserViewModel::class.java)
     }
@@ -60,6 +62,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     private fun initData() {
+        userViewModel.loginResult.observe(this){
+            miniFragment.setData()
+        }
         checkUserState()
     }
 

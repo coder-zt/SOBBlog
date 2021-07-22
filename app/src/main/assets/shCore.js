@@ -74,7 +74,7 @@ var sh = {
 		stripBrs : false,
 		
 		/** Name of the tag that SyntaxHighlighter will automatically look for. */
-		tagName : 'pre',
+		tagName : 'code',
 		
 		strings : {
 			expandSource : 'expand source',

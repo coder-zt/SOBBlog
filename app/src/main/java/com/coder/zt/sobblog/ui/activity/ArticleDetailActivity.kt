@@ -57,9 +57,10 @@ companion object{
             dataBinding.rvComment.isNestedScrollingEnabled = it
         }
         dataBinding.llZanContainer.setOnClickListener {
-            if(UserDataMan.checkUserLoginState(this, getString(R.string.check_login_thumb_up_tips))) {
-                viewModel.articleThumbUp(articleId)
-            }
+//            if(UserDataMan.checkUserLoginState(this, getString(R.string.check_login_thumb_up_tips))) {
+//                viewModel.articleThumbUp(articleId)
+//            }
+            dataBinding.wvArticle.loadUrl("javascript:window.androidApi.printPageSource('<head>'+document.getElementsByTagName('html')[0].innerHTML+'</head>');");
         }
         dataBinding.llCollectContainer.setOnClickListener {
             if(UserDataMan.checkUserLoginState(this, getString(R.string.check_login_collect_tips))) {

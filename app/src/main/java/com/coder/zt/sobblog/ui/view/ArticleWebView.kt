@@ -7,13 +7,11 @@ import android.view.MotionEvent
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
-import com.coder.zt.sobblog.ui.activity.ArticleDetailActivity
 import com.coder.zt.sobblog.ui.view.webwiew.ArticleWebViewClient
 import com.coder.zt.sobblog.ui.view.webwiew.JsApi
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import java.io.*
-import java.lang.Math.abs
 
 class ArticleWebView(context: Context, attrs: AttributeSet):WebView(context, attrs) {
 
@@ -81,14 +79,24 @@ class ArticleWebView(context: Context, attrs: AttributeSet):WebView(context, att
     fun loadArticle(articleContent: String) {
         val html = handleContent(articleContent)
         //可以保存html到本地进行检查
-        //saveHtml(html)
+        saveHtml(html)
         loadDataWithBaseURL("file:///android_asset/",html, "text/html", "utf-8", null)
     }
 
     private fun handleContent(articleContent: String):String {
         Log.d(TAG, "handleContent: $articleContent")
+        //处理code中是关键字的情况
+        var handleText = articleContent
+        val parttern = Regex("<code>(.*?)</code>")
+        val results = parttern.findAll(handleText)
+        for (result in results) {
+            var keyString: String = result.value
+            keyString = keyString.replace("<code>", "<span class=\"key_word\">")
+            keyString = keyString.replace("</code>", "</span>")
+            handleText = handleText.replace(result.value, keyString)
+        }
         val template = getTestHtml("article_template")
-        val document = Jsoup.parse(template.replace("{{template}}",articleContent))
+        val document = Jsoup.parse(template.replace("{{template}}",handleText))
         verseChild(document.body())
         return document.toString()
     }
@@ -96,18 +104,36 @@ class ArticleWebView(context: Context, attrs: AttributeSet):WebView(context, att
     private fun verseChild(e: Element?) {
         e?.let {
             for (child in e.children()) {
-                Log.d(TAG, "verseChild: ${child.tagName()}")
                 if (child.tagName() == "code") {
-                    child.parent().attributes().add("class", "brush: ${getLanguageTye(child.attr("class"))}; toolbar:false; quick-code:false; code")
-                    child.parent().appendText(child.text())
-                    child.remove()
+                    if(child.attributes().size() > 0){
+                        //给代码父标签添加属性，可以自定义样式
+                        child.parent().attributes().add("class", "code_block")
+                        child.attributes().put("class", "brush: ${getLanguageType(child.attr("class"))}; toolbar:false; quick-code:false;")
+                    }
+                    else{
+//                        val text = child.text()
+//                        var text1 = child.parent().toString()
+//                        val parttern = Regex("<code>(.*?)</code>")
+//                        val results = parttern.findAll(text1)
+//                        for (result in results) {
+//                            var keyString:String = result.value
+//                            keyString = keyString.replace("<code>","<span class=\"key_word\">")
+//                            keyString = keyString.replace("</code>","</span>")
+//                            Log.d(TAG, "verseChild: $keyString")
+//                            text1 = text1.replace(result.value, keyString)
+//                            child.parent().
+//                        }
+//                        child.remove()
+
+
+                    }
                 }
                 verseChild(child)
             }
         }
     }
 
-    private fun getLanguageTye(attr: String): String {
+    private fun getLanguageType(attr: String): String {
         Log.d(TAG, "getLanguageTye: $attr")
         if (attr.isEmpty()) {
             return "text"
@@ -125,7 +151,7 @@ class ArticleWebView(context: Context, attrs: AttributeSet):WebView(context, att
     }
 
     private fun saveHtml(html: String) {
-        val f = File("data/data/com.coder.zt.sobblog/index.html")
+        val f = File("data/data/com.coder.zt.sobblog/source.html")
         if (!f.exists()) {
             f.createNewFile()
         }

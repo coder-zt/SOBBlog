@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.coder.zt.sobblog.model.datamanager.UserDataMan
 import com.coder.zt.sobblog.model.user.LoginInfo
 import com.coder.zt.sobblog.model.user.SobUserInfo
+import com.coder.zt.sobblog.model.user.UserAchievement
 import com.coder.zt.sobblog.net.UserNetWork
 import com.coder.zt.sobblog.repository.UserRepository
 import com.coder.zt.sobblog.utils.Constants
@@ -24,6 +25,7 @@ class UserViewModel:ViewModel() {
     val logoutResult = MutableLiveData<Pair<Boolean, String>>()
     val loginMessage = MutableLiveData<String>()
     val captchaBitmap = MutableLiveData<Bitmap>()
+    val achievement = MutableLiveData<UserAchievement>()
 
     fun login(captcha:String, loginInfo: LoginInfo){
         Log.d(TAG, "login: ${loginInfo.password}")
@@ -57,6 +59,7 @@ class UserViewModel:ViewModel() {
             Log.d(TAG, "checkToken: $response")
             if(response.success){
                 UserDataMan.save(response.data)
+                loginResult.value = true
             }else{
                 UserDataMan.clear()
             }
@@ -65,8 +68,14 @@ class UserViewModel:ViewModel() {
 
     fun getAchievement(){
         viewModelScope.launch {
-            val response = UserRepository.getInstance().getAchievement()
-            Log.d(TAG, "getAchievement: ${response.data}")
+            if(UserDataMan.isLogin()){
+                val response = UserRepository.getInstance().getAchievement()
+                response.data.let {
+                    achievement.value = it
+                }
+        }
+
+
         }
     }
 

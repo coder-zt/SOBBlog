@@ -5,7 +5,7 @@ data class SobUserInfo(
     val fansCount: Any,
     val followCount: Any,
     val id: String,
-    val isVip: String,
+    val isVip: Boolean,
     val lev: Int,
     val nickname: String,
     val roles: Any,

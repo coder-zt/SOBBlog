@@ -7,83 +7,132 @@ import android.graphics.drawable.Drawable
 import android.os.Build
 import android.util.AttributeSet
 import android.util.Log
-import android.view.Gravity
 import androidx.annotation.RequiresApi
 import com.coder.zt.sobblog.R
 import com.luck.picture.lib.tools.ScreenUtils
 import kotlin.math.min
+import kotlin.math.sqrt
 
 
 /**
  * 自定义View-用户头像
  */
 
+@RequiresApi(Build.VERSION_CODES.M)
 class SobAvatarView(context: Context, attrs: AttributeSet): androidx.appcompat.widget.AppCompatImageView(context, attrs) {
 
     companion object{
         private const val TAG = "SobAvatarView"
     }
 
+    /**
+     * 默认属性
+     */
+    private var isCircle:Boolean = true
+    private var isVip:Boolean = false
 
     private var defaultBitmap: Bitmap = BitmapFactory.decodeResource(resources, R.mipmap.tab_profile_normal)
-    private val borderWidth = ScreenUtils.dip2px(context, 3f)
-    private val isCircle = false
+    private var borderWidth = ScreenUtils.dip2px(context, 3f)
+    private var viewHeight = 0
+    private var viewWidth = 0
+    private val sqrt2 = sqrt(2.0)
+    private var smallR:Float = 0f
+    private lateinit var resSizeBitmap:Bitmap
+    private lateinit var circleBitmap:Bitmap
+    private lateinit var roundBitmap:Bitmap
+    private lateinit var vipIconRect:RectF
     private val paint:Paint by lazy{
-        Paint()
+        val p = Paint()
+        p.color = resources.getColor(R.color.sob_vip_color, null)
+        p
     }
-    @RequiresApi(Build.VERSION_CODES.M)
+
+    private val path:Path by lazy{
+        val p = Path()
+        val leftX = vipIconRect.left + vipIconRect.width() * 0.3f
+        val upY = vipIconRect.top + vipIconRect.height() * 0.3f
+        val rightX = vipIconRect.right - vipIconRect.height() * 0.3f
+        val downX = vipIconRect.left + vipIconRect.height() * 0.5f
+        val downY = vipIconRect.bottom - vipIconRect.height() * 0.3f
+        p.moveTo(leftX, upY)//左上起始点
+        p.lineTo(downX, downY)//下中点
+        p.lineTo(rightX, upY)//右上末尾点
+        p
+    }
+
+    init {
+        val obtainStyledAttributes = context.obtainStyledAttributes(attrs, R.styleable.SobAvatarView)
+        isCircle = obtainStyledAttributes.getBoolean(R.styleable.SobAvatarView_isCircle, isCircle)
+        isVip = obtainStyledAttributes.getBoolean(R.styleable.SobAvatarView_isVip, isVip)
+    }
+
+
     override fun draw(canvas: Canvas?) {
         canvas?.let {
-            Log.d(TAG, "draw: ${ScreenUtils.dip2px(context, 60f)}")
-            val height = height - paddingBottom - paddingTop
-            val width = width - paddingStart - paddingEnd
-            Log.d(TAG, "draw: width: $width height: $height")
-            val image:Bitmap = drawableToBitmap(drawable)
-            val resSizeBitmap = resizeBitmap(image, width, height)
+            if(viewHeight == 0 || viewWidth == 0){
+                viewHeight = height - paddingBottom - paddingTop
+                viewWidth = width - paddingStart - paddingEnd
+                val image:Bitmap = drawableToBitmap(drawable)
+                resSizeBitmap = resizeBitmap(image, viewWidth, viewHeight)
+                //VIP图标半径
+                smallR = viewWidth/2.0f - ((viewWidth-borderWidth)/2.0f)*(sqrt2/2.0f).toFloat()
+                if(!isVip){
+                    borderWidth = 0
+                }
+                if(isCircle){
+                    circleBitmap = createCircleImage(resSizeBitmap, viewWidth, viewHeight)
+                }else{
+                    roundBitmap = createRoundImage(resSizeBitmap, viewWidth, viewHeight)
+                }
+                vipIconRect = RectF(viewWidth - 2 * smallR,viewWidth - 2 * smallR,
+                            viewWidth.toFloat(), viewHeight.toFloat())
+            }
             if(isCircle){
-                val sqrt2 = Math.sqrt(2.0)
-                val smallR:Float = width/2.0f - ((width-borderWidth)/2.0f)*(sqrt2/2.0f).toFloat()//图标半径
-                paint.color = resources.getColor(R.color.sob_vip_color, null)
-                it.drawCircle(width/2.0f, height/2.0f, min(width,height)/2.0f, paint)
-                it.drawBitmap(createCircleImage(resSizeBitmap, width, height),
-                    paddingLeft.toFloat(), paddingTop.toFloat(), paint)
-                paint.color = resources.getColor(R.color.sob_vip_color, null)
-                it.drawCircle(width - smallR, height - smallR, smallR, paint)
-                paint.color = Color.WHITE
-                paint.textAlign = Paint.Align.CENTER
-                paint.textSize = 30f
-                paint.strokeWidth = ScreenUtils.dip2px(context, 2f).toFloat()
-                it.drawText("V",width - smallR, height - smallR/1.7f, paint)
+                //画圆形背景
+                if(isVip) {
+                    it.drawCircle(
+                        viewWidth / 2.0f,
+                        viewHeight / 2.0f,
+                        min(viewWidth, viewHeight) / 2.0f,
+                        paint
+                    )
+                }
+                //画圆形头像图片
+                it.drawBitmap(circleBitmap, paddingLeft.toFloat(), paddingTop.toFloat(), paint)
+                //画圆形VIP背景
+                if(isVip) {
+                    it.drawCircle(viewWidth - smallR, viewHeight - smallR, smallR, paint)
+                }
             }else{
                 //画圆角矩形背景
-                paint.color = resources.getColor(R.color.sob_vip_color, null)
-                val backgroundRect = RectF(0.0f,0.0f, width.toFloat(), height.toFloat())
                 val roundR = ScreenUtils.dip2px(context, 8f).toFloat()
-                it.drawRoundRect(backgroundRect, roundR, roundR, paint)
+                if(isVip){
+                    val backgroundRect = RectF(0.0f,0.0f, viewWidth.toFloat(), viewHeight.toFloat())
+                    it.drawRoundRect(backgroundRect, roundR, roundR, paint)
+                }
                 //画用户头像
-                it.drawBitmap(createRoundImage(resSizeBitmap, width, height),
-                    paddingLeft.toFloat(), paddingTop.toFloat(), paint)
-                //画VIP图片的矩形背景
-                val ratio = 0.67f
-                val iconBgRect = RectF(width*ratio,(height * ratio),width.toFloat(),height.toFloat())
-                paint.color = resources.getColor(R.color.sob_vip_color, null)
-                it.drawRoundRect(iconBgRect, roundR*ratio*0.8f, roundR*ratio*0.8f, paint)
-                //画字母V
-                val path = Path()
-                val leftX = iconBgRect.left + iconBgRect.width() * 0.3f
-                val upY = iconBgRect.top + iconBgRect.height() * 0.2f
-                val rightX = iconBgRect.right - iconBgRect.height() * 0.3f
-                val downX = iconBgRect.left + iconBgRect.height() * 0.5f
-                val downY = iconBgRect.bottom - iconBgRect.height() * 0.3f
-                path.moveTo(leftX, upY)//左上起始点
-                path.lineTo(downX, downY)//下中点
-                path.lineTo(rightX, upY)//右上末尾点
+                it.drawBitmap(roundBitmap, paddingLeft.toFloat(), paddingTop.toFloat(), paint)
+                if(isVip) {
+                    //画VIP图片的矩形背景
+                    paint.color = resources.getColor(R.color.sob_vip_color, null)
+                    val ratio = 0.67f
+                    it.drawRoundRect(
+                        vipIconRect,
+                        roundR * ratio * 0.8f,
+                        roundR * ratio * 0.8f,
+                        paint
+                    )
+                }
+            }
+            //画字母V
+            if(isVip){
                 paint.color = Color.WHITE
                 paint.style = Paint.Style.STROKE
                 paint.strokeCap = Paint.Cap.ROUND
-                paint.strokeWidth = ScreenUtils.dip2px(context, 1f).toFloat()
+                paint.strokeWidth = viewWidth/30.0f
                 it.drawPath(path, paint)
                 paint.style = Paint.Style.FILL
+                paint.color = resources.getColor(R.color.sob_vip_color, null)
             }
 
         }
@@ -95,7 +144,6 @@ class SobAvatarView(context: Context, attrs: AttributeSet): androidx.appcompat.w
 
     private fun createRoundImage(bitmap: Bitmap, width: Int, height: Int): Bitmap {
         paint.isAntiAlias = true
-        paint.color = Color.BLUE
         val target = Bitmap.createBitmap(bitmap.width, bitmap.width, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(target)
         val min = Math.min(bitmap.width, bitmap.height)
@@ -108,7 +156,6 @@ class SobAvatarView(context: Context, attrs: AttributeSet): androidx.appcompat.w
         paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
         canvas.drawBitmap(bitmap, srcRect, dstRect, paint)
         paint.xfermode = null
-//        canvas.restoreToCount(sc)
         return target
     }
 
@@ -151,7 +198,6 @@ class SobAvatarView(context: Context, attrs: AttributeSet): androidx.appcompat.w
 
     private fun createCircleImage(bitmap: Bitmap, width:Int, height:Int):Bitmap {
         paint.isAntiAlias = true
-        paint.color = Color.BLUE
         val target = Bitmap.createBitmap(bitmap.width, bitmap.width, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(target)
         val min = Math.min(bitmap.width, bitmap.height)
@@ -162,7 +208,6 @@ class SobAvatarView(context: Context, attrs: AttributeSet): androidx.appcompat.w
         paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
         canvas.drawBitmap(bitmap, srcRect, dstRect, paint)
         paint.xfermode = null
-//        canvas.restoreToCount(sc)
         return target
     }
 
@@ -170,5 +215,9 @@ class SobAvatarView(context: Context, attrs: AttributeSet): androidx.appcompat.w
         val width = MeasureSpec.getSize(widthMeasureSpec)
         val height = MeasureSpec.getSize(heightMeasureSpec)
         setMeasuredDimension(width, height)
+    }
+
+    fun isVip(vip:Boolean){
+        isVip = vip
     }
 }

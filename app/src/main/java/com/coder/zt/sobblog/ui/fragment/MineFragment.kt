@@ -40,6 +40,14 @@ class MineFragment:BaseFragment<FragmentMineBinding>() {
     }
 
     override fun initData() {
+
+        userViewModel.achievement.observe(this){
+            dataBinding.cdcChangeData.setData(it)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
         userViewModel.getAchievement()
     }
 
