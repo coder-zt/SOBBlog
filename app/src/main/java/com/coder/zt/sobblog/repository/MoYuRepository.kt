@@ -9,6 +9,7 @@ import com.coder.zt.sobblog.model.moyu.*
 import com.coder.zt.sobblog.net.MoYuNetWork
 import com.coder.zt.sobblog.utils.Constants
 import com.coder.zt.sobblog.utils.ImageSelectManager
+import com.coder.zt.sobblog.utils.SPUtils
 import com.luck.picture.lib.compress.CompressionPredicate
 import com.luck.picture.lib.compress.Luban
 import com.luck.picture.lib.compress.OnCompressListener
@@ -18,6 +19,7 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
+import java.util.*
 
 
 class MoYuRepository {
@@ -92,6 +94,29 @@ class MoYuRepository {
     suspend fun publishMinifeed(minifeed: MinifeedSender):ResponseData<MYPublishResponse>{
         val comment = MoYuNetWork.getInstance().publishMinifeed(minifeed)
         return comment
+    }
+
+    suspend fun getWarpData():String{
+        var url = SPUtils.getInstance().read(Constants.SP_KEY_WARP_URL)
+        if (url.isNullOrEmpty() || isUpDate()) {
+            val comment = MoYuNetWork.getInstance().getWarpData()
+            url = Constants.BING_BASE_URL + comment.MediaContents[0].ImageContent.Image.Url
+            SPUtils.getInstance().save(Constants.SP_KEY_WARP_URL, url)
+            SPUtils.getInstance().save(Constants.SP_KEY_WARP_TIME, comment.MediaContents[0].Ssd)
+        }
+        return url
+    }
+
+    private fun isUpDate(): Boolean {
+        val ssd = SPUtils.getInstance().read(Constants.SP_KEY_WARP_TIME)
+        return if(ssd.isNullOrEmpty()) {
+            true
+        }else{
+            val date = ssd.split("_")[0]
+            val oldDay =Integer.parseInt(date.substring(6,7))
+            val curDay = Calendar.getInstance().time.day
+            oldDay != curDay
+        }
     }
 
 

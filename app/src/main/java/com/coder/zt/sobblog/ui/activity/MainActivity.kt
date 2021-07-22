@@ -29,6 +29,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         ViewModelProvider(this).get(UserViewModel::class.java)
     }
 
+    val miniFragment:MineFragment by lazy{
+        MineFragment()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,11 +46,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 R.id.item_index-> dataBinding.viewPager.currentItem = 0
                 R.id.item_discovery-> dataBinding.viewPager.currentItem = 1
                 R.id.item_other-> dataBinding.viewPager.currentItem = 2
-                R.id.item_mine-> dataBinding.viewPager.currentItem = 3
+                R.id.item_mine-> {
+                    dataBinding.viewPager.currentItem = 3
+                    miniFragment.setData()
+                }
             }
             return@setOnNavigationItemSelectedListener true
         }
-        val adapter = HomePagerAdapter(supportFragmentManager, listOf(IndexFragment(),DiscoveryFragment(),OtherFragment(),MineFragment()))
+        val adapter = HomePagerAdapter(supportFragmentManager, listOf(IndexFragment(),DiscoveryFragment(),OtherFragment(),miniFragment))
         dataBinding.viewPager.adapter = adapter
         dataBinding.viewPager.currentItem = 0
         dataBinding.viewPager.offscreenPageLimit = 4

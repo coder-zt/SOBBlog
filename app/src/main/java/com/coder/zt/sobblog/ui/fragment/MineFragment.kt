@@ -1,5 +1,6 @@
 package com.coder.zt.sobblog.ui.fragment
 
+import android.util.Log
 import androidx.core.util.Pair
 import androidx.lifecycle.ViewModelProvider
 import com.coder.zt.sobblog.R
@@ -30,7 +31,6 @@ class MineFragment:BaseFragment<FragmentMineBinding>() {
 
 
     override fun initView() {
-        dataBinding.data = UserDataMan.getUserInfo()
         dataBinding.rvMiniMenu.adapter = MiniMuenAdapter(menuList){
             when(it){
                 "设置"->AppRouter.toSettingActivity(requireActivity())
@@ -41,6 +41,11 @@ class MineFragment:BaseFragment<FragmentMineBinding>() {
 
     override fun initData() {
         userViewModel.getAchievement()
+    }
+
+
+    fun setData() {
+        dataBinding.data = UserDataMan.getUserInfo()
     }
 
 

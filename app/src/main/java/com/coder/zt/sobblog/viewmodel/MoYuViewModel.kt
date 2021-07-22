@@ -29,7 +29,7 @@ companion object{
     val topicItem:MutableLiveData<List<TopicItem>> = MutableLiveData()
     val eventObserver:MutableLiveData<Pair<Int, Boolean>> = MutableLiveData()
     val changeItemId:MutableLiveData<Pair<String,MoYuAdapter.DO_TYPE>> = MutableLiveData()
-
+    val bingWarpUrl:MutableLiveData<String> = MutableLiveData()
 
     /**
      * 获取摸鱼动态
@@ -138,6 +138,16 @@ companion object{
             val message = MoYuRepository.getInstance().publishMinifeed(media)
             ToastUtils.show(message.message)
             eventObserver.value = Pair(EVENT_PUBLISH, message.success)
+        }
+    }
+
+    /**
+     * 发布动态
+     */
+    fun getWarpUrl(){
+        viewModelScope.launch{
+            val url = MoYuRepository.getInstance().getWarpData()
+            bingWarpUrl.value = url
         }
     }
 

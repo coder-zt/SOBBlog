@@ -30,4 +30,12 @@ object ServiceCreator {
                             .build()
 
     fun <T> create(serviceClass: Class<T>):T = retrofit.create(serviceClass)
+
+    private val bingRetrofit:Retrofit = Retrofit.Builder()
+        .baseUrl(Constants.BING_BASE_URL)
+        .client(client)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
+    fun <T> createBing(serviceClass: Class<T>):T = bingRetrofit.create(serviceClass)
 }

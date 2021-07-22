@@ -44,6 +44,7 @@ class MoYuAdapter(val callback:(code:DO_TYPE, data:Any) -> Unit): RecyclerView.A
     val mData by lazy {
         mutableListOf<MiniFeed>()
     }
+    private lateinit var topView:TopView
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -79,6 +80,7 @@ class MoYuAdapter(val callback:(code:DO_TYPE, data:Any) -> Unit): RecyclerView.A
         }else{
             val topItem = holder as TopView
             topItem.setData()
+            topView = topItem
         }
     }
 
@@ -135,6 +137,10 @@ class MoYuAdapter(val callback:(code:DO_TYPE, data:Any) -> Unit): RecyclerView.A
             }
         }
 
+    }
+
+    fun setTopWarpUrl(it: String?) {
+        Glide.with(topView.inflate.themeIv.context).load(it).into(topView.inflate.themeIv)
     }
 
     class ContentView(val inflate:RvMoyuBinding) :RecyclerView.ViewHolder(inflate.root){

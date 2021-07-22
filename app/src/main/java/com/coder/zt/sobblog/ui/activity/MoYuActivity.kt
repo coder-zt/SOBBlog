@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.coder.zt.sobblog.R
 import com.coder.zt.sobblog.databinding.ActivityMoyuBinding
+import com.coder.zt.sobblog.databinding.ActivityMoyuBindingImpl
 import com.coder.zt.sobblog.model.datamanager.UserDataMan
 import com.coder.zt.sobblog.model.moyu.MYReplySender
 import com.coder.zt.sobblog.ui.adapter.MYCommentAdapter
@@ -126,10 +127,10 @@ class MoYuActivity:BaseActivity<ActivityMoyuBinding>() {
 
             })
             refreshView.setContentSlideListener {
-                if(it != moyuViewModel?.slideDistance?.value){
+                if(it != viewModel?.slideDistance?.value){
                     closeCommentInput()
                 }
-                moyuViewModel?.slideDistance?.value = it
+                viewModel?.slideDistance?.value = it
             }
         }
         dataBinding.commentSendTv.setOnClickListener {
@@ -184,7 +185,7 @@ class MoYuActivity:BaseActivity<ActivityMoyuBinding>() {
     }
 
     private fun initData() {
-        dataBinding.moyuViewModel = viewModel
+        dataBinding.data = viewModel
         viewModel.moyuDisplayData.observe(this){
             if (loadMore) {//加载结束
                 Log.d(TAG, "initData: 获取数据添加")
@@ -243,11 +244,15 @@ class MoYuActivity:BaseActivity<ActivityMoyuBinding>() {
                 }
             }
         }
+        viewModel.bingWarpUrl.observe(this){
+            adapter.setTopWarpUrl(it)
+        }
     }
 
     override fun onResume() {
         super.onResume()
         viewModel.getRecommendMiniFeed(loadMore)
+        viewModel.getWarpUrl()
     }
 
     override fun getLayoutId(): Int {

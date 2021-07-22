@@ -4,7 +4,7 @@
 
     <data>
         <variable
-            name="moyuViewModel"
+            name="data"
             type="com.coder.zt.sobblog.viewmodel.MoYuViewModel" />
     </data>
 
@@ -152,7 +152,7 @@
                 android:padding="6dp"
                 android:textSize="14sp"
                 android:hint="@string/str_comment_hint"
-                android:text="@={moyuViewModel.comment}"
+                android:text="@={data.comment}"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_margin="8dp"

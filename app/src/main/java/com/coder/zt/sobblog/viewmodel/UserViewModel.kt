@@ -54,6 +54,7 @@ class UserViewModel:ViewModel() {
     fun checkToken(){
         viewModelScope.launch {
             val response = UserRepository.getInstance().checkToken()
+            Log.d(TAG, "checkToken: $response")
             if(response.success){
                 UserDataMan.save(response.data)
             }else{

@@ -16,8 +16,6 @@
             android:layout_height="0dp"
             app:layout_constraintDimensionRatio="h,16:9"
             android:scaleType="fitXY"
-            app:pic_url="@{`https://cn.bing.com/th?id=OHR.VermilionLakes_ZH-CN3446257764_1920x1080.jpg&amp;rf=LaDigue_1920x1080.jpg&amp;pid=hp`}"
-            app:pic_corner="@{0}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
