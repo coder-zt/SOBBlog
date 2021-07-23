@@ -52,13 +52,14 @@
             app:layout_constraintStart_toStartOf="@+id/textView8"
             app:layout_constraintTop_toTopOf="@+id/imageView4" />
 
-        <ImageView
+        <com.coder.zt.sobblog.ui.view.SobAvatarView
             android:id="@+id/imageView5"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginStart="12dp"
-            app:pic_url="@{data.avatar}"
-            app:pic_corner="@{12}"
+            app:avatar="@{data.avatar}"
+            app:isCircle="true"
+            app:isVip="@{data.vip}"
             app:layout_constraintBottom_toBottomOf="@+id/textView9"
             app:layout_constraintStart_toEndOf="@+id/textView9"
             app:layout_constraintTop_toTopOf="@+id/textView9" />

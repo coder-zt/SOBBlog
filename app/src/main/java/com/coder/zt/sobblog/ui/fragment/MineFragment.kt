@@ -1,6 +1,7 @@
 package com.coder.zt.sobblog.ui.fragment
 
 import android.util.Log
+import android.view.View
 import androidx.core.util.Pair
 import androidx.lifecycle.ViewModelProvider
 import com.coder.zt.sobblog.R
@@ -42,13 +43,21 @@ class MineFragment:BaseFragment<FragmentMineBinding>() {
     override fun initData() {
 
         userViewModel.achievement.observe(this){
-            dataBinding.cdcChangeData.setData(it)
+            it?.let {
+                dataBinding.cdcChangeData.visibility = View.VISIBLE
+                dataBinding.cdcChangeData.setData(it)
+            }
         }
     }
 
     override fun onResume() {
         super.onResume()
-        userViewModel.getAchievement()
+        if(UserDataMan.isLogin()){
+            userViewModel.getAchievement()
+        }else{
+            dataBinding.cdcChangeData.visibility = View.GONE
+        }
+
     }
 
 

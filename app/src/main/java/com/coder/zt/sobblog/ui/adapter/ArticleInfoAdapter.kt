@@ -52,6 +52,7 @@ companion object{
 
     class ArticleView(val bind:RvArticleInfoBinding):RecyclerView.ViewHolder(bind.root){
         fun setData(articleInfo: ArticleInfo, callback:(id:String)->Unit) {
+            Log.d(TAG, "setData: ${articleInfo.avatar}")
             bind.data = articleInfo
             bind.root.setOnClickListener{
                 callback(articleInfo.id)

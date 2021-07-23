@@ -70,9 +70,12 @@ class UserViewModel:ViewModel() {
         viewModelScope.launch {
             if(UserDataMan.isLogin()){
                 val response = UserRepository.getInstance().getAchievement()
-                response.data.let {
-                    achievement.value = it
+                if (response.success) {
+                    response.data.let {
+                        achievement.value = it
+                    }
                 }
+
         }
 
 

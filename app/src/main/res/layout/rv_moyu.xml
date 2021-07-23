@@ -14,9 +14,11 @@
         android:layout_height="wrap_content"
         android:background="@color/white">
 
-        <ImageView
+        <com.coder.zt.sobblog.ui.view.SobAvatarView
             android:id="@+id/imageView"
-            url="@{data.avatar}"
+            app:avatar="@{data.avatar}"
+            app:isVip="@{data.vip}"
+            app:isCircle="false"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_marginTop="6dp"
