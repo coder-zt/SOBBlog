@@ -62,6 +62,7 @@ companion object{
         viewModelScope.launch {
             val thumbUp = MoYuRepository.getInstance().comment(MYCommentSender(content, commentId))
             ToastUtils.show(thumbUp.message, !thumbUp.success)
+            getMiniFeedComment(commentId)
         }
     }
 
@@ -74,6 +75,7 @@ companion object{
             Log.d(TAG, "sendReply: $sender")
             val data = MoYuRepository.getInstance().reply(sender)
             ToastUtils.show(data.message, !data.success)
+            getMiniFeedComment(sender.momentId)
         }
     }
 
