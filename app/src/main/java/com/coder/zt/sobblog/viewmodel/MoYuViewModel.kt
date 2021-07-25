@@ -28,7 +28,7 @@ companion object{
     val feedComment:MutableLiveData<List<MYComment>> = MutableLiveData()
     val topicItem:MutableLiveData<List<TopicItem>> = MutableLiveData()
     val eventObserver:MutableLiveData<Pair<Int, Boolean>> = MutableLiveData()
-    val changeItemId:MutableLiveData<Pair<String,MoYuAdapter.DO_TYPE>> = MutableLiveData()
+    val changeItemId:MutableLiveData<Pair<String,MoYuAdapter.DOTYPE>> = MutableLiveData()
     val bingWarpUrl:MutableLiveData<String> = MutableLiveData()
 
     /**
@@ -50,7 +50,7 @@ companion object{
             Log.d(TAG, "thumbUP: $thumbUp")
             ToastUtils.show(thumbUp.message, !thumbUp.success)
             if(thumbUp.success){
-                changeItemId.value = Pair(momentId, MoYuAdapter.DO_TYPE.THUMB_UP)
+                changeItemId.value = Pair(momentId, MoYuAdapter.DOTYPE.THUMB_UP)
             }
         }
     }
@@ -69,8 +69,13 @@ companion object{
      * 回复评论
      *
      */
+//    commentId: "1419320369843560450"
+//    content: "明天可能能更新一下"
+//    momentId: "1419249162863628289"
+//    targetUserId: "1139423796017500160"
     fun sendReply(sender: MYReplySender) {
         viewModelScope.launch {
+            Log.d(TAG, "sendReply: $sender")
             val data = MoYuRepository.getInstance().reply(sender)
             ToastUtils.show(data.message, !data.success)
         }

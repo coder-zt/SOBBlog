@@ -9,7 +9,7 @@ data class MiniFeed(
     val createTime: String,
     val id: String,
     val images: List<String>,
-    val linkCover: Any,
+    val linkCover: String,
     val linkTitle: String,
     val linkUrl: String,
     val nickname: String,

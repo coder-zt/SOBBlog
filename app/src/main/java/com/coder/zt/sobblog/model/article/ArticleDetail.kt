@@ -12,7 +12,7 @@ data class ArticleDetail(
     val id: String,
     val isComment: String,
     val isTop: String,
-    val isVip: String,
+    val isVip: Boolean,
     val labels: List<String>,
     val nickname: String,
     val recommend: Int,

@@ -80,7 +80,7 @@
             android:id="@+id/textView10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{data.createTime.substring(0,10)}"
+            app:time_text="@{data.createTime}"
             app:layout_constraintBottom_toBottomOf="@+id/imageView4"
             app:layout_constraintStart_toStartOf="@+id/textView9" />
 

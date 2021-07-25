@@ -24,19 +24,23 @@ import com.coder.zt.sobblog.utils.ScreenUtils
  * 请求数据与ui不符文件解决：
  * 在客户端网络模块请求将所有数据请求再以特定的格式返回，加载出错的数据表示加载出错，并提供重新请求数据的点击事件
  */
-class MoYuAdapter(val callback:(code:DO_TYPE, data:Any) -> Unit): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MoYuAdapter(val callback:(code:DOTYPE, data:Any) -> Unit): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object{
         private const val TAG = "MoYuAdapter"
     }
-    enum class DO_TYPE{
+
+    enum class  DOTYPE{
         REPLY,
         COMMENT,
         GET_COMMENT,
-        THUMB_UP
+        THUMB_UP,
+        SHARE_LINK
     }
+
     private val TOP_VIEW:Int = 0
     private val CONTENT_VIEW:Int = 1
+
     private val listener:()->Unit = {
         checkChildrenState()
     }
@@ -147,8 +151,8 @@ class MoYuAdapter(val callback:(code:DO_TYPE, data:Any) -> Unit): RecyclerView.A
 
         private var showExpansion = false
         private var requestComment = false
-        private lateinit var adapter:MYCommentAdapter
-        fun setData(miniFeed: MiniFeed, position: Int,listener:()->Unit,callback:(code:DO_TYPE, data:Any) -> Unit) {
+        private lateinit var adapter:ArticleCommentAdapter
+        fun setData(miniFeed: MiniFeed, position: Int,listener:()->Unit,callback:(code:DOTYPE, data:Any) -> Unit) {
             requestComment = false
             showExpansion = false
             inflate.rvComment.visibility = View.GONE
@@ -190,26 +194,26 @@ class MoYuAdapter(val callback:(code:DO_TYPE, data:Any) -> Unit): RecyclerView.A
         }
 
         private fun setListener(
-            callback: (code: DO_TYPE, data: Any) -> Unit,
+            callback: (code: DOTYPE, data: Any) -> Unit,
             miniFeed: MiniFeed
         ) {
             //设置点击事件
             //点赞
             inflate.zanLl.setOnClickListener {
-                callback.invoke(DO_TYPE.THUMB_UP, miniFeed.id)
+                callback.invoke(DOTYPE.THUMB_UP, miniFeed.id)
             }
             //点击评论（显示与隐藏）
             inflate.commentLl.setOnClickListener {
                 if(!showExpansion){
                     inflate.rvComment.visibility = View.VISIBLE
                     inflate.triangleView.visibility = View.VISIBLE
-                    adapter = MYCommentAdapter(miniFeed.id, callback)
+                    adapter = ArticleCommentAdapter(miniFeed.id,callback)
                     inflate.rvComment.adapter = adapter
                     showExpansion = true
                     //获取评论
                     if(miniFeed.commentCount > 0){
                         requestComment = true
-                        callback.invoke(DO_TYPE.GET_COMMENT, miniFeed.id)
+                        callback.invoke(DOTYPE.GET_COMMENT, miniFeed.id)
                     }
                 }else{
                     inflate.rvComment.visibility = View.GONE
@@ -218,6 +222,10 @@ class MoYuAdapter(val callback:(code:DO_TYPE, data:Any) -> Unit): RecyclerView.A
                     requestComment = false
                 }
 
+            }
+            //点击分享的链接
+            inflate.rlLinkContainer.setOnClickListener{
+                callback(DOTYPE.SHARE_LINK, miniFeed.linkUrl)
             }
         }
 
@@ -238,7 +246,7 @@ class MoYuAdapter(val callback:(code:DO_TYPE, data:Any) -> Unit): RecyclerView.A
         fun setComment(it: List<MYComment>) {
             if (!it.isNullOrEmpty()) {
                 if (inflate.data?.id == it[0].momentId && requestComment) {
-                    adapter.setData(it)
+                    adapter.setMYData(it)
                     requestComment = false
                 }
             }

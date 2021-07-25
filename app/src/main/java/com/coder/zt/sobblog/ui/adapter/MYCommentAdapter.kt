@@ -13,7 +13,7 @@ import com.coder.zt.sobblog.databinding.RvMoyuCommentTopBinding
 import com.coder.zt.sobblog.databinding.RvMoyuInteractionBinding
 import com.coder.zt.sobblog.model.moyu.MYComment
 
-class MYCommentAdapter(val minifeedId:String, val callback:(code: MoYuAdapter.DO_TYPE, data:Any) -> Unit)
+class MYCommentAdapter(val minifeedId:String, val callback:(code: MoYuAdapter.DOTYPE, data:Any) -> Unit)
     :RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
@@ -111,19 +111,17 @@ class MYCommentAdapter(val minifeedId:String, val callback:(code: MoYuAdapter.DO
 
     class ItemView(val inflate: RvMoyuInteractionBinding) : RecyclerView.ViewHolder(inflate!!.root) {
         @SuppressLint("SetTextI18n")
-        fun setData(commentDataBean: CommentDataBean,callback:(code: MoYuAdapter.DO_TYPE, data:Any) -> Unit) {
+        fun setData(commentDataBean: CommentDataBean,callback:(code: MoYuAdapter.DOTYPE, data:Any) -> Unit) {
             inflate.diver.visibility = View.GONE
             //评论
             if(commentDataBean.from != "有点赞"){
                 if(commentDataBean.to == parentComment){
-                    Log.d(TAG, "setData 父评论: $commentDataBean")
                     inflate.content.text = Html.fromHtml( "<font color=\"#294F6C\">${commentDataBean.from}</font><font color=\"#000000\">:${commentDataBean.content}</font>")
                 }else{
-                    Log.d(TAG, "setData 子评论: $commentDataBean")//
                     inflate.content.text = Html.fromHtml( "<font color=\"#294F6C\">${commentDataBean?.from}</font><font color=\"#000000\">回复</font><font color=\"#294F6C\">${commentDataBean?.to}</font><font color=\"#000000\">:${commentDataBean?.content}</font>")
                 }
                 inflate.root.setOnClickListener{
-                    callback(MoYuAdapter.DO_TYPE.REPLY, commentDataBean)
+                    callback(MoYuAdapter.DOTYPE.REPLY, commentDataBean)
                 }
 
             }
@@ -134,12 +132,11 @@ class MYCommentAdapter(val minifeedId:String, val callback:(code: MoYuAdapter.DO
 
     class TopView(val inflate: RvMoyuCommentTopBinding) : RecyclerView.ViewHolder(inflate!!.root) {
 
-        fun setData(minifeedId: String, callback:(code: MoYuAdapter.DO_TYPE, data:Any) -> Unit) {
+        fun setData(minifeedId: String, callback:(code: MoYuAdapter.DOTYPE, data:Any) -> Unit) {
             inflate.root.setOnClickListener{
-                callback.invoke(MoYuAdapter.DO_TYPE.COMMENT, minifeedId)
+                callback.invoke(MoYuAdapter.DOTYPE.COMMENT, minifeedId)
             }
         }
-
 
     }
 }

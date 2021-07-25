@@ -91,6 +91,7 @@ dependencies {
     //友盟统计
     implementation  'com.umeng.umsdk:common:9.4.0'
     implementation  'com.umeng.umsdk:asms:1.2.3'
+    implementation 'com.umeng.umsdk:apm:1.4.0'
     //app内升级
     implementation 'com.github.xuexiangjys:XUpdate:2.0.8'
     implementation 'com.zhy:okhttputils:2.6.2'

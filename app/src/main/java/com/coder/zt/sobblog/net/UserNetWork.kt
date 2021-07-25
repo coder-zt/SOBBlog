@@ -18,6 +18,8 @@ class UserNetWork: NetWorkBase() {
 
         suspend fun achievement() = userService.achievement().await()
 
+        suspend fun interactInfo() = userService.interactInfo().await()
+
 
         companion object{
                 private var network: UserNetWork? = null

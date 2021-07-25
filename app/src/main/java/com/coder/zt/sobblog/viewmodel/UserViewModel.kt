@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.coder.zt.sobblog.model.datamanager.UserDataMan
+import com.coder.zt.sobblog.model.user.InteractInfo
 import com.coder.zt.sobblog.model.user.LoginInfo
 import com.coder.zt.sobblog.model.user.SobUserInfo
 import com.coder.zt.sobblog.model.user.UserAchievement
@@ -26,6 +27,7 @@ class UserViewModel:ViewModel() {
     val loginMessage = MutableLiveData<String>()
     val captchaBitmap = MutableLiveData<Bitmap>()
     val achievement = MutableLiveData<UserAchievement>()
+    val interactInfo = MutableLiveData<InteractInfo>()
 
     fun login(captcha:String, loginInfo: LoginInfo){
         Log.d(TAG, "login: ${loginInfo.password}")
@@ -75,10 +77,20 @@ class UserViewModel:ViewModel() {
                         achievement.value = it
                     }
                 }
-
+            }
         }
+    }
 
-
+    fun getInteractInfo(){
+        viewModelScope.launch {
+            if(UserDataMan.isLogin()){
+                val response = UserRepository.getInstance().getInteractInfo()
+                if (response.success) {
+                    response.data.let {
+                        interactInfo.value = it
+                    }
+                }
+            }
         }
     }
 

@@ -2,6 +2,7 @@ package com.coder.zt.sobblog.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.coder.zt.sobblog.R
@@ -18,6 +19,7 @@ import com.coder.zt.sobblog.utils.ToastUtils
 import com.coder.zt.sobblog.viewmodel.UserViewModel
 import com.google.android.material.tabs.TabLayout
 import com.xuexiang.xupdate.XUpdate
+import java.lang.StringBuilder
 
 class MainActivity : BaseActivity<ActivityMainBinding>() {
 
@@ -73,7 +75,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         XUpdate.newBuild(this)
             .updateUrl(Constants.UPDATE_URL)
             .update()
-
     }
 
     private fun checkUserState() {

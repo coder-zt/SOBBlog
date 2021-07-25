@@ -5,7 +5,7 @@ data class ArticleComment(
     val articleId: String,
     val avatar: String,
     val commentContent: String,
-    val isTop: String,
+    val isTop: Boolean,
     val nickname: String,
     val parentId: String,
     val publishTime: String,

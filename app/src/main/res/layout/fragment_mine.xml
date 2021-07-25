@@ -34,14 +34,14 @@
                 app:isVip="@{data.isVip}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:pic_corner="@{0}"
-                app:pic_url="@{data.avatar}" />
+                app:avatar="@{data.avatar.length() == 0?`null`:data.avatar}"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 android:text="@{data.nickname}"
+                app:vip_text_color = "@{data.vip}"
                 android:textColor="@color/white"
                 android:textSize="22sp"
                 app:layout_constraintStart_toEndOf="@+id/imageView1"
@@ -95,6 +95,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_mini_menu"
+            android:overScrollMode="never"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@color/theme_gray"

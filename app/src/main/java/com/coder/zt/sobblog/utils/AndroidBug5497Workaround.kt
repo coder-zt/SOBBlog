@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.appcompat.widget.ContentFrameLayout
+import com.coder.zt.sobblog.SOBApp
 
 
 class AndroidBug5497Workaround(val activity: Activity) {
@@ -40,14 +41,14 @@ class AndroidBug5497Workaround(val activity: Activity) {
     private fun possiblyResizeChildOfContent() {
         val usableHeightNow = computeUsableHeight()//剩余内容的高度
         if (usableHeightNow != usableHeightPrevious) {
-            Log.d(TAG, "possiblyResizeChildOfContent: usableHeightNow $usableHeightNow")
             val usableHeightSansKeyboard = mChildOfContent!!.rootView.height//整个屏幕的高度
-            Log.d(TAG, "possiblyResizeChildOfContent: usableHeightSansKeyboard$usableHeightSansKeyboard")
             val heightDifference = usableHeightSansKeyboard - usableHeightNow
             if (heightDifference > usableHeightSansKeyboard / 4) {
+                Log.d(TAG, "possiblyResizeChildOfContent: 大于")
                 frameLayoutParams!!.height = usableHeightSansKeyboard - heightDifference + 96
             } else {
-                frameLayoutParams!!.height = usableHeightSansKeyboard
+                Log.d(TAG, "possiblyResizeChildOfContent: 小于等于")
+                frameLayoutParams!!.height = usableHeightSansKeyboard - StatusBarUtil.getNavigationBarHeight(SOBApp._context)
             }
             mChildOfContent!!.requestLayout()
             usableHeightPrevious = usableHeightNow

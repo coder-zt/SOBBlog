@@ -25,67 +25,82 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#2f2f2f"
-                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#2f2f2f"
+                    android:orientation="vertical">
 
-                <View
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
 
-                <TextView
-                    android:id="@+id/text"
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:id="@+id/text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:text="阳光沙滩"
+                        android:layout_marginTop="20dp"
+                        android:layout_gravity="center_horizontal"
+                        android:textSize="28sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginBottom="32dp"
+                        android:text="--让学习编程更加简单"
+                        android:layout_gravity="center_horizontal"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_moyu"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:text="阳光沙滩"
-                    android:layout_marginTop="20dp"
-                    android:layout_gravity="center_horizontal"
-                    android:textSize="28sp"
-                    android:textStyle="bold" />
+                    android:background="@color/white"
+                    android:nestedScrollingEnabled="false" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginBottom="32dp"
-                    android:text="--让学习编程更加简单"
-                    android:layout_gravity="center_horizontal"
-                    android:textSize="18sp" />
-
-            </LinearLayout>
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_moyu"
-                android:layout_width="match_parent"
-                android:nestedScrollingEnabled="false"
-                android:layout_height="wrap_content"
-                android:background="@color/white"/>
-
-            <LinearLayout
+                <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:orientation="horizontal"
-                android:gravity="center">
+                android:gravity="center_horizontal">
 
-                <com.coder.zt.sobblog.ui.view.BottomLoadingView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:background="@color/teal_700"/>
+                    <com.coder.zt.sobblog.ui.view.BottomLoadingView
+                        android:id="@+id/loading"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginTop="12dp"/>
+
+                    <TextView
+                        android:id="@+id/tv_loading"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginStart="12dp"
+                        android:text="正在加载。。。"
+                        android:layout_toEndOf="@+id/loading"
+                        android:gravity="center"/>
+
+
+                </RelativeLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="32dp"
-                    android:layout_marginStart="12dp"
-                    android:text="正在加载。。。"
-                    android:gravity="center"/>
-
-            </LinearLayout>
+                    android:layout_height="200dp"
+                    android:text="彩蛋"
+                    android:textSize="32sp"
+                    android:gravity="center"
+                    android:layout_marginTop="1dp"/>
 
             </com.coder.zt.sobblog.ui.view.RefreshView>
+
 
 
             <com.coder.zt.sobblog.ui.view.MinifeedLoadingView
@@ -132,6 +147,7 @@
                     android:layout_alignParentRight="true"/>
 
             </RelativeLayout>
+
         </FrameLayout>
 
         <LinearLayout

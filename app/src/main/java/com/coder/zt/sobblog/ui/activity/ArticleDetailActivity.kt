@@ -13,13 +13,10 @@ import com.coder.zt.sobblog.databinding.PopRvReawrdBinding
 import com.coder.zt.sobblog.model.article.ArticleCollect
 import com.coder.zt.sobblog.model.article.ArticleReward
 import com.coder.zt.sobblog.model.datamanager.UserDataMan
-import com.coder.zt.sobblog.ui.adapter.ArticleCommentAdapter
-import com.coder.zt.sobblog.ui.adapter.PopListAdapter
-import com.coder.zt.sobblog.ui.adapter.RewardAdapter
+import com.coder.zt.sobblog.ui.adapter.*
 import com.coder.zt.sobblog.ui.base.BaseActivity
 import com.coder.zt.sobblog.utils.*
 import com.coder.zt.sobblog.viewmodel.ArticleViewModel
-import com.coder.zt.sobblog.viewmodel.UserViewModel
 
 class ArticleDetailActivity:BaseActivity<ActivityArticleDetailBinding>(){
 
@@ -34,12 +31,27 @@ companion object{
     private val rewardAdapter: RewardAdapter by lazy {
         RewardAdapter()
     }
+    private val callback:(MoYuAdapter.DOTYPE, Any) -> Unit = {doType: MoYuAdapter.DOTYPE, data:Any ->
+        when(doType){
+            MoYuAdapter.DOTYPE.COMMENT ->{//评论动态
+                if(UserDataMan.checkUserLoginState(this, getString(R.string.check_login_comment_tips))){
+                }
+            }
+            MoYuAdapter.DOTYPE.REPLY ->{//回复评论
+                if(UserDataMan.checkUserLoginState(this, getString(R.string.check_login_comment_tips))) {
 
-    private val commentAdapter: ArticleCommentAdapter by lazy {
-        ArticleCommentAdapter()
+                }
+
+            }
+        }
     }
 
     private lateinit var articleId:String
+
+    private val commentAdapter: ArticleCommentAdapter by lazy {
+        ArticleCommentAdapter("", callback)
+    }
+
 
     override fun getLayoutId() = R.layout.activity_article_detail
 
@@ -57,10 +69,10 @@ companion object{
             dataBinding.rvComment.isNestedScrollingEnabled = it
         }
         dataBinding.llZanContainer.setOnClickListener {
-//            if(UserDataMan.checkUserLoginState(this, getString(R.string.check_login_thumb_up_tips))) {
-//                viewModel.articleThumbUp(articleId)
-//            }
-            dataBinding.wvArticle.loadUrl("javascript:window.androidApi.printPageSource('<head>'+document.getElementsByTagName('html')[0].innerHTML+'</head>');");
+            if(UserDataMan.checkUserLoginState(this, getString(R.string.check_login_thumb_up_tips))) {
+                viewModel.articleThumbUp(articleId)
+            }
+//            dataBinding.wvArticle.loadUrl("javascript:window.androidApi.printPageSource('<head>'+document.getElementsByTagName('html')[0].innerHTML+'</head>');");
         }
         dataBinding.llCollectContainer.setOnClickListener {
             if(UserDataMan.checkUserLoginState(this, getString(R.string.check_login_collect_tips))) {
@@ -82,6 +94,9 @@ companion object{
 
                     },false)
             }
+        }
+        dataBinding.wvArticle.setOpenUrlListener {
+            AppRouter.toOutsideWebsite(this, it)
         }
     }
 
@@ -135,6 +150,7 @@ companion object{
     private fun loadArticle(articleId:String) {
         if (articleId.isEmpty()) {
             ToastUtils.showError("找不到该文章信息")
+            finish()
             return
         }
         viewModel.getArticleDetail(articleId)

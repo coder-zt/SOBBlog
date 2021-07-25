@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="1dp"
             android:textSize="12sp"
-            android:text="@{data.createTime}"
+            app:time_text = "@{data.createTime}"
             app:layout_constraintBottom_toBottomOf="@+id/textView"
             app:layout_constraintEnd_toEndOf="@+id/textView2"
             app:layout_constraintTop_toTopOf="@+id/textView" />
@@ -96,24 +96,82 @@
             app:layout_constraintStart_toStartOf="@+id/recyclerView"
             app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
 
+
+        <RelativeLayout
+            android:id="@+id/rl_link_container"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginVertical="12dp"
+            android:visibility="@{(data.linkTitle.length() == 0||data.linkUrl.length() == 0)?8:0}"
+            android:background="@drawable/bule_boroad_bg"
+            app:layout_constraintEnd_toEndOf="@+id/textView2"
+            app:layout_constraintStart_toStartOf="@+id/textView2"
+            app:layout_constraintTop_toBottomOf="@+id/topic_tv">
+
+
+            <ImageView
+                android:id="@+id/iv_site_icon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="10dp"
+                android:layout_centerVertical="true"
+                android:padding="4dp"
+                android:scaleType="fitXY"
+                app:link_url="@{data.linkUrl.length() == 0?`no_link`:data.linkUrl}" />
+
+            <View
+                android:id="@+id/v_diver"
+                android:layout_width="1dp"
+                android:layout_height="40dp"
+                android:background="@color/theme_gray"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="6dp"
+                android:layout_toEndOf="@+id/iv_site_icon"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/v_diver"
+                android:layout_alignTop="@+id/iv_site_icon"
+                android:layout_marginStart="6dp"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:text="@{data.linkTitle}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/iv_site_icon"
+                android:layout_marginStart="6dp"
+                android:layout_toEndOf="@+id/v_diver"
+                android:textSize="10sp"
+                app:url_host="@{data.linkUrl.length() == 0?`no_link`:data.linkUrl}"
+                android:textColor="@color/theme_blue" />
+
+        </RelativeLayout>
+
+
         <View
             android:id="@+id/view"
             android:layout_width="0dp"
             android:layout_height="1dp"
+            android:layout_marginTop="12dp"
             android:background="@color/diver_line_color"
             app:layout_constraintBottom_toTopOf="@+id/relativeLayout"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rl_link_container" />
 
         <RelativeLayout
             android:id="@+id/relativeLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            app:layout_constraintBottom_toTopOf="@+id/diver"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/topic_tv">
+            app:layout_constraintTop_toBottomOf="@+id/rl_link_container">
 
             <!--  点赞、评论、分享工具条  -->
             <LinearLayout
@@ -218,11 +276,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/linearLayout"
-                android:layout_marginBottom="12dp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 android:background="@drawable/moyu_interaction_bg"
-                android:paddingVertical="8dp"
-                android:visibility="gone" />
+                android:paddingTop="8dp"
+                android:visibility="gone"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
             <com.coder.zt.sobblog.ui.view.TriangleView
                 android:id="@+id/triangle_view"
@@ -241,9 +298,10 @@
             android:layout_width="0dp"
             android:layout_height="8dp"
             android:background="@color/diver_line_color"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

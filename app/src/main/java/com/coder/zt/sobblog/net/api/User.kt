@@ -2,6 +2,7 @@ package com.coder.zt.sobblog.net.api
 
 
 import com.coder.zt.sobblog.model.base.ResponseData
+import com.coder.zt.sobblog.model.user.InteractInfo
 import com.coder.zt.sobblog.model.user.LoginInfo
 import com.coder.zt.sobblog.model.user.SobUserInfo
 import com.coder.zt.sobblog.model.user.UserAchievement
@@ -41,6 +42,12 @@ interface User {
      */
     @GET("ast/ucenter/achievement")
     fun achievement():  Call<ResponseData<UserAchievement>>
+
+    /**
+     * 获取互动信息
+     */
+    @GET("ct/msg/count")
+    fun interactInfo():  Call<ResponseData<InteractInfo>>
 
 
 }

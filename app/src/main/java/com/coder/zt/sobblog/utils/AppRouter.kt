@@ -1,12 +1,17 @@
 package com.coder.zt.sobblog.utils
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import com.coder.zt.sobblog.ui.activity.ArticleDetailActivity
 import com.coder.zt.sobblog.ui.activity.EditMinifeedActivity
 import com.coder.zt.sobblog.ui.activity.LoginActivity
 import com.coder.zt.sobblog.ui.activity.SettingActivity
+import com.umeng.analytics.MobclickAgent
+import com.umeng.umcrash.UMCrash
+
 
 object AppRouter {
 
@@ -46,5 +51,30 @@ object AppRouter {
         val intent = Intent(activity, SettingActivity::class.java)
         activity.startActivity(intent)
     }
+
+    /**
+     * 跳转到外部浏览器
+     */
+    @SuppressLint("QueryPermissionsNeeded")
+    fun toOutsideWebsite(activity: Activity, url: String) {
+        Log.d(TAG, "toOutsideWebsite: $url")
+        val intent = Intent().apply {
+            action = Intent.ACTION_VIEW
+            data = Uri.parse(url)
+        }
+        // 注意此处的判断intent.resolveActivity()可以返回显示该Intent的Activity对应的组件名
+        // 官方解释 : Name of the component implementing an activity that can display the intent
+        if (intent.resolveActivity(activity.packageManager) != null) {
+            activity.startActivity(Intent.createChooser(intent, "请选择浏览器"))
+        } else {
+            try {
+                activity.startActivity(Intent.createChooser(intent, "请选择浏览器"))
+            }catch (e:Exception){
+                ClipBoardUtils.paste(url)
+                ToastUtils.showError("打开链接出错，已将链接粘贴到剪切板");
+            }
+        }
+    }
+
 
 }

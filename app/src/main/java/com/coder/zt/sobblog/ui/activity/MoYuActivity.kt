@@ -8,15 +8,12 @@ import android.view.*
 import android.view.inputmethod.InputMethodManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.coder.zt.sobblog.R
 import com.coder.zt.sobblog.databinding.ActivityMoyuBinding
-import com.coder.zt.sobblog.databinding.ActivityMoyuBindingImpl
 import com.coder.zt.sobblog.model.datamanager.UserDataMan
 import com.coder.zt.sobblog.model.moyu.MYReplySender
-import com.coder.zt.sobblog.ui.adapter.MYCommentAdapter
+import com.coder.zt.sobblog.ui.adapter.ArticleCommentAdapter
 import com.coder.zt.sobblog.ui.adapter.MoYuAdapter
-import com.coder.zt.sobblog.ui.adapter.SlideLayoutManager
 import com.coder.zt.sobblog.ui.base.BaseActivity
 import com.coder.zt.sobblog.ui.view.RefreshView
 import com.coder.zt.sobblog.utils.*
@@ -40,6 +37,8 @@ class MoYuActivity:BaseActivity<ActivityMoyuBinding>() {
     private var targetUserId:String? = null
 
     private var loadMore:Boolean = false
+    private var showInput:Boolean = false
+    private var curSlideDistance = 0
 
 
 
@@ -48,14 +47,14 @@ class MoYuActivity:BaseActivity<ActivityMoyuBinding>() {
     }
 
     val adapter by lazy {
-        MoYuAdapter(){ doType: MoYuAdapter.DO_TYPE, any: Any ->
+        MoYuAdapter(){ doType: MoYuAdapter.DOTYPE, any: Any ->
             when(doType){
-                MoYuAdapter.DO_TYPE.THUMB_UP ->{//点赞
+                MoYuAdapter.DOTYPE.THUMB_UP ->{//点赞
                     if(UserDataMan.checkUserLoginState(this, getString(R.string.check_login_thumb_up_tips))) {
                         viewModel.thumbUP(any as String)
                     }
                 }
-                MoYuAdapter.DO_TYPE.COMMENT ->{//评论动态
+                MoYuAdapter.DOTYPE.COMMENT ->{//评论动态
                     if(UserDataMan.checkUserLoginState(this, getString(R.string.check_login_comment_tips))){
                         minifeedIdTemp = any as String//动态id
                         targetUserId = ""//被评论者的ID
@@ -63,20 +62,24 @@ class MoYuActivity:BaseActivity<ActivityMoyuBinding>() {
                         showCommentInput("")
                     }
                 }
-                MoYuAdapter.DO_TYPE.REPLY ->{//回复评论
+                MoYuAdapter.DOTYPE.REPLY ->{//回复评论
                     if(UserDataMan.checkUserLoginState(this, getString(R.string.check_login_comment_tips))) {
                         UserDataMan.getUserInfo()!!.let{
-                            val comment = any as MYCommentAdapter.CommentDataBean
-                            minifeedIdTemp = comment.momentId//动态ID
-                            targetUserId = comment.fromId//被评论者的ID
-                            commentIdTemp = comment.commentId//评论ID
-                            showCommentInput(comment.from)
+                            val comment = any as ArticleCommentAdapter.Comment
+                            Log.d(TAG, "comment: $comment ")
+                            minifeedIdTemp = comment.objectId//动态ID
+                            targetUserId = comment.userId//被评论者的ID
+                            commentIdTemp = comment._id//评论ID
+                            showCommentInput(comment.userName)
                         }
                     }
 
                 }
-                MoYuAdapter.DO_TYPE.GET_COMMENT ->{//获取该动态的评论
+                MoYuAdapter.DOTYPE.GET_COMMENT ->{//获取该动态的评论
                     viewModel.getMiniFeedComment(any as String)
+                }
+                MoYuAdapter.DOTYPE.SHARE_LINK ->{//点击了分享链接
+                    TransUtils.dispatchShareLink(this, any as String)
                 }
             }
 
@@ -87,6 +90,7 @@ class MoYuActivity:BaseActivity<ActivityMoyuBinding>() {
      * 显示评论输入窗口
      */
     private fun showCommentInput(toName: String) {
+        showInput = true
         dataBinding.commentBarLl.visibility = View.VISIBLE
         dataBinding.commentInputEt.requestFocus()
         if (toName.isNotEmpty()) {
@@ -127,10 +131,14 @@ class MoYuActivity:BaseActivity<ActivityMoyuBinding>() {
 
             })
             refreshView.setContentSlideListener {
-                if(it != viewModel?.slideDistance?.value){
+                if(!showInput){
+                    Log.d(TAG, "initView: 关闭输入法")
                     closeCommentInput()
+                }else{
+                    showInput = false
                 }
-                viewModel?.slideDistance?.value = it
+                curSlideDistance = it
+                viewModel.slideDistance.value = it
             }
         }
         dataBinding.commentSendTv.setOnClickListener {
@@ -146,7 +154,7 @@ class MoYuActivity:BaseActivity<ActivityMoyuBinding>() {
                 }
             }else{//回复评论
                 if (!content.isNullOrBlank() && !minifeedIdTemp.isEmpty()) {
-                    viewModel.sendReply(MYReplySender(commentIdTemp!!,content,minifeedIdTemp,targetUserId!!))
+                    viewModel.sendReply(MYReplySender(minifeedIdTemp,commentIdTemp!!,targetUserId!!,content))
                 }
             }
             closeCommentInput()
@@ -204,7 +212,6 @@ class MoYuActivity:BaseActivity<ActivityMoyuBinding>() {
         viewModel.slideDistance.observe(this){
             val height = ScreenUtils.dp2px(320)
             var a = 0
-            Log.d(TAG, "initData: $it")
             if(1.0f * it/height < 1){
                a =  (1.0f * it/height * 255).toInt()
             }else{
@@ -232,14 +239,14 @@ class MoYuActivity:BaseActivity<ActivityMoyuBinding>() {
         }
         viewModel.changeItemId.observe(this){
             when(it.second){
-                MoYuAdapter.DO_TYPE.THUMB_UP ->{//点赞
+                MoYuAdapter.DOTYPE.THUMB_UP ->{//点赞
                     Log.d(TAG, "initData: 点赞后更新数据")
                     adapter.updateThumbUp(it.first)
                 }
-                MoYuAdapter.DO_TYPE.COMMENT ->{//评论动态
+                MoYuAdapter.DOTYPE.COMMENT ->{//评论动态
 
                 }
-                MoYuAdapter.DO_TYPE.REPLY ->{//回复评论
+                MoYuAdapter.DOTYPE.REPLY ->{//回复评论
 
                 }
             }

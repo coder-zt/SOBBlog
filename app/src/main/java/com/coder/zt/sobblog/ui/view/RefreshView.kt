@@ -28,6 +28,7 @@ class RefreshView(context:Context, attrs: AttributeSet): LinearLayout(context, a
     private lateinit var topView: View
     private lateinit var contentView: RecyclerView
     private lateinit var bottomView:View
+    private lateinit var eggView:View
     private var startY:Int = 0
     private var pullDownDistance:Int = 0
     private var pullUpDistance:Int = 0
@@ -36,13 +37,14 @@ class RefreshView(context:Context, attrs: AttributeSet): LinearLayout(context, a
     private var canRefresh:Boolean = false
     private var canPullDown:Boolean = false
     private var canPullUp:Boolean = false
+    private lateinit var callback : OnRefreshListener
+    private lateinit var contentListener: (distance:Int)->Unit
     private val mScroller:Scroller by lazy {//DecelerateInterpolator()
         Scroller(context)
     }
     private val mTouchSlop:Int by lazy{
         ViewConfiguration.get(context).scaledTouchSlop
     }
-    private lateinit var contentListener: (distance:Int)->Unit
 
     override fun onFinishInflate() {
         super.onFinishInflate()
@@ -52,6 +54,7 @@ class RefreshView(context:Context, attrs: AttributeSet): LinearLayout(context, a
         topView = getChildAt(0)
         contentView = getChildAt(1) as RecyclerView
         bottomView = getChildAt(2)
+        eggView = getChildAt(3)
         contentView.addOnScrollListener(object: RecyclerView.OnScrollListener(){
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
@@ -72,7 +75,10 @@ class RefreshView(context:Context, attrs: AttributeSet): LinearLayout(context, a
         topView.layout(l, -topViewHeight + pullDownDistance, r, t + pullDownDistance)
         contentView.layout(l, t + pullDownDistance-pullUpDistance , r, b- pullUpDistance)
         bottomView.layout(l, b - pullUpDistance, r, b + bottomViewHeight- pullUpDistance)
+        eggView.layout(l, b + bottomViewHeight- pullUpDistance, r, b + bottomViewHeight- pullUpDistance + eggView.measuredHeight)
     }
+
+
 
     override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
         if(state != RefreshState.ON_NULL){
@@ -108,8 +114,6 @@ class RefreshView(context:Context, attrs: AttributeSet): LinearLayout(context, a
         }
         return super.onInterceptTouchEvent(ev)
     }
-
-
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         Log.d(TAG, "onTouchEvent: ")
@@ -149,6 +153,7 @@ class RefreshView(context:Context, attrs: AttributeSet): LinearLayout(context, a
         requestLayout()
     }
 
+
     private fun returnView() {
         if(getTopPosition() && pullDownDistance >0){
             val i = (-pullDownDistance)*1.0 / (topView.height)
@@ -173,7 +178,6 @@ class RefreshView(context:Context, attrs: AttributeSet): LinearLayout(context, a
 
     }
 
-
     fun setPullDownListener(listener: (len:Int) -> Boolean) {
         this.listener = listener
     }
@@ -186,10 +190,10 @@ class RefreshView(context:Context, attrs: AttributeSet): LinearLayout(context, a
         canRefresh = !listener.invoke(pullDownDistance)
         requestLayout()
     }
-
     private fun getTopPosition():Boolean{
         return touchTop
     }
+
     private fun getBottomPosition():Boolean{
         return touchBottom
     }
@@ -197,7 +201,7 @@ class RefreshView(context:Context, attrs: AttributeSet): LinearLayout(context, a
     override fun computeScroll() {
         super.computeScroll()
         if (mScroller.computeScrollOffset()) {
-           
+
             if(getTopPosition() && pullDownDistance >0){
                 pullDown(mScroller.currY)
             }
@@ -212,8 +216,6 @@ class RefreshView(context:Context, attrs: AttributeSet): LinearLayout(context, a
         }
 
     }
-
-    private lateinit var callback : OnRefreshListener
 
     fun setOnRefreshListener(listener: OnRefreshListener){
         callback = listener

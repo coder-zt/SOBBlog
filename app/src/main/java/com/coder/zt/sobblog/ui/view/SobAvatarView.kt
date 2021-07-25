@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable
 import android.os.Build
 import android.util.AttributeSet
 import android.util.Log
+import android.view.View
 import androidx.annotation.RequiresApi
 import com.coder.zt.sobblog.R
 import com.luck.picture.lib.tools.ScreenUtils
@@ -38,6 +39,7 @@ class SobAvatarView(context: Context, attrs: AttributeSet): androidx.appcompat.w
     private var viewWidth = 0
     private val sqrt2 = sqrt(2.0)
     private var smallR:Float = 0f
+    private var  avatarBitmap:Bitmap = drawableToBitmap(drawable)
     private lateinit var circleBitmap:Bitmap
     private lateinit var roundBitmap:Bitmap
     private lateinit var vipIconRect:RectF
@@ -85,6 +87,24 @@ class SobAvatarView(context: Context, attrs: AttributeSet): androidx.appcompat.w
             super.draw(canvas)
         }
     }
+
+    /**
+     * darwable转为bitmap
+     */
+    private fun drawableToBitmap(drawable: Drawable?): Bitmap {
+        if(drawable == null){
+            return defaultBitmap
+        }else if(drawable is BitmapDrawable){
+            return drawable.bitmap
+        }
+        val bitmap = Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight,
+            Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        drawable.setBounds(0,0,canvas.width, canvas.height)
+        drawable.draw(canvas)
+        return bitmap
+    }
+
 
     /**
      * 画圆角矩形图像
@@ -154,18 +174,19 @@ class SobAvatarView(context: Context, attrs: AttributeSet): androidx.appcompat.w
         //计算控件的宽高
         viewHeight = height - paddingBottom - paddingTop
         viewWidth = width - paddingStart - paddingEnd
-        //将设置的图片转化为控件大小的Bitmap
-        val image: Bitmap = drawableToBitmap(drawable)
-        val resSizeBitmap = resizeBitmap(image, viewWidth, viewHeight)
         //VIP broad宽度
         borderWidth =
             (defBorderWidth * 1.0 * (viewWidth * 1.0 / ScreenUtils.dip2px(context, 60f))).toInt()
         //VIP图标半径
         smallR = viewWidth / 2.0f - ((viewWidth - borderWidth) / 2.0f) * (sqrt2 / 2.0f).toFloat()
-        if (isCircle) {
-            circleBitmap = createCircleImage(resSizeBitmap, viewWidth, viewHeight)
-        } else {
-            roundBitmap = createRoundImage(resSizeBitmap, viewWidth, viewHeight)
+        //将设置的图片转化为控件大小的Bitmap
+        avatarBitmap?.let{
+            val resSizeBitmap = resizeBitmap(it, viewWidth, viewHeight)
+            if (isCircle) {
+                circleBitmap = createCircleImage(resSizeBitmap, viewWidth, viewHeight)
+            } else {
+                roundBitmap = createRoundImage(resSizeBitmap, viewWidth, viewHeight)
+            }
         }
         vipIconRect = RectF(
             viewWidth - 2 * smallR, viewWidth - 2 * smallR,
@@ -183,7 +204,12 @@ class SobAvatarView(context: Context, attrs: AttributeSet): androidx.appcompat.w
         val min = Math.min(bitmap.width, bitmap.height)
         val dstRect = Rect(0, 0, width, height)
         val srcRect = Rect(0, 0, min, min)
-        val backgroundRect = RectF(0.0f + borderWidth,0.0f + borderWidth, width.toFloat() - borderWidth, height.toFloat() - borderWidth)
+        val drawBorderWidth = if(isVip){
+            borderWidth
+        }else{
+            0
+        }
+        val backgroundRect = RectF(0.0f + drawBorderWidth,0.0f + drawBorderWidth, width.toFloat() - drawBorderWidth, height.toFloat() - drawBorderWidth)
         val roundR = ScreenUtils.dip2px(context, 8f).toFloat()
         canvas.drawRoundRect(backgroundRect, roundR - borderWidth, roundR - borderWidth, paint)
         // 核心代码取两个图片的交集部分
@@ -193,22 +219,7 @@ class SobAvatarView(context: Context, attrs: AttributeSet): androidx.appcompat.w
         return target
     }
 
-    /**
-     * darwable转为bitmap
-     */
-    private fun drawableToBitmap(drawable: Drawable?): Bitmap {
-        if(drawable == null){
-            return defaultBitmap
-        }else if(drawable is BitmapDrawable){
-            return drawable.bitmap
-        }
-        val bitmap = Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight,
-            Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
-        drawable.setBounds(0,0,canvas.width, canvas.height)
-        drawable.draw(canvas)
-        return bitmap
-    }
+
 
 
     /**
@@ -246,7 +257,12 @@ class SobAvatarView(context: Context, attrs: AttributeSet): androidx.appcompat.w
         val min = Math.min(bitmap.width, bitmap.height)
         val dstRect = Rect(0, 0, width, height)
         val srcRect = Rect(0, 0, min, min)
-        canvas.drawCircle((width / 2f),(height / 2f), (Math.min(width, height) / 2f) - borderWidth, paint)
+        val drawBorderWidth = if(isVip){
+            borderWidth
+        }else{
+            0
+        }
+        canvas.drawCircle((width / 2f),(height / 2f), (Math.min(width, height) / 2f) - drawBorderWidth, paint)
         // 核心代码取两个图片的交集部分
         paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
         canvas.drawBitmap(bitmap, srcRect, dstRect, paint)
@@ -261,15 +277,22 @@ class SobAvatarView(context: Context, attrs: AttributeSet): androidx.appcompat.w
     }
 
     fun isVip(vip:Boolean){
-        isVip = vip
-        viewHeight = 0
-        viewWidth = 0
-        postInvalidate()
+        postDelayed({
+            isVip = vip
+            viewHeight = 0
+            viewWidth = 0
+            postInvalidate()
+        },200)
     }
 
-    fun update() {
-        viewHeight = 0
-        viewWidth = 0
-        postInvalidate()
+    /**
+     * 提供给外部设置头像后用来刷新数据的接口
+     */
+    fun update(bitmap: Bitmap) {
+        //参数置为0，重新计算参数
+            viewHeight = 0
+            viewWidth = 0
+            avatarBitmap = bitmap
+            postInvalidate()
     }
 }

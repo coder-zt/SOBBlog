@@ -86,6 +86,14 @@ class ArticleWebView(context: Context, attrs: AttributeSet):WebView(context, att
     private fun handleContent(articleContent: String):String {
         Log.d(TAG, "handleContent: $articleContent")
         //处理code中是关键字的情况
+        val handleText = handleKeywords(articleContent)
+        val template = getTestHtml("article_template")
+        val document = Jsoup.parse(template.replace("{{template}}",handleText))
+        verseChild(document.body())
+        return document.toString()
+    }
+
+    private fun handleKeywords(articleContent: String): String {
         var handleText = articleContent
         val parttern = Regex("<code>(.*?)</code>")
         val results = parttern.findAll(handleText)
@@ -95,10 +103,7 @@ class ArticleWebView(context: Context, attrs: AttributeSet):WebView(context, att
             keyString = keyString.replace("</code>", "</span>")
             handleText = handleText.replace(result.value, keyString)
         }
-        val template = getTestHtml("article_template")
-        val document = Jsoup.parse(template.replace("{{template}}",handleText))
-        verseChild(document.body())
-        return document.toString()
+        return handleText
     }
 
     private fun verseChild(e: Element?) {
@@ -168,4 +173,9 @@ class ArticleWebView(context: Context, attrs: AttributeSet):WebView(context, att
     fun setWebViewScrollView(sv:WebViewScrollView?){
         wbsv = sv
     }
+
+    fun setOpenUrlListener(listener:(url:String)->Unit){
+        webClient.setOpenUrlListener(listener)
+    }
+
 }

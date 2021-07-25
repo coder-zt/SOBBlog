@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
 import com.coder.zt.sobblog.model.base.ResponseData
+import com.coder.zt.sobblog.model.user.InteractInfo
 import com.coder.zt.sobblog.model.user.LoginInfo
 import com.coder.zt.sobblog.model.user.SobUserInfo
 import com.coder.zt.sobblog.model.user.UserAchievement
@@ -62,7 +63,11 @@ class UserRepository {
 
     suspend fun getAchievement(): ResponseData<UserAchievement> {
         val netWork = UserNetWork.getInstance().achievement()
-        Log.d(TAG, "login: ${netWork.data}")
+        return netWork
+    }
+
+    suspend fun getInteractInfo(): ResponseData<InteractInfo> {
+        val netWork = UserNetWork.getInstance().interactInfo()
         return netWork
     }
 }
