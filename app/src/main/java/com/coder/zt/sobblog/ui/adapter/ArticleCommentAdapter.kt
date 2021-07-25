@@ -248,7 +248,7 @@ class ArticleCommentAdapter(val objectId: String, val callback:(code: MoYuAdapte
 
         constructor(comment:MYComment.SubComment,objectId: String, finally: Boolean):this(
             CHILD,
-            comment.id,
+            comment.commentId,
             objectId,
             comment.userId,
             comment.nickname,

@@ -69,10 +69,6 @@ companion object{
      * 回复评论
      *
      */
-//    commentId: "1419320369843560450"
-//    content: "明天可能能更新一下"
-//    momentId: "1419249162863628289"
-//    targetUserId: "1139423796017500160"
     fun sendReply(sender: MYReplySender) {
         viewModelScope.launch {
             Log.d(TAG, "sendReply: $sender")
