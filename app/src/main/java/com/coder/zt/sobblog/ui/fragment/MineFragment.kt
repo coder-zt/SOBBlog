@@ -20,10 +20,21 @@ class MineFragment:BaseFragment<FragmentMineBinding>() {
     private var initial = false
     companion object{
         private const val TAG = "MineFragment"
-        private val menuList = listOf<Pair<Int, String>>(
-            Pair(R.mipmap.icon_content,"内容管理"),
-            Pair(R.mipmap.icon_interact,"互动管理"),
-            Pair(R.mipmap.icon_setting,"设置"))
+        private val menuList = listOf(
+            MineMenuAdapter.MenuItemData(1, "内容管理", R.mipmap.icon_content,0, MineMenuAdapter.ShowType.First,true,false),
+            MineMenuAdapter.MenuItemData(11, "问题列表", R.mipmap.icon_interact, 0,MineMenuAdapter.ShowType.FirstSecond,false,false),
+            MineMenuAdapter.MenuItemData(12, "文章管理", R.mipmap.icon_interact, 0,MineMenuAdapter.ShowType.FirstSecond,false,false),
+            MineMenuAdapter.MenuItemData(13, "内容分享", R.mipmap.icon_interact, 0,MineMenuAdapter.ShowType.FirstSecond,false,false),
+            MineMenuAdapter.MenuItemData(14, "我的收藏", R.mipmap.icon_interact, 0,MineMenuAdapter.ShowType.FirstSecond,false,false),
+            MineMenuAdapter.MenuItemData(2, "互动管理", R.mipmap.icon_interact, 0,MineMenuAdapter.ShowType.First,true,false),
+            MineMenuAdapter.MenuItemData(21, "回复我的", R.mipmap.icon_interact, 0,MineMenuAdapter.ShowType.FirstSecond,false,false),
+            MineMenuAdapter.MenuItemData(22, "给我点赞", R.mipmap.icon_interact, 0,MineMenuAdapter.ShowType.FirstSecond,false,false),
+            MineMenuAdapter.MenuItemData(23, "文章评论", R.mipmap.icon_interact, 0,MineMenuAdapter.ShowType.FirstSecond,false,false),
+            MineMenuAdapter.MenuItemData(24, "动态评论", R.mipmap.icon_interact, 0,MineMenuAdapter.ShowType.FirstSecond,false,false),
+            MineMenuAdapter.MenuItemData(25, "问题回答", R.mipmap.icon_interact, 0,MineMenuAdapter.ShowType.FirstSecond,false,false),
+            MineMenuAdapter.MenuItemData(26, "系统通知", R.mipmap.icon_interact, 0,MineMenuAdapter.ShowType.FirstSecond,false,false),
+            MineMenuAdapter.MenuItemData(3, "设置", R.mipmap.icon_setting,0, MineMenuAdapter.ShowType.First,true,false)
+        )
     }
 
     override fun getLayoutId():Int{
@@ -33,8 +44,8 @@ class MineFragment:BaseFragment<FragmentMineBinding>() {
 
 
     private val adapter = MineMenuAdapter(menuList) {
-        when (it) {
-            "设置" -> AppRouter.toSettingActivity(requireActivity())
+        when (it.id) {
+            3 -> AppRouter.toSettingActivity(requireActivity())
 
         }
     }

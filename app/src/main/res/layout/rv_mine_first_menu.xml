@@ -5,7 +5,7 @@
     <data>
 <variable
     name="data"
-    type="androidx.core.util.Pair&lt;Integer, String>" />
+    type="com.coder.zt.sobblog.ui.adapter.MineMenuAdapter.MenuItemData" />
     </data>
 
     <RelativeLayout
@@ -39,7 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:text="@{data.second}"
+            android:text="@{data.menuName}"
             android:textColor="@color/black"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/iv_icon"
