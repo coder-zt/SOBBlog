@@ -8,9 +8,12 @@ import android.view.View
 import android.view.ViewConfiguration
 import android.widget.LinearLayout
 import android.widget.Scroller
+import android.widget.TextView
 import androidx.core.view.children
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.coder.zt.sobblog.utils.Constants
+import com.luck.picture.lib.tools.ScreenUtils
 import kotlin.math.abs
 
 class RefreshView(context:Context, attrs: AttributeSet): LinearLayout(context, attrs) {
@@ -55,6 +58,10 @@ class RefreshView(context:Context, attrs: AttributeSet): LinearLayout(context, a
         contentView = getChildAt(1) as RecyclerView
         bottomView = getChildAt(2)
         eggView = getChildAt(3)
+        val layoutParams = eggView.layoutParams
+        layoutParams.height = (ScreenUtils.getScreenHeight(context) * 0.8).toInt()
+        eggView.layoutParams = layoutParams
+        (eggView as TextView).text = Constants.finallyMsg
         contentView.addOnScrollListener(object: RecyclerView.OnScrollListener(){
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)

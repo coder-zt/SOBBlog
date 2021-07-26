@@ -14,5 +14,6 @@ object Constants {
     const val WEBSITE_URL = "www.sunofbeach.net"
     const val BING_BASE_URL = "https://cn.bing.com"
     const val SUCCESS_CODE = 10000
-    const val HUMAN_CODE_URL = "$BASE_URL/uc/ut/captcha?code="
+    var firstMsg = ""
+    var finallyMsg = ""
 }

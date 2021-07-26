@@ -9,6 +9,7 @@ import com.coder.zt.sobblog.model.datamanager.UserDataMan
 import com.coder.zt.sobblog.ui.adapter.MineMenuAdapter
 import com.coder.zt.sobblog.ui.base.BaseFragment
 import com.coder.zt.sobblog.utils.AppRouter
+import com.coder.zt.sobblog.utils.ToastUtils
 import com.coder.zt.sobblog.viewmodel.UserViewModel
 class MineFragment:BaseFragment<FragmentMineBinding>() {
 
@@ -22,10 +23,10 @@ class MineFragment:BaseFragment<FragmentMineBinding>() {
         private const val TAG = "MineFragment"
         private val menuList = listOf(
             MineMenuAdapter.MenuItemData(1, "内容管理", R.mipmap.icon_content,0, MineMenuAdapter.ShowType.First,true,false),
-            MineMenuAdapter.MenuItemData(11, "问题列表", R.mipmap.icon_interact, 0,MineMenuAdapter.ShowType.FirstSecond,false,false),
-            MineMenuAdapter.MenuItemData(12, "文章管理", R.mipmap.icon_interact, 0,MineMenuAdapter.ShowType.FirstSecond,false,false),
-            MineMenuAdapter.MenuItemData(13, "内容分享", R.mipmap.icon_interact, 0,MineMenuAdapter.ShowType.FirstSecond,false,false),
-            MineMenuAdapter.MenuItemData(14, "我的收藏", R.mipmap.icon_interact, 0,MineMenuAdapter.ShowType.FirstSecond,false,false),
+            MineMenuAdapter.MenuItemData(11, "问题列表", R.mipmap.icon_content, 0,MineMenuAdapter.ShowType.FirstSecond,false,false),
+            MineMenuAdapter.MenuItemData(12, "文章管理", R.mipmap.icon_content, 0,MineMenuAdapter.ShowType.FirstSecond,false,false),
+            MineMenuAdapter.MenuItemData(13, "内容分享", R.mipmap.icon_content, 0,MineMenuAdapter.ShowType.FirstSecond,false,false),
+            MineMenuAdapter.MenuItemData(14, "我的收藏", R.mipmap.icon_content, 0,MineMenuAdapter.ShowType.FirstSecond,false,false),
             MineMenuAdapter.MenuItemData(2, "互动管理", R.mipmap.icon_interact, 0,MineMenuAdapter.ShowType.First,true,false),
             MineMenuAdapter.MenuItemData(21, "回复我的", R.mipmap.icon_interact, 0,MineMenuAdapter.ShowType.FirstSecond,false,false),
             MineMenuAdapter.MenuItemData(22, "给我点赞", R.mipmap.icon_interact, 0,MineMenuAdapter.ShowType.FirstSecond,false,false),
@@ -46,7 +47,7 @@ class MineFragment:BaseFragment<FragmentMineBinding>() {
     private val adapter = MineMenuAdapter(menuList) {
         when (it.id) {
             3 -> AppRouter.toSettingActivity(requireActivity())
-
+            else -> ToastUtils.showError("程序猿估计去摸鱼了，快去把他抓回来写代码！")
         }
     }
 

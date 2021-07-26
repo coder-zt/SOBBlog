@@ -3,6 +3,9 @@ package com.coder.zt.sobblog
 import android.app.Application
 import android.content.Context
 import android.util.Log
+import com.coder.zt.sobblog.model.base.UpdateInfo
+import com.coder.zt.sobblog.utils.Constants
+import com.coder.zt.sobblog.utils.GsonUtils
 import com.coder.zt.sobblog.utils.OKHttpUpdateHttpService
 import com.xuexiang.xupdate.XUpdate
 import com.xuexiang.xupdate.entity.UpdateError.ERROR.CHECK_NO_NEW_VERSION
@@ -44,6 +47,13 @@ class SOBApp:Application() {
         XUpdate.get().setILogger { priority, tag, message, t ->
             //实现日志记录功能
             Log.d(TAG, "initAppUpdate: $message")
+            if(message.contains("服务端返回的最新版本信息")){
+                val infoObj = message.replace("服务端返回的最新版本信息:", "")
+                val updateInfo = GsonUtils.getInstance().fromJson(infoObj, UpdateInfo::class.java)
+                val split = updateInfo.Msg.split("&&&&")
+                Constants.firstMsg = split[0]
+                Constants.finallyMsg = split[1]
+            }
         }
         UMConfigure.preInit(this,"60f5c062a6f90557b7bed448", "beta")
 //        UMConfigure.init(this,UMConfigure.DEVICE_TYPE_PHONE,"60f5c062a6f90557b7bed448")

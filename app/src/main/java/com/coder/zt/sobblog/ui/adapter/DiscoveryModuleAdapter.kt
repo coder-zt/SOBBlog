@@ -14,6 +14,8 @@ class DiscoveryModuleAdapter(val callback:(i:ItemType)->Unit): RecyclerView.Adap
         TYPE_QUESTION
     }
 
+
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -29,7 +31,14 @@ class DiscoveryModuleAdapter(val callback:(i:ItemType)->Unit): RecyclerView.Adap
 
 
     override fun onBindViewHolder(holder: ItemView, position: Int) {
-
+        when(position){
+            0 ->{
+                holder.setData(ItemType.TYPE_MOYU)
+            }
+            1 ->{
+                holder.setData(ItemType.TYPE_QUESTION)
+            }
+        }
     }
 
     override fun getItemCount(): Int {
@@ -39,8 +48,20 @@ class DiscoveryModuleAdapter(val callback:(i:ItemType)->Unit): RecyclerView.Adap
     class ItemView(val dataBinding:RvDiscoveryItemBinding,val callback:(i:ItemType)->Unit):RecyclerView.ViewHolder(dataBinding.root) {
 
         init {
+
+        }
+
+        fun setData(type:ItemType){
+            when(type){
+                ItemType.TYPE_MOYU ->{
+                    dataBinding.tvTypeBtn.text = "鱼塘"
+                }
+                ItemType.TYPE_QUESTION ->{
+                    dataBinding.tvTypeBtn.text = "问答"
+                }
+            }
             dataBinding.tvTypeBtn.setOnClickListener {
-                callback.invoke(ItemType.TYPE_MOYU)
+                callback.invoke(type)
             }
         }
     }

@@ -48,7 +48,8 @@ class MoYuAdapter(val callback:(code:DOTYPE, data:Any) -> Unit): RecyclerView.Ad
     val mData by lazy {
         mutableListOf<MiniFeed>()
     }
-    private lateinit var topView:TopView
+    private var topView:TopView? = null
+    private var topViewUrl:String? = null
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -61,7 +62,8 @@ class MoYuAdapter(val callback:(code:DOTYPE, data:Any) -> Unit): RecyclerView.Ad
                     parent,
                     false
                 )
-                TopView(inflate)
+               topView =  TopView(inflate)
+               topView!!
             }
             else->{
                 val inflate = DataBindingUtil.inflate<RvMoyuBinding>(
@@ -84,7 +86,9 @@ class MoYuAdapter(val callback:(code:DOTYPE, data:Any) -> Unit): RecyclerView.Ad
         }else{
             val topItem = holder as TopView
             topItem.setData()
-            topView = topItem
+            topViewUrl?.let {
+                Glide.with(topItem.inflate.themeIv.context).load(it).into(topItem.inflate.themeIv)
+            }
         }
     }
 
@@ -143,8 +147,14 @@ class MoYuAdapter(val callback:(code:DOTYPE, data:Any) -> Unit): RecyclerView.Ad
 
     }
 
-    fun setTopWarpUrl(it: String?) {
-        Glide.with(topView.inflate.themeIv.context).load(it).into(topView.inflate.themeIv)
+    /**
+     * 设置顶部壁纸的url
+     */
+    fun setTopWarpUrl(url: String?) {
+        topView?.let {
+            Glide.with(it.inflate.themeIv.context).load(url).into(it.inflate.themeIv)
+        }
+        topViewUrl = url
     }
 
     class ContentView(val inflate:RvMoyuBinding) :RecyclerView.ViewHolder(inflate.root){

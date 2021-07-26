@@ -111,31 +111,18 @@ class MineMenuAdapter(private val menuList: List<MenuItemData>, val callback:(ti
                 interactItem = holder
             }
             holder.setData(menuList[i]){
-                callback(it)
+
                 if(it.grade == ShowType.First){
                     when(it.id){
-                        1->{
-                            switchChildMenu(it, 10, position)
-                        }
-                        2->{
-                            switchChildMenu(it, 20, position)
-                        }
+                        1-> switchChildMenu(it, 10, position)
+                        2-> switchChildMenu(it, 20, position)
+                        3-> callback(it)
                     }
                 }
             }
         }else if(holder is ChildView){
             holder.setData(menuList[i]){
                 callback(it)
-                if(it.grade == ShowType.First){
-                    when(it.id){
-                        1->{
-                            switchChildMenu(it, 10, position)
-                        }
-                        2->{
-                            switchChildMenu(it, 20, position)
-                        }
-                    }
-                }
             }
         }
 

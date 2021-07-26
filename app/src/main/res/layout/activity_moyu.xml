@@ -92,11 +92,12 @@
                 </RelativeLayout>
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="200dp"
+                    android:id="@+id/tv_egg"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
                     android:text="彩蛋"
-                    android:textSize="32sp"
-                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:gravity="center_horizontal|bottom"
                     android:layout_marginTop="1dp"/>
 
             </com.coder.zt.sobblog.ui.view.RefreshView>

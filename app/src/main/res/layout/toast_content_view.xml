@@ -8,7 +8,9 @@
     <LinearLayout
         android:id="@+id/ll_container"
         android:layout_width="wrap_content"
-        android:layout_height="38dp"
+        android:layout_height="wrap_content"
+        android:minHeight="42dp"
+        android:padding="4dp"
         android:orientation="horizontal"
         android:background="@drawable/toast_ok_bg">
 
@@ -23,11 +25,12 @@
         <TextView
             android:id="@+id/tv_content"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginHorizontal="8dp"
             android:textColor="#67C23A"
             android:textStyle="bold"
             android:textSize="14dp"
+            android:layout_gravity="center"
             android:text="展示信息内容！"
             android:gravity="center" />
 
