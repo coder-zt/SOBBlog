@@ -4,11 +4,10 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
 import com.coder.zt.sobblog.model.base.ResponseData
-import com.coder.zt.sobblog.model.user.InteractInfo
-import com.coder.zt.sobblog.model.user.LoginInfo
-import com.coder.zt.sobblog.model.user.SobUserInfo
-import com.coder.zt.sobblog.model.user.UserAchievement
+import com.coder.zt.sobblog.model.datamanager.UserDataMan
+import com.coder.zt.sobblog.model.user.*
 import com.coder.zt.sobblog.net.UserNetWork
+import com.coder.zt.sobblog.utils.Constants
 import java.io.IOException
 import java.util.*
 
@@ -31,6 +30,9 @@ class UserRepository {
         }
 
     }
+
+    private var sunofCoinPage = 1
+
     suspend fun login(captcha:String, loginInfo: LoginInfo): ResponseData<String> {
         val netWork = UserNetWork.getInstance().login(captcha, loginInfo)
         Log.d(TAG, "login: $netWork")
@@ -69,5 +71,20 @@ class UserRepository {
     suspend fun getInteractInfo(): ResponseData<InteractInfo> {
         val netWork = UserNetWork.getInstance().interactInfo()
         return netWork
+    }
+
+    suspend fun getSobCoinInfo(loadMore:Boolean): List<SunofCoinInfo> {
+        if(loadMore){
+            sunofCoinPage++
+        }else{
+            sunofCoinPage = 1
+        }
+        val netWork = UserNetWork.getInstance().sunofCoinInfo(UserDataMan.getUserInfo()!!.id, sunofCoinPage)
+        return if (netWork.code == Constants.SUCCESS_CODE) {
+            netWork.data.list
+        }else{
+            sunofCoinPage--
+            listOf()
+        }
     }
 }

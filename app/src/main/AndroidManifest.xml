@@ -51,6 +51,7 @@
         </activity>
         <activity android:name=".ui.activity.EditMinifeedActivity" />
         <activity android:name=".ui.activity.SettingActivity" />
+        <activity android:name=".ui.activity.SunofLogActivity" />
     </application>
 
 </manifest>

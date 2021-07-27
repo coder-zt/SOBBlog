@@ -84,6 +84,7 @@ class MoYuRepository {
         val request: RequestBody = RequestBody.create("image/jpg".toMediaTypeOrNull(), file)
         val image = MultipartBody.Part.createFormData("image", file.name, request)
         val comment = MoYuNetWork.getInstance().uploadImage(image)
+        Log.d(TAG, "uploadImage: $comment")
         media.url = comment.data
         media.upload = true
         ImageSelectManager.update()

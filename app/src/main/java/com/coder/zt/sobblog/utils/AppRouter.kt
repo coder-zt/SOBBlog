@@ -5,13 +5,7 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
-import com.coder.zt.sobblog.ui.activity.ArticleDetailActivity
-import com.coder.zt.sobblog.ui.activity.EditMinifeedActivity
-import com.coder.zt.sobblog.ui.activity.LoginActivity
-import com.coder.zt.sobblog.ui.activity.SettingActivity
-import com.umeng.analytics.MobclickAgent
-import com.umeng.umcrash.UMCrash
-
+import com.coder.zt.sobblog.ui.activity.*
 
 object AppRouter {
 
@@ -74,6 +68,15 @@ object AppRouter {
                 ToastUtils.showError("打开链接出错，已将链接粘贴到剪切板");
             }
         }
+    }
+
+    /**
+     * 跳转到获取Sunof币的记录activity
+     */
+    fun toSunofLogActivity(activity: Activity) {
+        val intent = Intent(activity, SunofLogActivity::class.java)
+        Log.d(TAG, "toSunofLogActivity: ")
+        activity.startActivity(intent)
     }
 
 

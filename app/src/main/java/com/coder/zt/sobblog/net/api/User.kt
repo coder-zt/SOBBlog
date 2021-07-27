@@ -2,10 +2,8 @@ package com.coder.zt.sobblog.net.api
 
 
 import com.coder.zt.sobblog.model.base.ResponseData
-import com.coder.zt.sobblog.model.user.InteractInfo
-import com.coder.zt.sobblog.model.user.LoginInfo
-import com.coder.zt.sobblog.model.user.SobUserInfo
-import com.coder.zt.sobblog.model.user.UserAchievement
+import com.coder.zt.sobblog.model.base.ResponseListData
+import com.coder.zt.sobblog.model.user.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
@@ -49,5 +47,10 @@ interface User {
     @GET("ct/msg/count")
     fun interactInfo():  Call<ResponseData<InteractInfo>>
 
+    /**
+     * Sunof币的信息
+     */
+    @GET("ast/ucenter/sob-trade/{userId}/{page}")
+    fun sobTrade(@Path("userId") id:String, @Path("page")  page:Int):Call<ResponseListData<SunofCoinInfo>>
 
 }

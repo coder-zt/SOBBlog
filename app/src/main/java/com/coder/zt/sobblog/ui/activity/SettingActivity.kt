@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.coder.zt.sobblog.R
 import com.coder.zt.sobblog.databinding.ActivitySettingBinding
 import com.coder.zt.sobblog.ui.base.BaseActivity
+import com.coder.zt.sobblog.utils.AppRouter
 import com.coder.zt.sobblog.utils.ToastUtils
 import com.coder.zt.sobblog.viewmodel.UserViewModel
 
@@ -24,6 +25,9 @@ class SettingActivity:BaseActivity<ActivitySettingBinding>() {
     private fun initView() {
         dataBinding.tvLogoutBtn.setOnClickListener {
             userViewModel.logout()
+        }
+        dataBinding.tvSunof.setOnClickListener {
+            AppRouter.toSunofLogActivity(this)
         }
     }
 

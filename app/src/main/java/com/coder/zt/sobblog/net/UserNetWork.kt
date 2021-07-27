@@ -20,6 +20,8 @@ class UserNetWork: NetWorkBase() {
 
         suspend fun interactInfo() = userService.interactInfo().await()
 
+        suspend fun sunofCoinInfo(userId:String, page:Int) = userService.sobTrade(userId, page).await()
+
 
         companion object{
                 private var network: UserNetWork? = null
