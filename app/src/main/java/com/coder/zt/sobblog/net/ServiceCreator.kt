@@ -5,6 +5,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 object ServiceCreator {
 
@@ -19,6 +20,9 @@ object ServiceCreator {
     private val client = OkHttpClient.Builder()
         .addInterceptor(httpLoggingInterceptor)
         .cookieJar(cookieJar)
+        .readTimeout(60, TimeUnit.SECONDS) //设置读取超时时间
+        .writeTimeout(60, TimeUnit.SECONDS) //设置写的超时时间
+        .connectTimeout(60, TimeUnit.SECONDS)
         .build()
 
 

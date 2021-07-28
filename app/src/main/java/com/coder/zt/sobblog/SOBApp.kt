@@ -51,8 +51,11 @@ class SOBApp:Application() {
                 val infoObj = message.replace("服务端返回的最新版本信息:", "")
                 val updateInfo = GsonUtils.getInstance().fromJson(infoObj, UpdateInfo::class.java)
                 val split = updateInfo.Msg.split("&&&&")
-                Constants.firstMsg = split[0]
-                Constants.finallyMsg = split[1]
+                if(split.size > 1){
+                    Constants.firstMsg = split[0]
+                    Constants.finallyMsg = split[1]
+                }
+
             }
         }
         UMConfigure.preInit(this,"60f5c062a6f90557b7bed448", "beta")

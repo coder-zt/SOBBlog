@@ -2,12 +2,51 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-
+        <variable
+            name="data"
+            type="com.coder.zt.sobblog.model.user.SunofCoinInfo" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:id="@+id/ll_title_row"
+        android:layout_width="match_parent"
+        android:layout_height="42dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:text="@{data.createTime.substring(0,16)}"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:textColor="@color/theme_dark_gray"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:text="@{data.sob + ``}"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:textColor="@color/theme_dark_gray"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="4"
+            android:text="@{data.content}"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:textColor="@color/theme_dark_gray"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@{data.tax + ``}"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:textColor="@color/theme_dark_gray"/>
+    </LinearLayout>
 </layout>

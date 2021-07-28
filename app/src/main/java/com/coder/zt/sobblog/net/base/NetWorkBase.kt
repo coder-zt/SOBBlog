@@ -4,6 +4,7 @@ import com.coder.zt.sobblog.net.MoYuNetWork
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.Exception
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -21,7 +22,13 @@ open class NetWorkBase {
                     override fun onResponse(call: Call<T>, response: Response<T>) {
                         val body = response.body()
                         if (body != null) it.resume(body)
-                        else it.resumeWithException(RuntimeException("response body is null"))
+                        else {
+                            try{
+                                it.resumeWithException(RuntimeException("response body is null"))
+                            }catch (e:Exception){
+                                e.printStackTrace()
+                            }
+                        }
                     }
                 })
             }

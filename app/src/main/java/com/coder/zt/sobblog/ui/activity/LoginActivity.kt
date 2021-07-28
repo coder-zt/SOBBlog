@@ -28,7 +28,7 @@ class LoginActivity:BaseActivity<ActivityLoginBinding>() {
     private fun initData() {
         userViewModel.loginResult.observe(this){
             if (it) {
-                ToastUtils.show(userViewModel.loginMessage.value!!)
+//                ToastUtils.show(userViewModel.loginMessage.value!!)
                 userViewModel.checkToken()
                 finish()
             }else{

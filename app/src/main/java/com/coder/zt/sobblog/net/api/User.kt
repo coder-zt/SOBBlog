@@ -19,7 +19,7 @@ interface User {
     /**
      * 注销登录
      */
-    @POST("/uc/user/logout")
+    @GET("/uc/user/logout")
     fun logout(): Call<ResponseData<String>>
 
 

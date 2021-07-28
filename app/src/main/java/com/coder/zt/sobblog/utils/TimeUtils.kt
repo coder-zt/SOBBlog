@@ -11,9 +11,8 @@ object TimeUtils {
     @SuppressLint("SimpleDateFormat")
     fun getTimeShowText(date: Date):String{
         val curDate = Date()
-        val curDay = SimpleDateFormat("dd").format(curDate).toInt()
-        val pastDay = SimpleDateFormat("dd").format(date).toInt()
-        val diff = curDay - pastDay
+        val diffTime = curDate.time - date.time
+        val diff:Int = (diffTime/(1000*3600*24)).toInt()
         return if(diff != 0){
             when(diff){
                 1 -> "昨天"

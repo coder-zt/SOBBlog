@@ -21,4 +21,8 @@
     <string name="str_logout">注销登录</string>
     <string name="str_setting">设置</string>
     <string name="comment_empty_tips">你至少有一句话要说</string>
+    <string name="str_time">时间</string>
+    <string name="str_change">变化</string>
+    <string name="str_change_cause">变化原因</string>
+    <string name="str_tax">税</string>
 </resources>

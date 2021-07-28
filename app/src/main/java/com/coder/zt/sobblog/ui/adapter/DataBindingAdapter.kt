@@ -153,6 +153,7 @@ fun setLinkHost(tv: TextView, url_host:String){
 @RequiresApi(Build.VERSION_CODES.N)
 @BindingAdapter("time_text")
 fun setTimeText(tv: TextView, time_text:String){
+    Log.d(TAG, "setTimeText: $time_text")
     val date = TransUtils.transStrToDate(time_text)
     tv.text = TimeUtils.getTimeShowText(date)
 }

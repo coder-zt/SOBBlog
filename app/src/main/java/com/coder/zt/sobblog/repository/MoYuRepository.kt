@@ -1,5 +1,6 @@
 package com.coder.zt.sobblog.repository
 
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.text.TextUtils
 import android.util.Log
@@ -81,7 +82,11 @@ class MoYuRepository {
     }
 
     suspend fun uploadImage(media:ImageSelectManager.UpLoadImage, file: File){
-        val request: RequestBody = RequestBody.create("image/jpg".toMediaTypeOrNull(), file)
+        val options:BitmapFactory.Options  = BitmapFactory.Options();
+        options.inJustDecodeBounds = true
+        BitmapFactory.decodeFile(file.absolutePath, options);
+        val type = options.outMimeType
+        val request: RequestBody = RequestBody.create(type.toMediaTypeOrNull(), file)
         val image = MultipartBody.Part.createFormData("image", file.name, request)
         val comment = MoYuNetWork.getInstance().uploadImage(image)
         Log.d(TAG, "uploadImage: $comment")
