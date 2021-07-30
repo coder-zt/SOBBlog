@@ -6,11 +6,15 @@ import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import com.coder.zt.sobblog.ui.activity.*
+import java.text.FieldPosition
+import java.util.ArrayList
 
 object AppRouter {
 
     private const val TAG = "AppRouter"
-    val param_id = "id"
+    const val  param_id = "id"
+    const val param_data = "data"
+    const val param_Position = "position"
 
     /**
      * 跳转到文章详情
@@ -76,6 +80,17 @@ object AppRouter {
     fun toSunofLogActivity(activity: Activity) {
         val intent = Intent(activity, SunofLogActivity::class.java)
         Log.d(TAG, "toSunofLogActivity: ")
+        activity.startActivity(intent)
+    }
+
+    /**
+     * 跳转到图片浏览的activity
+     */
+    fun toPictureBrowseActivity(activity: Activity,picUrls:ArrayList<String>, position: Int) {
+        Log.d(TAG, "toPictureBrowseActivity: $picUrls")
+        val intent = Intent(activity, PictureBrowseActivity::class.java)
+        intent.putStringArrayListExtra(param_data, picUrls)
+        intent.putExtra(param_Position, position)
         activity.startActivity(intent)
     }
 

@@ -81,6 +81,13 @@ class MoYuActivity:BaseActivity<ActivityMoyuBinding>() {
                 MoYuAdapter.DOTYPE.SHARE_LINK ->{//点击了分享链接
                     TransUtils.dispatchShareLink(this, any as String)
                 }
+                MoYuAdapter.DOTYPE.PIC_SHOW->{//展示图片
+                    val data = any as Pair<List<String>, Int>
+                    val picUrls:List<String> = data.first
+                    val pics = ArrayList<String>()
+                    pics.addAll(picUrls)
+                    AppRouter.toPictureBrowseActivity(this, pics, data.second)
+                }
             }
 
         }
@@ -254,13 +261,10 @@ class MoYuActivity:BaseActivity<ActivityMoyuBinding>() {
         viewModel.bingWarpUrl.observe(this){
             adapter.setTopWarpUrl(it)
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
         viewModel.getRecommendMiniFeed(loadMore)
         viewModel.getWarpUrl()
     }
+
 
     override fun getLayoutId(): Int {
         return R.layout.activity_moyu

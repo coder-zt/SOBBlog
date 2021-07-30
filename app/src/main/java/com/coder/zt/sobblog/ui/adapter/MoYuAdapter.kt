@@ -35,6 +35,7 @@ class MoYuAdapter(val callback:(code:DOTYPE, data:Any) -> Unit): RecyclerView.Ad
         COMMENT,
         GET_COMMENT,
         THUMB_UP,
+        PIC_SHOW,
         SHARE_LINK
     }
 
@@ -198,7 +199,7 @@ class MoYuAdapter(val callback:(code:DOTYPE, data:Any) -> Unit): RecyclerView.Ad
             }
             inflate.recyclerView.layoutManager =
                 GridLayoutManager(inflate.root.context, span)
-            inflate.recyclerView.adapter = GridImagesAdapter(picSize, miniFeed.images)
+            inflate.recyclerView.adapter = GridImagesAdapter(picSize, miniFeed.images,callback)
 
 
         }

@@ -13,7 +13,7 @@ import com.coder.zt.sobblog.databinding.RvGridIvBinding
 import com.coder.zt.sobblog.databinding.RvMoyuBinding
 import com.coder.zt.sobblog.utils.ScreenUtils
 
-class GridImagesAdapter(val picSize:Int,val images:List<String>) : RecyclerView.Adapter<GridImagesAdapter.ItemView>() {
+class GridImagesAdapter(val picSize:Int,val images:List<String>,val callback:(code: MoYuAdapter.DOTYPE, data:Any) -> Unit) : RecyclerView.Adapter<GridImagesAdapter.ItemView>() {
 
     companion object{
         private const val TAG = "GridImagesAdapter"
@@ -29,14 +29,16 @@ class GridImagesAdapter(val picSize:Int,val images:List<String>) : RecyclerView.
     }
 
     override fun onBindViewHolder(holder: ItemView, position: Int) {
-       holder.setImageSrc(images[position])
+       holder.setImageSrc(images[position]){
+           callback(MoYuAdapter.DOTYPE.PIC_SHOW, Pair<List<String>, Int>(images,position))
+       }
     }
 
     override fun getItemCount(): Int = picSize
 
     class ItemView(val viewBinding: RvGridIvBinding, val picSize: Int): RecyclerView.ViewHolder(viewBinding.root) {
 
-        fun setImageSrc(url: String) {
+        fun setImageSrc(url: String, callback: () -> Unit) {
             Log.d(TAG, "setImageSrc: $url")
             viewBinding.data = url
             val width = if(picSize > 1){
@@ -47,6 +49,9 @@ class GridImagesAdapter(val picSize:Int,val images:List<String>) : RecyclerView.
             viewBinding.image.updateLayoutParams {
                 this.width = ScreenUtils.dp2px(width)
                 this.height = ScreenUtils.dp2px(width)
+            }
+            viewBinding.image.setOnClickListener {
+                callback()
             }
         }
 

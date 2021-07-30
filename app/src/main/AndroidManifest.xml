@@ -52,6 +52,7 @@
         <activity android:name=".ui.activity.EditMinifeedActivity" />
         <activity android:name=".ui.activity.SettingActivity" />
         <activity android:name=".ui.activity.SunofLogActivity" />
+        <activity android:name=".ui.activity.PictureBrowseActivity" />
     </application>
 
 </manifest>
