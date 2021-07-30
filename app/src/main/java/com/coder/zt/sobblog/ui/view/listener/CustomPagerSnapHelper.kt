@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 
 class CustomPagerSnapHelper(val listener:(position:Int)->Unit):PagerSnapHelper() {
 
+    private var oldPosition = -1
+
     override fun findSnapView(layoutManager: RecyclerView.LayoutManager?): View? {
         return super.findSnapView(layoutManager)
     }
@@ -16,7 +18,9 @@ class CustomPagerSnapHelper(val listener:(position:Int)->Unit):PagerSnapHelper()
         velocityY: Int
     ): Int {
         val pos = super.findTargetSnapPosition(layoutManager, velocityX, velocityY)
-        listener(pos)
+        if(oldPosition != pos){
+            listener(pos)
+        }
         return pos
     }
 }
