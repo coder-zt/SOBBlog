@@ -30,7 +30,7 @@
             android:layout_toEndOf="@+id/textView18"
             android:background="@drawable/red_number_bg"
             android:gravity="center"
-            android:text="100"
+            android:text="0"
             android:textColor="@color/white"
             android:textSize="8sp" />
 

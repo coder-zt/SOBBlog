@@ -13,6 +13,7 @@ object AppRouter {
 
     private const val TAG = "AppRouter"
     const val  param_id = "id"
+    const val  param_type = "type"
     const val param_data = "data"
     const val param_Position = "position"
 
@@ -25,6 +26,7 @@ object AppRouter {
         }
         activity.startActivity(intent)
     }
+
 
     /**
      * 跳转到发布动态详情
@@ -94,5 +96,24 @@ object AppRouter {
         activity.startActivity(intent)
     }
 
+    /**
+     * 跳转到互动管理页面
+     */
+    fun toInteractMessageActivity(activity: Activity, type:Int){
+        val intent = Intent(activity, InteractMessageActivity::class.java).apply {
+            putExtra(param_type, type)
+        }
+        activity.startActivity(intent)
+    }
+
+    /**
+     * 跳转到单条摸鱼详情页面
+     */
+    fun toMomentDetailActivity(activity: Activity, momentId: String) {
+        val intent = Intent(activity, MomentDetailActivity::class.java).apply {
+            putExtra(param_id, momentId)
+        }
+        activity.startActivity(intent)
+    }
 
 }

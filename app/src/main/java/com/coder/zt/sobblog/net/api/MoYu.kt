@@ -21,16 +21,15 @@ interface MoYu {
     @GET("/ct/moyu/list/recommend/{page}")
     fun getRecommend( @Path("page") page:Int): Call<ResponseListData<MiniFeed>>
 
+    /**
+     * 获取单条动态详情
+     */
+    @GET("/ct/moyu/{momentId}")
+    fun getMomentDetail( @Path("momentId") momentId:String): Call<ResponseData<Moment>>
 
     /**
      * 上传图片
      *
-     * {
-    "success": true,
-    "code": 10000,
-    "message": "上传成功.",//https://images.sunofbeaches.com/content/2021_07_15/865253509971312640.jpg
-    "data": "https://images.sunofbeaches.com/content/2021_07_01/860186568067907584.jpg"
-    }
      */
     @Multipart
     @POST("/ct/image/mo_yu")
@@ -66,6 +65,7 @@ interface MoYu {
      */
     @POST("/ct/moyu/sub-comment")
     fun reply(@Body comment:MYReplySender): Call<ResponseData<String>>
+
     /**
      * 获取动态话题
      */

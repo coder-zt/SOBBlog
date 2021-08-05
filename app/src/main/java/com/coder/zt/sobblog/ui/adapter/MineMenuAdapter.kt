@@ -1,5 +1,6 @@
 package com.coder.zt.sobblog.ui.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,20 +25,7 @@ class MineMenuAdapter(private val menuList: List<MenuItemData>, val callback:(ti
         FirstFirst,
         FirstSecond,
     }
-    init{
-//        initShowList()
-    }
-
-//    private fun initShowList() {
-//        showList.clear()
-//        for (menuItemData in menuList) {
-//            if (menuItemData.grade == ShowType.First) {
-//                showList.add(menuItemData)
-//            }
-//        }
-//        notifyDataSetChanged()
-//        Log.d(TAG, "initShowList: $showList.size")
-//    }
+    private var mInteractInfo:InteractInfo? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when(viewType){
@@ -109,13 +97,14 @@ class MineMenuAdapter(private val menuList: List<MenuItemData>, val callback:(ti
         if(holder is ItemView){
             if(menuList[i].menuName == "互动管理"){
                 interactItem = holder
+                holder.setMessageNumber(mInteractInfo?.getMsgCount()?:0)
             }
             holder.setData(menuList[i]){
 
                 if(it.grade == ShowType.First){
                     when(it.id){
-                        1-> switchChildMenu(it, 10, position)
-                        2-> switchChildMenu(it, 20, position)
+                        1-> switchChildMenu(it, 10, position, holder)
+                        2-> switchChildMenu(it, 20, position, holder)
                         3-> callback(it)
                     }
                 }
@@ -124,6 +113,16 @@ class MineMenuAdapter(private val menuList: List<MenuItemData>, val callback:(ti
             holder.setData(menuList[i]){
                 callback(it)
             }
+            var messageCount = 0
+            when(menuList[i].menuName){
+                "回复我的"-> messageCount = mInteractInfo?.atMsgCount?:0
+                "给我点赞"-> messageCount = mInteractInfo?.thumbUpMsgCount?:0
+                "文章评论"-> messageCount = mInteractInfo?.articleMsgCount?:0
+                "动态评论"-> messageCount = mInteractInfo?.momentCommentCount?:0
+                "问题回答"-> messageCount = mInteractInfo?.wendaMsgCount?:0
+                "系统通知"-> messageCount = mInteractInfo?.systemMsgCount?:0
+            }
+            holder.setMessageNumber(messageCount)
         }
 
     }
@@ -131,7 +130,8 @@ class MineMenuAdapter(private val menuList: List<MenuItemData>, val callback:(ti
     private fun switchChildMenu(
         it: MenuItemData,
         minId: Int,
-        position: Int
+        position: Int,
+        view: ItemView
     ) {
         if (it.expand) {
             it.expand = false
@@ -142,9 +142,11 @@ class MineMenuAdapter(private val menuList: List<MenuItemData>, val callback:(ti
                             menuItemData.show = false
                             notifyItemRemoved(position + 1)
                         }
+                        view.setMessageShow(true)
                     }
                 }
             }
+
         } else {
             showType = ShowType.FirstSecond
             it.expand = true
@@ -157,6 +159,7 @@ class MineMenuAdapter(private val menuList: List<MenuItemData>, val callback:(ti
                             notifyItemInserted(position + i)
                             i++
                         }
+                        view.setMessageShow(false)
                     }
 
                 }
@@ -174,27 +177,30 @@ class MineMenuAdapter(private val menuList: List<MenuItemData>, val callback:(ti
         return i
     }
 
-    var messageCount = 0
     fun setInteractInfo(it: InteractInfo) {
-        if (interactItem == null) {
-            messageCount = it.getMsgCount()
-            return
-        }
+        mInteractInfo = it
         interactItem?.setMessageNumber(it.getMsgCount())
     }
 
 
     class ItemView(val inflate:RvMineFirstMenuBinding):RecyclerView.ViewHolder(inflate.root) {
+
+        private var meunData:MenuItemData? = null
         fun setData(data: MenuItemData, callback:(title:MenuItemData)->Unit) {
             inflate.data = data
             inflate.ivIcon.setImageResource(data.menuIcon)
             inflate.root.setOnClickListener {
                 callback(data)
             }
+            meunData = data
         }
 
         fun setMessageNumber(value:Int){
-            if(value == 0){
+            var show = true
+            meunData?.let {
+                show = it.expand
+            }
+            if(value == 0 || show){
                 inflate.tvMsgNum.visibility = View.GONE
                 return
             }
@@ -205,6 +211,16 @@ class MineMenuAdapter(private val menuList: List<MenuItemData>, val callback:(ti
             }
             inflate.tvMsgNum.visibility = View.VISIBLE
             inflate.tvMsgNum.text = msg
+        }
+
+        fun setMessageShow(show:Boolean){
+            Log.d(TAG, "setMessageShow: ")
+
+            if(show && inflate.tvMsgNum.text != "0"){
+                inflate.tvMsgNum.visibility = View.VISIBLE
+            }else{
+                inflate.tvMsgNum.visibility = View.GONE
+            }
         }
     }
 

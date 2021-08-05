@@ -9,6 +9,7 @@ import com.coder.zt.sobblog.model.datamanager.UserDataMan
 import com.coder.zt.sobblog.ui.adapter.MineMenuAdapter
 import com.coder.zt.sobblog.ui.base.BaseFragment
 import com.coder.zt.sobblog.utils.AppRouter
+import com.coder.zt.sobblog.utils.Constants
 import com.coder.zt.sobblog.utils.ToastUtils
 import com.coder.zt.sobblog.viewmodel.UserViewModel
 class MineFragment:BaseFragment<FragmentMineBinding>() {
@@ -47,6 +48,8 @@ class MineFragment:BaseFragment<FragmentMineBinding>() {
     private val adapter = MineMenuAdapter(menuList) {
         when (it.id) {
             3 -> AppRouter.toSettingActivity(requireActivity())
+            22 -> AppRouter.toInteractMessageActivity(requireActivity(), Constants.InteractType.typeThumbUp)
+            26 -> AppRouter.toInteractMessageActivity(requireActivity(), Constants.InteractType.typeSyetem)
             else -> ToastUtils.showError("程序猿估计去摸鱼了，快去把他抓回来写代码！")
         }
     }
@@ -78,6 +81,11 @@ class MineFragment:BaseFragment<FragmentMineBinding>() {
                 dataBinding.cdcChangeData.visibility = View.GONE
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setData()
     }
 
 

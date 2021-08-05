@@ -32,6 +32,7 @@ class UserRepository {
     }
 
     private var sunofCoinPage = 1
+    private var systemMessagePage = 1
 
     suspend fun login(captcha:String, loginInfo: LoginInfo): ResponseData<String> {
         val netWork = UserNetWork.getInstance().login(captcha, loginInfo)
@@ -87,4 +88,37 @@ class UserRepository {
             listOf()
         }
     }
+
+
+    suspend fun getSystemMessage(loadMore:Boolean): List<SystemMessage> {
+        if(loadMore){
+            systemMessagePage++
+        }else{
+            systemMessagePage = 1
+        }
+        val netWork = UserNetWork.getInstance().systemMessage(systemMessagePage)
+        return if (netWork.code == Constants.SUCCESS_CODE) {
+            netWork.data.content
+        }else{
+            systemMessagePage--
+            listOf()
+        }
+    }
+
+  suspend fun getThumbUpMessage(loadMore:Boolean): List<ThumbUpMessage> {
+        if(loadMore){
+            systemMessagePage++
+        }else{
+            systemMessagePage = 1
+        }
+        val netWork = UserNetWork.getInstance().thumbUpMessage(systemMessagePage)
+        return if (netWork.code == Constants.SUCCESS_CODE) {
+            netWork.data.content
+        }else{
+            systemMessagePage--
+            listOf()
+        }
+    }
+
+
 }

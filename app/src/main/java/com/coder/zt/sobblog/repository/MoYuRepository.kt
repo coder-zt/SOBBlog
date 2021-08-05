@@ -43,6 +43,10 @@ class MoYuRepository {
         }
     }
 
+    suspend fun getMomentDetail(momentId: String):Moment{
+        return MoYuNetWork.getInstance().getMomentDetail(momentId).data
+    }
+
     suspend fun getRecommendMinifeed(page:Int):List<MiniFeed>{
         val recommend = MoYuNetWork.getInstance().getRecommendMinifeed(page)
         return if (recommend.code == Constants.SUCCESS_CODE) {

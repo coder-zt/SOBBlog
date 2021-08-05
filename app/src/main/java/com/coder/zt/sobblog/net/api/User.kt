@@ -1,6 +1,7 @@
 package com.coder.zt.sobblog.net.api
 
 
+import com.coder.zt.sobblog.model.base.ResponseContentData
 import com.coder.zt.sobblog.model.base.ResponseData
 import com.coder.zt.sobblog.model.base.ResponseListData
 import com.coder.zt.sobblog.model.user.*
@@ -52,5 +53,17 @@ interface User {
      */
     @GET("ast/ucenter/sob-trade/{userId}/{page}")
     fun sobTrade(@Path("userId") id:String, @Path("page")  page:Int):Call<ResponseListData<SunofCoinInfo>>
+
+    /**
+     * 系统通知
+     */
+    @GET("ct/ucenter/message/system/{page}")
+    fun systemMessage(@Path("page")  page:Int):Call<ResponseContentData<SystemMessage>>
+
+    /**
+     * 系统通知
+     */
+    @GET("ct/ucenter/message/thumb/{page}")
+    fun thumbUpMessage(@Path("page")  page:Int):Call<ResponseContentData<ThumbUpMessage>>
 
 }

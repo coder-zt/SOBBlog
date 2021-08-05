@@ -9,12 +9,3 @@ data class SunofCoinInfo(
     val userId: String
 )
 
-//data class Data(
-//    val currentPage: Int,
-//    val hasNext: Boolean,
-//    val hasPre: Boolean,
-//    val list: List<>,
-//    val pageSize: Int,
-//    val total: Int,
-//    val totalPage: Int
-//)

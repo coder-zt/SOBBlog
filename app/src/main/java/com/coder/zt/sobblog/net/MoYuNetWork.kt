@@ -18,6 +18,7 @@ class MoYuNetWork: NetWorkBase() {
 
     suspend fun getRecommendMinifeed(page:Int) = moYuService.getRecommend(page).await()
 
+    suspend fun getMomentDetail(momentId:String) = moYuService.getMomentDetail(momentId).await()
 
     suspend fun getMinifeedComment(commentId:String, page:Int) = moYuService.getMinifeedComment(commentId, page).await()
 

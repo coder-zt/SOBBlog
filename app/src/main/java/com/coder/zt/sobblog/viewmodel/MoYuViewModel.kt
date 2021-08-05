@@ -23,6 +23,7 @@ companion object{
     const val EVENT_PUBLISH = 111
 }
     val moyuDisplayData:MutableLiveData<List<MiniFeed>> = MutableLiveData()
+    val momentDetail:MutableLiveData<Moment> = MutableLiveData()
     val slideDistance:MutableLiveData<Int> = MutableLiveData()
     val comment:MutableLiveData<String> = MutableLiveData()
     val feedComment:MutableLiveData<List<MYComment>> = MutableLiveData()
@@ -37,6 +38,15 @@ companion object{
     fun getRecommendMiniFeed(loadMore:Boolean){
         viewModelScope.launch{
             moyuDisplayData.value = MoYuRepository.getInstance().getRecommendMinifeed(loadMore)
+        }
+    }
+
+    /**
+     * 获取单条摸鱼动态详情
+     */
+    fun getMomentDetail(momentId:String){
+        viewModelScope.launch{
+            momentDetail.value = MoYuRepository.getInstance().getMomentDetail(momentId)
         }
     }
 

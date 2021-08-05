@@ -11,9 +11,18 @@ object Constants {
     const val SP_KEY_WARP_TIME: String = "sp_key_warp_time"
     //https//www.sunofbeach.net/u/1284274686481473536
     const val BASE_URL = "https://api.sunofbeach.net"
-    const val WEBSITE_URL = "www.sunofbeach.net"
+    const val WEBSITE_URL = "sunofbeach.net"
     const val BING_BASE_URL = "https://cn.bing.com"
     const val SUCCESS_CODE = 10000
     var firstMsg = ""
     var finallyMsg = ""
+
+    object InteractType{
+        val typeSyetem = 0
+        val typeReply = 1
+        val typeThumbUp = 2
+        val typeArticleComment = 3
+        val typeMontentComment = 4
+        val typeWeDa = 5
+    }
 }

@@ -53,6 +53,8 @@
         <activity android:name=".ui.activity.SettingActivity" />
         <activity android:name=".ui.activity.SunofLogActivity" />
         <activity android:name=".ui.activity.PictureBrowseActivity" />
+        <activity android:name=".ui.activity.InteractMessageActivity" />
+        <activity android:name=".ui.activity.MomentDetailActivity" />
     </application>
 
 </manifest>
