@@ -27,6 +27,7 @@ class UserViewModel:ViewModel() {
     val interactInfo = MutableLiveData<InteractInfo>()
     val sunofCoinInfo = MutableLiveData<List<SunofCoinInfo>>()
     val thumbUpMessage = MutableLiveData<List<ThumbUpMessage>>()
+    val replyMessage = MutableLiveData<List<ReplyMessage>>()
     val systemMessage = MutableLiveData<List<SystemMessage>>()
 
     fun login(captcha:String, loginInfo: LoginInfo){
@@ -109,7 +110,7 @@ class UserViewModel:ViewModel() {
         }
     }
     /**
-     * 获取Sunof币的信息
+     * 获取系统信息的信息
      */
     fun getSystemMessage(loadMore:Boolean){
         viewModelScope.launch {
@@ -120,11 +121,26 @@ class UserViewModel:ViewModel() {
         }
     }
 
+    /**
+     * 获取点赞的信息
+     */
     fun getThumbUpMessage(loadMore: Boolean) {
         viewModelScope.launch {
             if(UserDataMan.isLogin()){
                 val response = UserRepository.getInstance().getThumbUpMessage(loadMore)
                 thumbUpMessage.value = response
+            }
+        }
+    }
+
+    /**
+     * 获取回复我的信息
+     */
+    fun getReplyMessage(loadMore: Boolean) {
+        viewModelScope.launch {
+            if(UserDataMan.isLogin()){
+                val response = UserRepository.getInstance().getReplyMessage(loadMore)
+                replyMessage.value = response
             }
         }
     }

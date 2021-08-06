@@ -26,6 +26,8 @@ class UserNetWork: NetWorkBase() {
 
         suspend fun thumbUpMessage(page:Int) = userService.thumbUpMessage(page).await()
 
+        suspend fun replyMessage(page:Int) = userService.replyMessage(page).await()
+
 
         companion object{
                 private var network: UserNetWork? = null

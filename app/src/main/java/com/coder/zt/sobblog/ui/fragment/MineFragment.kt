@@ -48,6 +48,7 @@ class MineFragment:BaseFragment<FragmentMineBinding>() {
     private val adapter = MineMenuAdapter(menuList) {
         when (it.id) {
             3 -> AppRouter.toSettingActivity(requireActivity())
+            21 -> AppRouter.toInteractMessageActivity(requireActivity(), Constants.InteractType.typeReply)
             22 -> AppRouter.toInteractMessageActivity(requireActivity(), Constants.InteractType.typeThumbUp)
             26 -> AppRouter.toInteractMessageActivity(requireActivity(), Constants.InteractType.typeSyetem)
             else -> ToastUtils.showError("程序猿估计去摸鱼了，快去把他抓回来写代码！")

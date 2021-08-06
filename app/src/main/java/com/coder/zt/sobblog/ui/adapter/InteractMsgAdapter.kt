@@ -17,8 +17,10 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.coder.zt.sobblog.R
+import com.coder.zt.sobblog.databinding.RvReplyMsgBinding
 import com.coder.zt.sobblog.databinding.RvSystemMsgBinding
 import com.coder.zt.sobblog.databinding.RvThumbUpMsgBinding
+import com.coder.zt.sobblog.model.user.ReplyMessage
 import com.coder.zt.sobblog.model.user.SystemMessage
 import com.coder.zt.sobblog.model.user.ThumbUpMessage
 import com.coder.zt.sobblog.utils.Constants
@@ -52,6 +54,15 @@ class InteractMsgAdapter<T>(val type:Int, val activity: Activity):RecyclerView.A
                 )
                 ThumbUpMsgView(inflate)
             }
+            Constants.InteractType.typeReply->{
+                val inflate = DataBindingUtil.inflate<RvReplyMsgBinding>(
+                    LayoutInflater.from(parent.context),
+                    R.layout.rv_reply_msg,
+                    parent,
+                    false
+                )
+                ReplyMsgView(inflate)
+            }
             else->{
                 val inflate = DataBindingUtil.inflate<RvSystemMsgBinding>(
                     LayoutInflater.from(parent.context),
@@ -69,6 +80,8 @@ class InteractMsgAdapter<T>(val type:Int, val activity: Activity):RecyclerView.A
             holder.setData(mData[position] as SystemMessage, activity)
         }else if (holder is ThumbUpMsgView && mData[position] is ThumbUpMessage) {
             holder.setData(mData[position] as ThumbUpMessage, activity)
+        }else if (holder is ReplyMsgView && mData[position] is ReplyMessage) {
+            holder.setData(mData[position] as ReplyMessage, activity)
         }
     }
 
@@ -82,6 +95,42 @@ class InteractMsgAdapter<T>(val type:Int, val activity: Activity):RecyclerView.A
         }
         mData.addAll(data)
         notifyDataSetChanged()
+    }
+
+    class ReplyMsgView(private val dataBind:RvReplyMsgBinding):RecyclerView.ViewHolder(dataBind.root){
+        fun setData(msg: ReplyMessage, activity: Activity) {
+            dataBind.data = msg
+            Log.d(TAG, "setData: repley message ---> $msg")
+            val content = StringBuilder().run{
+                append("回复了我的评论：「<a ")
+                append("href='")
+                append("https://www.sunofbeach.net")
+                append(msg.url)
+                append("' style='color:#406599' >")
+                append(msg.content)
+                append("</a>」")
+                toString()
+            }
+            Log.d(TAG, "setData: $content")
+            dataBind.tvContent.text = Html.fromHtml(content)
+            dataBind.tvContent.movementMethod = LinkMovementMethod.getInstance()
+            val text = dataBind.tvContent.text
+            if (text is Spannable) {
+                val end = text.length
+                val spannable = dataBind.tvContent.text as Spannable
+                val urls = spannable.getSpans(0, end, URLSpan::class.java)
+                val  style=  SpannableStringBuilder(text)
+                style.clearSpans();//should clear old spans
+                for(url in urls){
+                    val myURLSpan = MyURLSpan(url.getURL(), Color.parseColor("#406599"),activity)
+//                    style.color(Color.parseColor("#406599"),)
+//                    style.setSpan( ForegroundColorSpan(Color.parseColor(afterColor)),beforeText.length(), builder.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                    style.setSpan(myURLSpan,spannable.getSpanStart(url),spannable.getSpanEnd(url),Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+                dataBind.tvContent.setText(style)
+            }
+        }
+
     }
 
     class SystemMsgView(private val dataBind:RvSystemMsgBinding):RecyclerView.ViewHolder(dataBind.root){

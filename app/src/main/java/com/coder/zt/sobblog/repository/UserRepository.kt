@@ -120,5 +120,20 @@ class UserRepository {
         }
     }
 
+     suspend fun getReplyMessage(loadMore:Boolean): List<ReplyMessage> {
+            if(loadMore){
+                systemMessagePage++
+            }else{
+                systemMessagePage = 1
+            }
+            val netWork = UserNetWork.getInstance().replyMessage(systemMessagePage)
+            return if (netWork.code == Constants.SUCCESS_CODE) {
+                netWork.data.content
+            }else{
+                systemMessagePage--
+                listOf()
+            }
+        }
+
 
 }

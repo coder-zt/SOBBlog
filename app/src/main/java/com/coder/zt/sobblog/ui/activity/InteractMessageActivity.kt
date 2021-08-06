@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import com.coder.zt.sobblog.R
 import com.coder.zt.sobblog.databinding.ActivityInteractBinding
+import com.coder.zt.sobblog.model.user.ReplyMessage
 import com.coder.zt.sobblog.model.user.SystemMessage
 import com.coder.zt.sobblog.model.user.ThumbUpMessage
 import com.coder.zt.sobblog.ui.adapter.InteractMsgAdapter
@@ -25,6 +26,7 @@ class InteractMessageActivity:BaseActivity<ActivityInteractBinding>() {
     private val userViewModel:UserViewModel by lazy {
         ViewModelProvider(this).get(UserViewModel::class.java)
     }
+    private val replyAdapter:InteractMsgAdapter<ReplyMessage> = InteractMsgAdapter(Constants.InteractType.typeReply, this)
     private val thumbUpAdapter:InteractMsgAdapter<ThumbUpMessage> = InteractMsgAdapter(Constants.InteractType.typeThumbUp, this)
     private val systemAdapter:InteractMsgAdapter<SystemMessage> = InteractMsgAdapter(Constants.InteractType.typeSyetem, this)
 
@@ -72,6 +74,18 @@ class InteractMessageActivity:BaseActivity<ActivityInteractBinding>() {
                     }
                 }
             }
+            Constants.InteractType.typeReply->{
+                typeName = "@朕的"
+                dataBinding.rvContent.adapter = replyAdapter
+                userViewModel.replyMessage.observe(this){
+                    replyAdapter.setData(it,loadMore)
+                    if(loadMore){
+                        dataBinding.srlContainer.finishLoadMore()
+                    }else{
+                        dataBinding.srlContainer.finishRefresh()
+                    }
+                }
+            }
         }
         loadData()
         dataBinding.srlContainer.setRefreshHeader(ClassicsHeader(this))
@@ -95,6 +109,9 @@ class InteractMessageActivity:BaseActivity<ActivityInteractBinding>() {
             }
             Constants.InteractType.typeSyetem->{
                 userViewModel.getSystemMessage(loadMore)
+            }
+            Constants.InteractType.typeReply->{
+                userViewModel.getReplyMessage(loadMore)
             }
         }
     }

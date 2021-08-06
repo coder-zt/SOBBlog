@@ -61,9 +61,15 @@ interface User {
     fun systemMessage(@Path("page")  page:Int):Call<ResponseContentData<SystemMessage>>
 
     /**
-     * 系统通知
+     * 点赞信息
      */
     @GET("ct/ucenter/message/thumb/{page}")
     fun thumbUpMessage(@Path("page")  page:Int):Call<ResponseContentData<ThumbUpMessage>>
+
+    /**
+     *  回复我的
+     */
+    @GET("ct/ucenter/message/at/{page}")
+    fun replyMessage(@Path("page")  page:Int):Call<ResponseContentData<ReplyMessage>>
 
 }
