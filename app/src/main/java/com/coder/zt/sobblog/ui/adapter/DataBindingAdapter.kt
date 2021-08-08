@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.os.Build
 import android.text.Html
 import android.util.Log
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
@@ -177,6 +178,20 @@ fun setVipTextColor(tv: TextView, vip_text_color:Boolean){
 fun setReplyContent(tv: TextView, reply_target:String,reply_content:String){
    tv.text = Html.fromHtml("<font color=\"black\">回复</font><font color=\"#409eef\">@${reply_target}</font><font color=\"black\"> ：${reply_content}</font>")
 
+}
+/**
+ * 已读和未读的标识
+ */
+@BindingAdapter("hasRead")
+fun setHasRead(tv: TextView, hasRead:String){
+   if(hasRead == "0"){//未读
+       tv.visibility= View.VISIBLE
+       tv.text = "未读"
+       tv.background = tv.resources.getDrawable(R.drawable.unread_bg, null)
+   }
+   else{//已读
+       tv.visibility= View.GONE
+   }
 }
 
 

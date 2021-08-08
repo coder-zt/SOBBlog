@@ -24,9 +24,9 @@ companion object{
 
     private fun Int.toLargeNumShow():String{
         if(this > 100000000){
-            return "${String.format("%.2f",(this/100000000.0))}亿"
+            return "${String.format("%.3f",(this/100000000.0))}亿"
         }else if(this > 10000){
-            return "${String.format("%.1f",(this/10000.0))}万"
+            return "${String.format("%.2f",(this/10000.0))}万"
         }
         return this.toString()
     }

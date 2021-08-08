@@ -6,7 +6,7 @@
     <data>
         <variable
             name="data"
-            type="com.coder.zt.sobblog.model.user.ReplyMessage" />
+            type="com.coder.zt.sobblog.model.user.MomentMessage" />
 
     </data>
 
@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="12dp"
-            android:text="@{data.publishTime}"
+            android:text="@{data.createTime}"
             android:textColor="@color/theme_dark_gray"
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"

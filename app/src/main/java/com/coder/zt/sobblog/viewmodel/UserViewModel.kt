@@ -28,6 +28,7 @@ class UserViewModel:ViewModel() {
     val sunofCoinInfo = MutableLiveData<List<SunofCoinInfo>>()
     val thumbUpMessage = MutableLiveData<List<ThumbUpMessage>>()
     val replyMessage = MutableLiveData<List<ReplyMessage>>()
+    val momentMessage = MutableLiveData<List<MomentMessage>>()
     val systemMessage = MutableLiveData<List<SystemMessage>>()
 
     fun login(captcha:String, loginInfo: LoginInfo){
@@ -141,6 +142,48 @@ class UserViewModel:ViewModel() {
             if(UserDataMan.isLogin()){
                 val response = UserRepository.getInstance().getReplyMessage(loadMore)
                 replyMessage.value = response
+            }
+        }
+    }
+
+    /**
+     * 更新@朕的信息状态
+     */
+    fun updateReplyMessageState(messageId: String) {
+        viewModelScope.launch {
+            if(UserDataMan.isLogin()){
+                val response = UserRepository.getInstance().updateReplyMessageState(messageId)
+                if(response){
+                    getReplyMessage(false)
+                }
+            }
+        }
+    }
+
+
+    /**
+     * 获取回复我的信息
+     */
+    fun getMomentMessage(loadMore: Boolean) {
+        viewModelScope.launch {
+            if(UserDataMan.isLogin()){
+                val response = UserRepository.getInstance().getMomentMessage(loadMore)
+                momentMessage.value = response
+            }
+        }
+    }
+
+
+    /**
+     * 更新@朕的信息状态
+     */
+    fun updateMomentMessageState(messageId: String) {
+        viewModelScope.launch {
+            if(UserDataMan.isLogin()){
+                val response = UserRepository.getInstance().updateMomentMessageState(messageId)
+                if(response){
+                    getMomentMessage(false)
+                }
             }
         }
     }

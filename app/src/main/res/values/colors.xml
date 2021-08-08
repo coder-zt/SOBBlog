@@ -13,4 +13,6 @@
     <color name="theme_dark_gray">#757070</color>
     <color name="ic_launcher_background">#FFFFFF</color>
     <color name="sob_vip_color">#FB7299</color>
+    <color name="theme_red">#F56C6C</color>
+    <color name="theme_gold">#FFE6A23C</color>
 </resources>

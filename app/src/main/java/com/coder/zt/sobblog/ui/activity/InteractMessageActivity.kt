@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import com.coder.zt.sobblog.R
 import com.coder.zt.sobblog.databinding.ActivityInteractBinding
+import com.coder.zt.sobblog.model.user.MomentMessage
 import com.coder.zt.sobblog.model.user.ReplyMessage
 import com.coder.zt.sobblog.model.user.SystemMessage
 import com.coder.zt.sobblog.model.user.ThumbUpMessage
@@ -28,6 +29,7 @@ class InteractMessageActivity:BaseActivity<ActivityInteractBinding>() {
     }
     private val replyAdapter:InteractMsgAdapter<ReplyMessage> = InteractMsgAdapter(Constants.InteractType.typeReply, this)
     private val thumbUpAdapter:InteractMsgAdapter<ThumbUpMessage> = InteractMsgAdapter(Constants.InteractType.typeThumbUp, this)
+    private val momentCommentAdapter:InteractMsgAdapter<MomentMessage> = InteractMsgAdapter(Constants.InteractType.typeMontentComment, this)
     private val systemAdapter:InteractMsgAdapter<SystemMessage> = InteractMsgAdapter(Constants.InteractType.typeSyetem, this)
 
     override fun getLayoutId() = R.layout.activity_interact
@@ -74,8 +76,27 @@ class InteractMessageActivity:BaseActivity<ActivityInteractBinding>() {
                     }
                 }
             }
+            Constants.InteractType.typeMontentComment->{
+                typeName = "动态评论"
+                momentCommentAdapter.setMessageOnClickListener {
+                    userViewModel.updateMomentMessageState(it)
+                }
+                dataBinding.rvContent.adapter = momentCommentAdapter
+                userViewModel.momentMessage.observe(this){
+                    Log.d(TAG, "initView: $typeName")
+                    momentCommentAdapter.setData(it,loadMore)
+                    if(loadMore){
+                        dataBinding.srlContainer.finishLoadMore()
+                    }else{
+                        dataBinding.srlContainer.finishRefresh()
+                    }
+                }
+            }
             Constants.InteractType.typeReply->{
                 typeName = "@朕的"
+                replyAdapter.setMessageOnClickListener {
+                    userViewModel.updateReplyMessageState(it)
+                }
                 dataBinding.rvContent.adapter = replyAdapter
                 userViewModel.replyMessage.observe(this){
                     replyAdapter.setData(it,loadMore)
@@ -112,6 +133,9 @@ class InteractMessageActivity:BaseActivity<ActivityInteractBinding>() {
             }
             Constants.InteractType.typeReply->{
                 userViewModel.getReplyMessage(loadMore)
+            }
+            Constants.InteractType.typeMontentComment->{
+                userViewModel.getMomentMessage(loadMore)
             }
         }
     }

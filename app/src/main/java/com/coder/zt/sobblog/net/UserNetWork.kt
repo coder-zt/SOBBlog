@@ -28,6 +28,11 @@ class UserNetWork: NetWorkBase() {
 
         suspend fun replyMessage(page:Int) = userService.replyMessage(page).await()
 
+        suspend fun updateReplyMessageState(messageId:String) = userService.updateReplyMessageState(messageId).await()
+
+        suspend fun momentMessage(page:Int) = userService.momentMessage(page).await()
+
+        suspend fun updateMomentMessageState(messageId:String) = userService.updateMomentMessageState(messageId).await()
 
         companion object{
                 private var network: UserNetWork? = null

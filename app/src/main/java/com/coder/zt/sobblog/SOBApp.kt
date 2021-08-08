@@ -58,9 +58,9 @@ class SOBApp:Application() {
 
             }
         }
-        UMConfigure.preInit(this,"60f5c062a6f90557b7bed448", "beta")
-//        UMConfigure.init(this,UMConfigure.DEVICE_TYPE_PHONE,"60f5c062a6f90557b7bed448")
-        UMConfigure.init(this, "60f5c062a6f90557b7bed448", "Umeng", UMConfigure.DEVICE_TYPE_PHONE, null)
+//        UMConfigure.preInit(this,"60f5c062a6f90557b7bed448", "beta")
+////        UMConfigure.init(this,UMConfigure.DEVICE_TYPE_PHONE,"60f5c062a6f90557b7bed448")
+//        UMConfigure.init(this, "60f5c062a6f90557b7bed448", "Umeng", UMConfigure.DEVICE_TYPE_PHONE, null)
     }
 
     companion object {

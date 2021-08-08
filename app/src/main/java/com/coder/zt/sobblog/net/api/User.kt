@@ -72,4 +72,21 @@ interface User {
     @GET("ct/ucenter/message/at/{page}")
     fun replyMessage(@Path("page")  page:Int):Call<ResponseContentData<ReplyMessage>>
 
+    /**
+     *  回复我的信息状态更新为已读
+     */
+    @PUT("ct/ucenter/message/at/state/{messageId}/1")
+    fun updateReplyMessageState(@Path("messageId")  page:String):Call<ResponseData<Void>>
+
+    /**
+     *  动态评论信息
+     */
+    @GET("ct/ucenter/message/moment/{page}")
+    fun momentMessage(@Path("page")  page:Int):Call<ResponseContentData<MomentMessage>>
+
+    /**
+     *  动态评论信息状态更新为已读
+     */
+    @PUT("ct/ucenter/message/moment/state/{messageId}/1")
+    fun updateMomentMessageState(@Path("messageId")  page:String):Call<ResponseData<Void>>
 }

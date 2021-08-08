@@ -50,6 +50,7 @@ class MineFragment:BaseFragment<FragmentMineBinding>() {
             3 -> AppRouter.toSettingActivity(requireActivity())
             21 -> AppRouter.toInteractMessageActivity(requireActivity(), Constants.InteractType.typeReply)
             22 -> AppRouter.toInteractMessageActivity(requireActivity(), Constants.InteractType.typeThumbUp)
+            24 -> AppRouter.toInteractMessageActivity(requireActivity(), Constants.InteractType.typeMontentComment)
             26 -> AppRouter.toInteractMessageActivity(requireActivity(), Constants.InteractType.typeSyetem)
             else -> ToastUtils.showError("程序猿估计去摸鱼了，快去把他抓回来写代码！")
         }
@@ -57,6 +58,9 @@ class MineFragment:BaseFragment<FragmentMineBinding>() {
 
     override fun initView() {
             dataBinding.rvMiniMenu.adapter = adapter
+            dataBinding.clUserInfo.setOnClickListener {
+                UserDataMan.checkUserLoginState(requireActivity(),"")
+            }
     }
 
     override fun initData() {

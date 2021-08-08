@@ -103,8 +103,8 @@ class MineMenuAdapter(private val menuList: List<MenuItemData>, val callback:(ti
 
                 if(it.grade == ShowType.First){
                     when(it.id){
-                        1-> switchChildMenu(it, 10, position, holder)
-                        2-> switchChildMenu(it, 20, position, holder)
+                        1-> switchChildMenu(it, 10, holder)
+                        2-> switchChildMenu(it, 20, holder)
                         3-> callback(it)
                     }
                 }
@@ -130,7 +130,6 @@ class MineMenuAdapter(private val menuList: List<MenuItemData>, val callback:(ti
     private fun switchChildMenu(
         it: MenuItemData,
         minId: Int,
-        position: Int,
         view: ItemView
     ) {
         if (it.expand) {
@@ -140,7 +139,7 @@ class MineMenuAdapter(private val menuList: List<MenuItemData>, val callback:(ti
                     ShowType.FirstSecond -> {
                         if (menuItemData.grade == ShowType.FirstSecond && menuItemData.id > minId && menuItemData.id < minId +10) {
                             menuItemData.show = false
-                            notifyItemRemoved(position + 1)
+                            notifyItemRemoved(view.absoluteAdapterPosition + 1)
                         }
                         view.setMessageShow(true)
                     }
@@ -156,7 +155,7 @@ class MineMenuAdapter(private val menuList: List<MenuItemData>, val callback:(ti
                     ShowType.FirstSecond -> {
                         if (menuItemData.grade == ShowType.FirstSecond && menuItemData.id > minId && menuItemData.id < minId +10) {
                             menuItemData.show = true
-                            notifyItemInserted(position + i)
+                            notifyItemInserted(view.absoluteAdapterPosition + i)
                             i++
                         }
                         view.setMessageShow(false)

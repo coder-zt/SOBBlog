@@ -8,7 +8,10 @@ import com.coder.zt.sobblog.model.datamanager.UserDataMan
 import com.coder.zt.sobblog.model.user.*
 import com.coder.zt.sobblog.net.UserNetWork
 import com.coder.zt.sobblog.utils.Constants
+import com.coder.zt.sobblog.utils.ToastUtils
 import java.io.IOException
+import java.lang.Exception
+import java.net.UnknownHostException
 import java.util.*
 
 
@@ -33,6 +36,7 @@ class UserRepository {
 
     private var sunofCoinPage = 1
     private var systemMessagePage = 1
+    private var momentMessagePage = 1
 
     suspend fun login(captcha:String, loginInfo: LoginInfo): ResponseData<String> {
         val netWork = UserNetWork.getInstance().login(captcha, loginInfo)
@@ -80,13 +84,23 @@ class UserRepository {
         }else{
             sunofCoinPage = 1
         }
-        val netWork = UserNetWork.getInstance().sunofCoinInfo(UserDataMan.getUserInfo()!!.id, sunofCoinPage)
-        return if (netWork.code == Constants.SUCCESS_CODE) {
-            netWork.data.list
-        }else{
-            sunofCoinPage--
-            listOf()
+        try{
+            val netWork = UserNetWork.getInstance().sunofCoinInfo(UserDataMan.getUserInfo()!!.id, sunofCoinPage)
+            return if (netWork.code == Constants.SUCCESS_CODE) {
+                netWork.data.list
+            }else{
+                sunofCoinPage--
+                ToastUtils.showError("数据为空")
+                listOf()
+
+            }
+        }catch (e:Exception){
+            e.printStackTrace()
+            if (e is UnknownHostException) {
+                ToastUtils.showError("找到服务器地址")
+            }
         }
+        return listOf()
     }
 
 
@@ -134,6 +148,31 @@ class UserRepository {
                 listOf()
             }
         }
+
+    suspend fun updateReplyMessageState(messageId:String): Boolean {
+        val netWork = UserNetWork.getInstance().updateReplyMessageState(messageId)
+        return netWork.success
+    }
+
+    suspend fun getMomentMessage(loadMore:Boolean): List<MomentMessage> {
+        if(loadMore){
+            momentMessagePage++
+        }else{
+            momentMessagePage = 1
+        }
+        val netWork = UserNetWork.getInstance().momentMessage(momentMessagePage)
+        return if (netWork.code == Constants.SUCCESS_CODE) {
+            netWork.data.content
+        }else{
+            momentMessagePage--
+            listOf()
+        }
+    }
+
+    suspend fun updateMomentMessageState(messageId:String): Boolean {
+        val netWork = UserNetWork.getInstance().updateMomentMessageState(messageId)
+        return netWork.success
+    }
 
 
 }

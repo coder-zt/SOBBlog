@@ -1,5 +1,6 @@
 package com.coder.zt.sobblog.ui.activity
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.recyclerview.widget.PagerSnapHelper
@@ -17,7 +18,7 @@ class PictureBrowseActivity:BaseActivity<ActivityPictureBrowseBinding>(){
     companion object{
         private const val TAG = "PictureBrowseActivity"
     }
-    private  var picUrls:List<String>? = null
+    private lateinit  var picUrls:List<String>
     private var position = 0
     override fun getLayoutId() = R.layout.activity_picture_browse
 
@@ -38,9 +39,11 @@ class PictureBrowseActivity:BaseActivity<ActivityPictureBrowseBinding>(){
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun initView() {
+        dataBinding.tvIndex.text = "${position+1}/${picUrls.size}"
         val snapHelper = CustomPagerSnapHelper(){
-            Log.d(TAG, "initView: snapHelper $it")
+            dataBinding.tvIndex.text = "${it+1}/${picUrls.size}"
         }
         picUrls?.let {
             dataBinding.rvPicContainer.adapter = PictureBrowseAdapter(it)

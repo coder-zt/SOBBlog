@@ -45,7 +45,9 @@ object UserDataMan {
 
     fun checkUserLoginState(activity: Activity,errorMsg:String):Boolean{
         return if (loginState != LoginState.LOGINED) {
-            ToastUtils.showError(errorMsg)
+            if (errorMsg.isNotEmpty()) {
+                ToastUtils.showError(errorMsg)
+            }
             AppRouter.toLoginActivity(activity)
             false
         }else{
