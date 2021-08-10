@@ -32,8 +32,8 @@ class ArticleWebView(context: Context, attrs: AttributeSet):WebView(context, att
         settings.javaScriptEnabled = true
         settings.layoutAlgorithm = WebSettings.LayoutAlgorithm.SINGLE_COLUMN
         settings.javaScriptCanOpenWindowsAutomatically = true
-        webViewClient = webClient
         webChromeClient = WebChromeClient()
+        webViewClient = webClient
         addJavascriptInterface(JsApi(){
             when(it){
                 JsApi.EventCode.Event_UP->{
@@ -78,8 +78,9 @@ class ArticleWebView(context: Context, attrs: AttributeSet):WebView(context, att
 
     fun loadArticle(articleContent: String) {
         val html = handleContent(articleContent)
+        Log.d(TAG, "loadArticle: $html")
         //可以保存html到本地进行检查
-        saveHtml(html)
+//        saveHtml(html)
         loadDataWithBaseURL("file:///android_asset/",html, "text/html", "utf-8", null)
     }
 

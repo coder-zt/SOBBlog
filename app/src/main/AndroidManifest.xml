@@ -26,6 +26,13 @@
             android:name="android.max_aspect"
             android:value="2.2" />
 
+        <activity android:name="com.coder.zt.sobblog.demo.ArticleDemoActivity">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+        </activity>
         <activity android:name=".ui.activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
