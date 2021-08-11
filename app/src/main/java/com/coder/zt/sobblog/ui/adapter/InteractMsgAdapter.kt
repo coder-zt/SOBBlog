@@ -234,7 +234,7 @@ class InteractMsgAdapter<T>(val type:Int, val activity: Activity):RecyclerView.A
     class SystemMsgView(private val dataBind:RvSystemMsgBinding):RecyclerView.ViewHolder(dataBind.root){
         fun setData(msg: SystemMessage, activity: Activity) {
             dataBind.data = msg
-            val parttern = Regex("<a [\\d\\D\\w\\W\\s\\S]+</a>")
+            val parttern = Regex("<a [\\d\\D\\w\\W\\s\\S]*?</a>")
             val results = parttern.findAll(msg.content)
             val urlColorMap = mutableMapOf<String, String>()
             for (result in results) {

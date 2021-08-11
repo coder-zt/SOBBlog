@@ -132,5 +132,167 @@ syntaxhighlighter这个库是我再搜索highlight库过程中找到的，因为
 
         class="brush: java; collapse: true;"
 
-    - brush: 指定code的类型，并需要加载对应的js文件，例如指定java，需要加载`shBrushJava.js`
-    - collapse: 是否默认收缩隐藏代码
+        - brush: 指定code的类型，并需要加载对应的js文件，例如指定java，需要加载`shBrushJava.js`
+        - collapse: 是否默认收缩隐藏代码
+        - class-name： 给高亮的标签新增一个类名
+        - first-line : 代码块开始的行号
+        - title: 代码块的标题会显示在代码块上方
+        - quick-code： 双击是否可以复制和粘贴代码
+        - toolbar： 是否使用工具条（启用，代码块右上方有个？方块，但是点击没什么反应）
+        - gutter：是否显示行号
+    - 关于class中使用的属性值很多，这里只是列举的几个，主要英语能力有限，测试其他属性发现变化并不明显，还有待大佬解析
+
+### 适配网站博客文章
+
+1. 首先时html的模板，先引用js、css资源，和编写额为的自定义样式的css属性和一些js代码供后面拓展，如下：
+
+```html
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <!-- 引入css文件 -->
+    <link rel="stylesheet" type="text/css" href="SyntaxHighlighter/css/shCore.css">
+    <link rel="stylesheet" type="text/css" href="SyntaxHighlighter/css/shThemeArticle.css">
+    <!-- 引入js文件，两面连个的引用顺序不可变 -->
+    <script type="text/javascript" src="SyntaxHighlighter/js/XRegExp.js"></script>
+    <script type="text/javascript" src="SyntaxHighlighter/js/shCore.js"></script>
+    <script type="text/javascript" src="SyntaxHighlighter/js/shBrushJava.js"></script>
+    <script type="text/javascript" src="SyntaxHighlighter/js/shBrushPowerShell.js"></script>
+    <script type="text/javascript" src="SyntaxHighlighter/js/shBrushJScript.js"></script>
+    <script type="text/javascript" src="SyntaxHighlighter/js/shBrushSql.js"></script>
+    <script type="text/javascript" src="SyntaxHighlighter/js/shBrushXml.js"></script>
+    <script type="text/javascript" src="SyntaxHighlighter/js/shBrushPlain.js"></script>
+    <script type="text/javascript" src="SyntaxHighlighter/js/shBrushKotlin.js"></script>
+    <script type="text/javascript">
+        SyntaxHighlighter.all()
+        // 给代码块设置监听事件，当点击时通知给ktolin
+        function onTouchStart(e) {
+            androidApi.touchEvent(0);
+        }
+
+        function onTouchEnd(e) {
+            androidApi.touchEvent(2);
+        }
+
+        function onTouchMove(e) {
+         androidApi.touchEvent(1);
+        }
+        function addTouchListener() {
+            var dom = document.getElementsByClassName('code');
+            androidApi.log(dom.length);
+            for (i in dom){
+                dom[i].addEventListener('touchstart', onTouchStart, false);
+                dom[i].addEventListener('touchmove', onTouchMove, false);
+                dom[i].addEventListener('touchend', onTouchEnd, false);
+            }
+        }
+        </script>
+    <style>
+        /* 控制文章中的image不超过屏幕 */
+        img {
+            max-width: 100%;
+        }
+        /* 代码块的样式 */
+        .code_block{
+            display: block;
+            overflow-x: auto;
+            padding: .5em;
+            background: #f0f0f0;
+        }
+
+        /* 文章中关键字的样式，及markdown中``修饰的文字 */
+        .key_word{
+            word-break: break-word;
+            border-radius: 2px;
+            margin-left: 3px;
+            margin-right: 3px;
+            overflow-x: auto;
+            background-color: #f7f7f7;
+            color: #ff502c;
+            font-size: .87em;
+            padding: .065em .4em!important;
+            display: inline!important;
+        }
+    </style>
+</head>
+<body>
+{{template}}
+</body>
+</html>
+```
+
+2. 在获取到文章数据的基础上对文章内容进行处理：
+    
+    首先时对关键字的处理，前文提到特殊关键字时被`<code>`标签包裹，我们在这里使用正则将其替换成`<span>`标签并添加属性`key_word`,代码如下：
+
+    ```kotlin
+        /**
+        * content：网页返回的文章内容
+        */
+        private fun handleKeywords(content: String): String {
+            var handleText = content
+            val parttern = Regex("<code>(.*?)</code>")
+            val results = parttern.findAll(handleText)
+            for (result in results) {
+                var keyString: String = result.value
+                keyString = keyString.replace("<code>", "<span class=\"key_word\">")
+                keyString = keyString.replace("</code>", "</span>")
+                handleText = handleText.replace(result.value, keyString)
+            }
+            return handleText
+        }
+    ```
+
+    再是对代码块的处理,前文中代码块除了被`<code>`标签包裹以为，其中还带有代码语言类型的类名，所以需要将原先的类名进行转换，然后再此基础上加上其他属性的值来控制代码块的样式，也可以直接再shCore.js中进行全局控制，处理代码如下：
+
+    ```kotlin
+     /**
+        * content：网页返回的文章内容
+        */
+        private fun handleHtmlContent(content: String): String {
+            //处理文章内容中是关键字的情况
+            val handleText = handleKeywords(content)
+            //读取模板代码
+            val template = getTestHtml("article_demo")
+            //利用jsoup转化未html对象，方便处理
+            val document = Jsoup.parse(template.replace("{{template}}",handleText))
+            //使用递归处理html中的代码块
+            verseChild(document.body())
+            return document.toString()
+        }
+
+        private fun verseChild(body: Element?) {
+        body?.let {
+            for (child in body.children()) {
+                if (child.tagName() == "code") {
+                    //给代码父标签添加属性，可以自定义样式
+                    child.parent().attributes().add("class", "code_block")
+                    //给code设置新的类名，来控制代码的属性
+                    child.attributes().put("class", "brush: ${getLanguageType(child.attr("class"))}; toolbar:false; quick-code:false;")
+                }
+                verseChild(child)
+            }
+        }
+    }
+
+    /**
+     * 将原来内容中的代码类型属性进行转换
+     */
+    private fun getLanguageType(attr: String): String {
+        Log.d(TAG, "getLanguageType: $attr")
+        if (attr.isEmpty()) {
+            return "text"
+        }else{
+            return when(attr){
+                "language-shell" -> "ps"
+                "language-java" -> "java"
+                "language-kotlin" -> "kotlin"
+                "language-xml" -> "xml"
+                "language-sql" -> "sql"
+                "language-json" -> "text"
+                else -> "text"
+            }
+        }
+    }
+    ```

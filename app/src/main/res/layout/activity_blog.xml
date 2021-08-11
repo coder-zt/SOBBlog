@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="data"
+            type="com.coder.zt.sobblog.model.article.ArticleDetail" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/theme_gray">
+
+        <LinearLayout
+            android:id="@+id/top_bar_ll"
+            android:layout_width="0dp"
+            android:layout_height="74dp"
+            android:paddingTop="26dp"
+            android:background="@color/theme_blue"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/tv_save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="文章详情"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+
+<!--        <com.coder.zt.sobblog.ui.view.WebViewScrollView-->
+<!--            android:id="@+id/wbsv"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="0dp"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/top_bar_ll"-->
+<!--            app:layout_constraintVertical_bias="0.0"-->
+<!--            android:overScrollMode="never"-->
+<!--            tools:layout_editor_absoluteX="-40dp">-->
+
+<!--            <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent">-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/article_title"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:padding="18dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:background="@color/white"-->
+<!--                    android:gravity="center_vertical"-->
+<!--                    android:text="@{data.title}"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textSize="24sp"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="parent" />-->
+
+
+<!--                <ImageView-->
+<!--                    android:id="@+id/article_cover"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="150dp"-->
+<!--                    android:background="@color/white"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/article_title" />-->
+
+<!--                <View-->
+<!--                    android:id="@+id/view"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="6dp"-->
+<!--                    android:background="#f2f2f2"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/article_cover" />-->
+
+<!--                <View-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="0dp"-->
+<!--                    android:background="@color/white"-->
+<!--                    app:layout_constraintBottom_toTopOf="@+id/view3"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/article_cover" />-->
+
+<!--                <ImageView-->
+<!--                    android:id="@+id/user_avatar"-->
+<!--                    android:layout_width="48dp"-->
+<!--                    android:layout_height="48dp"-->
+<!--                    android:layout_margin="12dp"-->
+<!--                    android:layout_marginStart="12dp"-->
+<!--                    android:background="@color/white"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/view" />-->
+
+<!--                <View-->
+<!--                    android:id="@+id/view2"-->
+<!--                    android:layout_width="1dp"-->
+<!--                    android:layout_height="0dp"-->
+<!--                    android:background="#f2f2f2"-->
+<!--                    app:layout_constraintBottom_toBottomOf="@+id/user_avatar"-->
+<!--                    app:layout_constraintEnd_toStartOf="@+id/article_time"-->
+<!--                    app:layout_constraintStart_toEndOf="@+id/user_avatar"-->
+<!--                    app:layout_constraintTop_toTopOf="@+id/user_avatar" />-->
+
+
+
+<!--                <TextView-->
+<!--                    android:id="@+id/username_tv"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="12dp"-->
+<!--                    android:text="@{data.nickname}"-->
+<!--                    app:vip_text_color = "@{data.isVip}"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textSize="16sp"-->
+<!--                    app:layout_constraintStart_toEndOf="@+id/user_avatar"-->
+<!--                    app:layout_constraintTop_toTopOf="@+id/user_avatar" />-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/article_time"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="8dp"-->
+<!--                    android:text="@{`发表于 `+data.createTime}"-->
+<!--                    android:textSize="12sp"-->
+<!--                    app:layout_constraintStart_toStartOf="@+id/username_tv"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/username_tv" />-->
+
+<!--                <ImageView-->
+<!--                    android:id="@+id/imageView2"-->
+<!--                    android:layout_width="18dp"-->
+<!--                    android:layout_height="12dp"-->
+<!--                    android:layout_marginStart="12dp"-->
+<!--                    android:background="@mipmap/ic_look"-->
+<!--                    app:layout_constraintBottom_toBottomOf="@+id/article_time"-->
+<!--                    app:layout_constraintStart_toEndOf="@+id/article_time"-->
+<!--                    app:layout_constraintTop_toTopOf="@+id/article_time" />-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/textView4"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="6dp"-->
+<!--                    android:text="@{data.viewCount +``}"-->
+<!--                    android:textSize="12sp"-->
+<!--                    app:layout_constraintBottom_toBottomOf="@+id/article_time"-->
+<!--                    app:layout_constraintStart_toEndOf="@+id/imageView2"-->
+<!--                    app:layout_constraintTop_toTopOf="@+id/article_time" />-->
+
+<!--                <View-->
+<!--                    android:id="@+id/view3"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="6dp"-->
+<!--                    android:layout_marginTop="12dp"-->
+<!--                    android:background="#f2f2f2"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/user_avatar" />-->
+
+        <WebView
+            android:id="@+id/wv_article"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/white"
+            android:fadingEdge="none"
+            android:minHeight="200dp"
+            android:overScrollMode="never"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/top_bar_ll" />
+
+<!--                <LinearLayout-->
+<!--                    android:id="@+id/linearLayout4"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="48dp"-->
+<!--                    android:gravity="center"-->
+<!--                    android:background="@color/white"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/wv_article">-->
+
+<!--                    <LinearLayout-->
+<!--                        android:id="@+id/ll_zan_container"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:paddingHorizontal= "4dp"-->
+<!--                        android:background="@drawable/gray_boroad_bg"-->
+<!--                        android:gravity="center_vertical">-->
+
+<!--                        <ImageView-->
+<!--                            android:id="@+id/zan_iv"-->
+<!--                            android:layout_width="20dp"-->
+<!--                            android:layout_height="20dp"-->
+<!--                            android:layout_marginStart="6dp"-->
+<!--                            android:background="@mipmap/zan_grey_feidian3" />-->
+
+<!--                        <TextView-->
+<!--                            android:id="@+id/zan_tv"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_margin="6dp"-->
+<!--                            android:text="@{data.thumbUp==0?`赞`:data.thumbUp+``}"-->
+<!--                            android:textSize="16sp" />-->
+
+<!--                    </LinearLayout>-->
+
+
+<!--                    <LinearLayout-->
+<!--                        android:id="@+id/ll_collect_container"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginStart="12dp"-->
+<!--                        android:paddingHorizontal= "4dp"-->
+<!--                        android:background="@drawable/gray_boroad_bg"-->
+<!--                        android:gravity="center_vertical">-->
+
+<!--                        <ImageView-->
+<!--                            android:id="@+id/collect_iv"-->
+<!--                            android:layout_width="20dp"-->
+<!--                            android:layout_height="20dp"-->
+<!--                            android:layout_marginStart="6dp"-->
+<!--                            android:background="@mipmap/ic_collect" />-->
+
+<!--                        <TextView-->
+<!--                            android:id="@+id/collect_tv"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_margin="6dp"-->
+<!--                            android:layout_marginHorizontal="20dp"-->
+<!--                            android:layout_marginStart="6dp"-->
+<!--                            android:text="收藏"-->
+<!--                            android:textSize="16sp" />-->
+
+<!--                    </LinearLayout>-->
+
+
+<!--                    <LinearLayout-->
+<!--                        android:id="@+id/ll_reward_container"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginStart="12dp"-->
+<!--                        android:paddingHorizontal= "4dp"-->
+<!--                        android:background="@drawable/gray_boroad_bg"-->
+<!--                        android:gravity="center_vertical">-->
+
+<!--                        <ImageView-->
+<!--                            android:layout_width="20dp"-->
+<!--                            android:layout_height="20dp"-->
+<!--                            android:layout_marginStart="6dp"-->
+<!--                            android:background="@mipmap/ic_reward" />-->
+
+<!--                        <TextView-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_margin="6dp"-->
+<!--                            android:layout_marginHorizontal="20dp"-->
+<!--                            android:layout_marginStart="6dp"-->
+<!--                            android:text="打赏"-->
+<!--                            android:textSize="16sp" />-->
+
+<!--                    </LinearLayout>-->
+
+<!--                </LinearLayout>-->
+
+<!--                <androidx.recyclerview.widget.RecyclerView-->
+<!--                    android:id="@+id/rv_reward"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="20dp"-->
+<!--                    android:background="@color/white"-->
+<!--                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />-->
+
+<!--                <View-->
+<!--                    android:id="@+id/diver_1"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="36dp"-->
+<!--                    android:background="@color/diver_line_color"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/rv_reward" />-->
+
+<!--                <androidx.recyclerview.widget.RecyclerView-->
+<!--                    android:id="@+id/rv_comment"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:overScrollMode="never"-->
+<!--                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/diver_1" />-->
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+<!--        </com.coder.zt.sobblog.ui.view.WebViewScrollView>-->
+
+<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
+</layout>

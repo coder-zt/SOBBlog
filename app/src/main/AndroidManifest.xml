@@ -27,18 +27,18 @@
             android:value="2.2" />
 
         <activity android:name="com.coder.zt.sobblog.demo.ArticleDemoActivity">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
-        </activity>
-        <activity android:name=".ui.activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".ui.activity.MainActivity">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
         </activity>
         <activity android:name=".ui.activity.LoginActivity" >
 <!--            <intent-filter>-->
@@ -62,6 +62,7 @@
         <activity android:name=".ui.activity.PictureBrowseActivity" />
         <activity android:name=".ui.activity.InteractMessageActivity" />
         <activity android:name=".ui.activity.MomentDetailActivity" />
+        <activity android:name=".ui.activity.BlogArticleTestActivity" />
     </application>
 
 </manifest>
