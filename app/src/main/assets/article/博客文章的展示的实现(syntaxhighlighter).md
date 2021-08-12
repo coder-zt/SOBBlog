@@ -351,6 +351,16 @@ syntaxhighlighter的资源下已经提供很多语言类型和文章主题，但
 
 2. 拓展语言类型-以kotlin为例
 
+    syntaxhighlighter的基础资源中已经支持了很多语言类型，而最新的库版本时2016年发布的，所以没有kotlin很正常，当时我也不知到会踏入安卓的大门，哈哈，基础资源支持的语言类型如下：
 
     ![](https://images.sunofbeaches.com/content/2021_08_12/875431897491046400.png)
 
+    打开一种语言的js文件可以发现其实就是简单编写配置：
+    
+    1. 修改function Brush()下的keywords也就是该种语言的关键字
+    2. 修改function Brush()下的regexList，这个列表使是使用正则表达式取匹配注解、注释、变量等等，然后再与类名相关联，实现css对代码中的特殊字符的渲染
+    3. 修改Bursh.aliases：该属性的值是一个列表，要匹配代码类型的名称
+
+3. 交互优化
+
+### 拿来吧你

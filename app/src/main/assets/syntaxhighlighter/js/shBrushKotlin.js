@@ -23,7 +23,7 @@
 			{ regex: /(?!\@interface\b)\@[\$\w]+\b/g,					css: 'color1' },		// annotation @anno
 			{ regex: /\@interface\b/g,									css: 'color2' },		// @interface keyword
 			{ regex: new RegExp(this.getKeywords(keywords), 'gm'),		css: 'keyword' },		// kotlin keyword
-			{ regex:  /(?<=fun )([a-z]+([A-Z][a-z]+)?)/g,		css: 'function' }		// kotlin function
+			{ regex:  /(?<=fun )([a-z]+([A-Z][a-z]+)*)/g,		css: 'function' }		// kotlin function
 			];
 
 		this.forHtmlScript({
