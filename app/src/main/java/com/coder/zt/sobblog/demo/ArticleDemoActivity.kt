@@ -37,7 +37,6 @@ class ArticleDemoActivity :BaseActivity<ActivityDemoBinding>() {
         articleViewModel.articleDetail.observe(this){
             val htmlContent = handleHtmlContent(it.content)
             dataBinding.wvArticle.loadDataWithBaseURL("file:///android_asset/",htmlContent, "text/html", "utf-8", null)
-
         }
     }
 

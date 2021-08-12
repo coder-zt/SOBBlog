@@ -144,7 +144,7 @@ syntaxhighlighter这个库是我再搜索highlight库过程中找到的，因为
 
 ### 适配网站博客文章
 
-1. 首先时html的模板，先引用js、css资源，和编写额为的自定义样式的css属性和一些js代码供后面拓展，如下：
+1. 首先是html的模板，先引用js、css资源，和编写额为的自定义样式的css属性和一些js代码供后面拓展，如下：
 
 ```html
 <html lang="en">
@@ -296,3 +296,59 @@ syntaxhighlighter这个库是我再搜索highlight库过程中找到的，因为
         }
     }
     ```
+
+3. 适配文章后的结果如下：
+
+    ![](https://images.sunofbeaches.com/content/2021_08_12/875376583227998208.jpg)
+
+### 自定义样式、拓展语言类型、交互优化
+
+syntaxhighlighter的资源下已经提供很多语言类型和文章主题，但是与网站的文章样式的差异较大，并且还不支持kotlin代码的渲染
+
+1. 自定义样式
+
+    打开资源中css文件，内容就是代码块的样式属性，但是里面某些类名的意思不是很清楚的，所以需要获取webview中的网页源代码，查看代码发生了什么变化，并且可以直接找到css中的类名修饰了那些html代码
+
+    获取webview中的网页源代码：
+
+    ```kotlin
+       class DemoJsApi {
+
+            companion object{
+                private const val TAG = "DemoJsApi"
+            }
+
+            @JavascriptInterface
+            fun printPageSource(html: String?) {
+                Log.d(TAG, "pageSource: $html")
+                saveHtml(html!!)
+            }
+
+            private fun saveHtml(html: String) {
+                val f = File("data/data/com.coder.zt.sobblog/result.html")
+                if (!f.exists()) {
+                    f.createNewFile()
+                }
+                val fos = FileOutputStream(f)
+                val input = OutputStreamWriter(BufferedOutputStream(fos))
+                val bfReader = BufferedWriter(input)
+                bfReader.write(html)
+                bfReader.flush()
+                bfReader.close()
+            }
+        }
+    ```
+
+    ```kotlin
+        //为webview设置js接口
+        dataBinding.wvArticle.addJavascriptInterface(DemoJsApi(), "androidApi")
+        //调用js代码获取webview中的网页源代码
+        dataBinding.btnSource.setOnClickListener{
+            dataBinding.wvArticle.loadUrl("javascript:window.androidApi.printPageSource('<head>'+document.getElementsByTagName('html')[0].innerHTML+'</head>');")
+        }
+    ```
+    获取网页源代码后，通过比较网页源代码中的类名即可知道css中各个类名修饰的作用，接着结合自己所需要的主题编辑自己的主题css文件
+
+2. 拓展语言类型-以kotlin为例
+
+    ![](https://images.sunofbeaches.com/content/2021_08_12/875431897491046400.png)

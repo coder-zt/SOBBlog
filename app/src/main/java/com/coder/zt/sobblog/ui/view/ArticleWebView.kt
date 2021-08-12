@@ -151,7 +151,7 @@ class ArticleWebView(context: Context, attrs: AttributeSet):WebView(context, att
     }
 
     private fun getTestHtml(fileNme:String):String{
-        val input = InputStreamReader(resources.assets.open("$fileNme.html"))
+        val input = InputStreamReader(resources.assets.open("syntaxhighlighter/html/$fileNme.html"))
         val bfReader = BufferedReader(input)
         val sbHtml = StringBuilder()
         var line = ""
