@@ -5,13 +5,13 @@
 
 	function Brush()
 	{
-		var keywords =	'abstract assert boolean break byte case catch char class const ' +
-						'continue default do double else enum extends ' +
-						'false final finally float for goto if implements import ' +
-						'instanceof int interface long native new null ' +
+		var keywords =	'abstract assert boolean break byte catch char class const ' +
+						'continue default else enum extends ' +
+						'false final finally float for if implements import ' +
+						'interface long native new null is init by lazy ' +
 						'package private protected public return ' +
 						'short static strictfp super switch synchronized this throw throws true ' +
-						'transient try void volatile when val var let apply run with fun';
+						'transient try void volatile when val var let apply run with fun override';
 
 		this.regexList = [
 			{ regex: SyntaxHighlighter.regexLib.singleLineCComments,	css: 'comments' },		// one line comments
@@ -22,7 +22,8 @@
 			{ regex: /\b([\d]+(\.[\d]+)?|0x[a-f0-9]+)\b/gi,				css: 'value' },			// numbers
 			{ regex: /(?!\@interface\b)\@[\$\w]+\b/g,					css: 'color1' },		// annotation @anno
 			{ regex: /\@interface\b/g,									css: 'color2' },		// @interface keyword
-			{ regex: new RegExp(this.getKeywords(keywords), 'gm'),		css: 'keyword' }		// java keyword
+			{ regex: new RegExp(this.getKeywords(keywords), 'gm'),		css: 'keyword' },		// kotlin keyword
+			{ regex:  /(?<=fun )([a-z]+([A-Z][a-z]+)?)/g,		css: 'function' }		// kotlin function
 			];
 
 		this.forHtmlScript({

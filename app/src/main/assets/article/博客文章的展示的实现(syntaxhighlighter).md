@@ -351,4 +351,6 @@ syntaxhighlighter的资源下已经提供很多语言类型和文章主题，但
 
 2. 拓展语言类型-以kotlin为例
 
+
     ![](https://images.sunofbeaches.com/content/2021_08_12/875431897491046400.png)
+
