@@ -123,6 +123,6 @@ class ArticleDemoActivity :BaseActivity<ActivityDemoBinding>() {
 
     override fun onResume() {
         super.onResume()
-        articleViewModel.getArticleDetail("1418562537657585666")
+        articleViewModel.getArticleDetail("1426061714838867969")
     }
 }

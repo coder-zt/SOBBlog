@@ -95,4 +95,6 @@ dependencies {
     //app内升级
     implementation 'com.github.xuexiangjys:XUpdate:2.0.8'
     implementation 'com.zhy:okhttputils:2.6.2'
+    //volley
+    implementation 'com.android.volley:volley:1.2.0'
 }

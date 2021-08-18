@@ -27,6 +27,7 @@ class WebViewScrollView(context: Context, attrs: AttributeSet):NestedScrollView(
     }
 
     lateinit var callback:(isBottom:Boolean)-> Unit
+
     fun setOverScrollListener(listener:(isBottom:Boolean)-> Unit){
         callback = listener
     }

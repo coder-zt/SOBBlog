@@ -1,10 +1,7 @@
 package com.coder.zt.sobblog.ui.view.webwiew
 
-import android.app.Activity
-import android.util.Log
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import com.coder.zt.sobblog.utils.AppRouter
 
 class ArticleWebViewClient():WebViewClient() {
 

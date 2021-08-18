@@ -1,9 +1,13 @@
 package com.coder.zt.sobblog.ui.adapter
 
+import android.os.Build
+import android.text.Html
+import android.text.Spanned
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,6 +20,7 @@ import com.coder.zt.sobblog.databinding.RvMoyuBinding
 import com.coder.zt.sobblog.model.datamanager.UserDataMan
 import com.coder.zt.sobblog.model.moyu.MYComment
 import com.coder.zt.sobblog.model.moyu.MiniFeed
+import com.coder.zt.sobblog.utils.EmojiImageGetter
 import com.coder.zt.sobblog.utils.ScreenUtils
 
 /**
@@ -163,12 +168,19 @@ class MoYuAdapter(val callback:(code:DOTYPE, data:Any) -> Unit): RecyclerView.Ad
         private var showExpansion = false
         private var requestComment = false
         private lateinit var adapter:ArticleCommentAdapter
-        fun setData(miniFeed: MiniFeed, position: Int,listener:()->Unit,callback:(code:DOTYPE, data:Any) -> Unit) {
+        @RequiresApi(Build.VERSION_CODES.N)
+        fun setData(miniFeed: MiniFeed, position: Int, listener:()->Unit, callback:(code:DOTYPE, data:Any) -> Unit) {
             requestComment = false
             showExpansion = false
             inflate.rvComment.visibility = View.GONE
             inflate.triangleView.visibility = View.GONE
             inflate.data = miniFeed
+            Log.d(TAG, "setData: ${miniFeed.content}")
+//            inflate.tvContent.text = Html.fromHtml(miniFeed.content)
+
+            val sp = Html.fromHtml(miniFeed.content,0, EmojiImageGetter(inflate.tvContent.context, 2), null)
+            inflate.tvContent.text = sp
+
             //展示评论、点赞数量
             val userId = UserDataMan.getUserInfo()?.id
             if(miniFeed.thumbUpList.contains(userId)){

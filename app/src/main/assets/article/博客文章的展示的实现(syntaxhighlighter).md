@@ -117,7 +117,7 @@ syntaxhighlighter这个库是我再搜索highlight库过程中找到的，因为
         <link rel="stylesheet" type="text/css" href="SyntaxHighlighter/css/shCore.css">
         <link rel="stylesheet" type="text/css" href="SyntaxHighlighter/css/shThemeDjango.css">
     ```
-    3. 加载js文件时必须要加载`XRegExp.js`、`shCore.js`两个js文件且`XRegExp.js需要加载在前面`和对应的不同语言类型的文件，语言类型的文件也可以自定义
+    3. 加载js文件时必须要加载`XRegExp.js`、`shCore.js`两个js文件和对应的不同语言类型的文件，语言类型的文件也可以自定义
     
     ```html
         <script type="text/javascript" src="SyntaxHighlighter/js/XRegExp.js"></script>
@@ -299,7 +299,7 @@ syntaxhighlighter这个库是我再搜索highlight库过程中找到的，因为
 
 3. 适配文章后的结果如下：
 
-    ![](https://images.sunofbeaches.com/content/2021_08_12/875376583227998208.jpg)
+    ![](https://images.sunofbeaches.com/content/2021_08_13/875698149857951744.png)
 
 ### 自定义样式、拓展语言类型、交互优化
 
@@ -363,4 +363,126 @@ syntaxhighlighter的资源下已经提供很多语言类型和文章主题，但
 
 3. 交互优化
 
+    界面中只用WebView的时候，在代码块左右滑动是没有问题的，但是我们如果要做打赏列表、评论内容的时候，我们就得把WebView、RecyclerView放在NestedScrollView中，这样就会导致代码块左右滑动与NestedScrollView的上下滑动存在冲突，我的方案如下：
+
+    1. 为代码块设置触摸的监听事件，可以在模板html中看到，代码如下：
+
+    ```js
+        // 给代码块设置监听事件，当点击时通知给ktolin
+            function onTouchStart(e) {
+                androidApi.touchEvent(0);
+            }
+
+            function onTouchEnd(e) {
+                androidApi.touchEvent(2);
+            }
+
+            function onTouchMove(e) {
+            androidApi.touchEvent(1);
+            }
+            //
+            function addTouchListener() {
+                var dom = document.getElementsByClassName('code');
+                androidApi.log(dom.length);
+                for (i in dom){
+                    dom[i].addEventListener('touchstart', onTouchStart, false);
+                    dom[i].addEventListener('touchmove', onTouchMove, false);
+                    dom[i].addEventListener('touchend', onTouchEnd, false);
+                }
+            }
+    ```
+
+        等待WebView加载完毕，调用js方法，为代码块添加监听事件
+
+    ```kotlin
+        //重写WebViewClient的子方法
+        override fun onPageFinished(view: WebView?, url: String?) {
+            super.onPageFinished(view, url)
+            view?.loadUrl("javascript:addTouchListener()")
+        }
+    ```
+
+    2. 通过回调的事件来分发触摸事件：
+
+
+    ```kotlin
+        //JsApi：接收js的回调
+        @JavascriptInterface
+        fun touchEvent(eventCode: Int) {
+            Log.d(TAG, "touchEvent: $eventCode")
+            when(eventCode){
+                0 -> callback.invoke(EventCode.Event_DOWN)
+                1 -> callback.invoke(EventCode.Event_MOVE)
+                2 -> callback.invoke(EventCode.Event_UP)
+            }
+        }
+
+        //重写WebView的子类：wbsv是重写的NestedScrollView,控制其是否可以滑动
+        addJavascriptInterface(JsApi(){
+            when(it){
+                JsApi.EventCode.Event_UP->{
+                    wbsv?.setSlide(true)
+                }
+                JsApi.EventCode.Event_MOVE->{
+                    wbsv?.setSlide(slideDir)
+                }
+                JsApi.EventCode.Event_DOWN->{
+                    wbsv?.setSlide(slideDir )
+                }
+            }
+        }, "androidApi") //AndroidtoJS类对象映射到js的test对象
+
+        //重写WebView的子类：判断WebView的触摸事件，判断是否恢复NestedScrollView的滑动
+        override fun onTouchEvent(event: MotionEvent?): Boolean {
+            event?.let {
+                val currentX =event.x
+                val currentY = event.y
+                    when (event.action) {
+                        MotionEvent.ACTION_DOWN -> {
+                            startX = currentX
+                            startY = currentY
+                        }
+                        MotionEvent.ACTION_MOVE -> {
+                            slideDir = kotlin.math.abs(currentX - startX) <= kotlin.math.abs(currentY - startY)
+                        }
+                        MotionEvent.ACTION_UP -> {
+                        }
+                        else -> {
+                        }
+                    }
+            }
+            return super.onTouchEvent(event)
+        }
+    ```
+    
+4. WebView中的链接处理
+
+    ```kotlin
+        /**
+            * 重写WebViewClient的此方法，即可使WebView不再跳转
+            */
+        override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
+            url?.let {
+                callback.invoke(it)
+            }
+            return true
+        }
+    ```
+    
+通过上面的处理就可以解决代码块的滑动浏览问题了，到这里自定义样式、拓展语言类型、交互优化就结束了，这其中肯定还有待优化的地方，待以后结合实际使用体验慢慢进行优化处理。
+
 ### 拿来吧你
+
+- 项目地址：https://github.com/coder-zt/SOBBlog
+- 相关类：
+
+    - [ArticleWebView](https://github.com/coder-zt/SOBBlog/blob/master/app/src/main/java/com/coder/zt/sobblog/ui/view/ArticleWebView.kt)
+    - [ArticleWebViewClient](https://github.com/coder-zt/SOBBlog/blob/master/app/src/main/java/com/coder/zt/sobblog/ui/view/webwiew/ArticleWebViewClient.kt)
+    - [JsApi](https://github.com/coder-zt/SOBBlog/blob/master/app/src/main/java/com/coder/zt/sobblog/ui/view/webwiew/JsApi.kt)
+- 相关资源：https://github.com/coder-zt/SOBBlog/tree/master/app/src/main/assets/syntaxhighlighter
+
+只需要将上面几个类和JS库的相关资源搬到自己项目中然后使用`ArticleWebView.loadArticle(content)`即可实现对博客文章的渲染
+
+### 总结
+
+    这篇文章刚好是我在这里发布的第10篇文章，由于中途去做了其他事，所以比预期发布时间晚了很多。这篇文章篇幅还是挺多的，但是可能还是有些地方还有待补充，欢迎同学们一起交流学习！

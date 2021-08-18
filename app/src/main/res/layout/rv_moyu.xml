@@ -47,7 +47,7 @@
             android:textSize="12sp"
             app:time_text = "@{data.createTime}"
             app:layout_constraintBottom_toBottomOf="@+id/textView"
-            app:layout_constraintEnd_toEndOf="@+id/textView2"
+            app:layout_constraintEnd_toEndOf="@+id/tv_content"
             app:layout_constraintTop_toTopOf="@+id/textView" />
 
         <TextView
@@ -61,13 +61,12 @@
             app:layout_constraintTop_toBottomOf="@+id/textView" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/tv_content"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="36dp"
-            android:text="@{data.content, default=`测试内容`}"
             android:textColor="@color/black"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -79,10 +78,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            app:layout_constraintEnd_toEndOf="@+id/textView2"
+            app:layout_constraintEnd_toEndOf="@+id/tv_content"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/textView2"
-            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+            app:layout_constraintStart_toStartOf="@+id/tv_content"
+            app:layout_constraintTop_toBottomOf="@+id/tv_content" />
 
 
         <TextView
@@ -104,8 +103,8 @@
             android:layout_marginVertical="12dp"
             android:visibility="@{(data.linkTitle.length() == 0||data.linkUrl.length() == 0)?8:0}"
             android:background="@drawable/bule_boroad_bg"
-            app:layout_constraintEnd_toEndOf="@+id/textView2"
-            app:layout_constraintStart_toStartOf="@+id/textView2"
+            app:layout_constraintEnd_toEndOf="@+id/tv_content"
+            app:layout_constraintStart_toStartOf="@+id/tv_content"
             app:layout_constraintTop_toBottomOf="@+id/topic_tv">
 
 
