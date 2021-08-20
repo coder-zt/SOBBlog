@@ -1,10 +1,13 @@
 package com.coder.zt.sobblog.utils
 
 import android.graphics.Color
+import android.os.Build
+import android.text.Html
 import android.view.Gravity
 import android.view.LayoutInflater
 
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import com.coder.zt.sobblog.R
 import com.coder.zt.sobblog.SOBApp
@@ -35,6 +38,7 @@ class ToastUtils {
         }
 
         //普通Toast展示
+        @RequiresApi(Build.VERSION_CODES.N)
         fun show(msg:String, error: Boolean){
             val toast = Toast(SOBApp._context)
             toast.setGravity(Gravity.CENTER_HORIZONTAL or Gravity.TOP, 0, ScreenUtils.dp2px(60))
@@ -44,7 +48,8 @@ class ToastUtils {
                 R.layout.toast_content_view, null, false
             )
             //内容
-            inflate.tvContent.text = msg
+            val sp = Html.fromHtml(msg,0, SOBApp._context?.let { EmojiImageGetter(it, 2) }, null)
+            inflate.tvContent.text = sp
             if(error){
                 //背景
                 inflate.llContainer.setBackgroundResource(R.drawable.toast_error_bg)

@@ -2,6 +2,7 @@ package com.coder.zt.sobblog.ui.adapter
 
 import android.os.Build
 import android.text.Html
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
@@ -22,6 +23,7 @@ class EmojiAdapter(val callback:(emojiUrl:String)->Unit) : RecyclerView.Adapter<
             val content = "<span><img src=\"https://cdn.sunofbeaches.com/emoji/${position + 1}.png\"></span>"
             val sp = Html.fromHtml(content,0, EmojiImageGetter(databind.tvEmoji.context, 3), null)
             databind.tvEmoji.text = sp
+
         }
 
     }

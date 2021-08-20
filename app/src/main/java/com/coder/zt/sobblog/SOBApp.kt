@@ -67,7 +67,7 @@ class SOBApp:Application() {
 
         private const val TAG = "SOBApp"
 
-        var _context: Application? = null
+        var _context: Context? = null
         fun getContext(): Context {
             return _context!!
         }
