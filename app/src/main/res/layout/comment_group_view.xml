@@ -63,7 +63,7 @@
         android:layout_height="54dp"
         android:padding="10dp"
         android:layout_marginBottom="20dp"
-        android:background="@color/theme_red"
+        android:background="#20ff0022"
         android:src="@drawable/picture_icon_delete"
         app:layout_constraintBottom_toBottomOf="@+id/rv_emoji"
         app:layout_constraintEnd_toEndOf="@+id/rv_emoji" />

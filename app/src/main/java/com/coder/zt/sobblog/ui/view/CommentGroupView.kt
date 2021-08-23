@@ -29,6 +29,11 @@ companion object{
 }
 
     private val editContentList = mutableListOf<String>()
+    private val adapter = EmojiAdapter(){
+        editContentList.add(it)
+        val sp = Html.fromHtml(it,0, EmojiImageGetter(context, 2), null)
+        commentInputEt.text.insert(commentInputEt.selectionEnd, sp)
+    }
     val contentView: View by lazy {
         LayoutInflater.from(context).inflate(R.layout.comment_group_view, this)
     }
@@ -52,11 +57,7 @@ companion object{
         init {
 //            rvEmoji.visibility = View.GONE
             rvEmoji.layoutManager = GridLayoutManager(context, 8)
-            rvEmoji.adapter = EmojiAdapter(){
-                editContentList.add(it)
-                val sp = Html.fromHtml(it,0, EmojiImageGetter(context, 2), null)
-                commentInputEt.text.insert(commentInputEt.selectionEnd, sp)
-            }
+            rvEmoji.adapter = adapter
             commentInputEt.addTextChangedListener(object: TextWatcher {
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                     Log.d(TAG, "beforeTextChanged: ${s?.length}")
@@ -103,21 +104,7 @@ companion object{
                 Log.d(TAG, "emoji recyclerView is slide: ${rvEmoji.childCount}")
                 val deletePosition = IntArray(2)
                 ivDeleteBtn.getLocationInWindow(deletePosition)
-                Log.d(TAG, "location delete is :(${deletePosition[0]}, ${deletePosition[1]}) ")
-                for(i in 0 until rvEmoji.childCount){
-                    if(i % 8 >= 6){
-                        Log.d(TAG, "i is $i ")
-                        val childView = rvEmoji.getChildAt(i)
-                        val position = IntArray(2)
-                        childView.getLocationInWindow(position)
-                        if(position[0] > deletePosition[0] && position[1] > deletePosition[1]){
-                            childView.visibility = View.GONE
-                        }else{
-                            childView.visibility = View.VISIBLE
-                        }
-                        Log.d(TAG, "location is :(${position[0]}, ${position[1]}) ")
-                    }
-                }
+                adapter.hideBottomRightIocn(deletePosition)
             }
         }
 
