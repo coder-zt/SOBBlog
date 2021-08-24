@@ -26,7 +26,7 @@ class EmojiView(context: Context, attrs: AttributeSet): TextView(context, attrs)
  }
 
     fun onSlide(deletePosition: IntArray):Float {
-        if(index != -1 && index % 8 >= 6){
+        if(index != -1 && (index - 1) % 8 >= 6){
             getLocationInWindow(position)
             val distance = (deletePosition[1] - position[1]) * 2
             val alpha = when {

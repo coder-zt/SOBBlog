@@ -21,6 +21,10 @@ import com.coder.zt.sobblog.R
 import com.coder.zt.sobblog.ui.adapter.EmojiAdapter
 import com.coder.zt.sobblog.utils.EmojiImageGetter
 import com.coder.zt.sobblog.utils.ToastUtils
+import com.scwang.smart.refresh.footer.ClassicsFooter
+import com.scwang.smart.refresh.header.ClassicsHeader
+import com.scwang.smart.refresh.layout.SmartRefreshLayout
+import java.lang.Math.abs
 
 @RequiresApi(Build.VERSION_CODES.N)
 class CommentGroupView(context: Context, attrs: AttributeSet):  ConstraintLayout(context, attrs)    {
@@ -53,10 +57,12 @@ companion object{
         val ivDeleteBtn:ImageView by lazy {
                     contentView.findViewById(R.id.iv_delete)
                 }
+    val refreshLayout: SmartRefreshLayout by lazy {
+        contentView.findViewById(R.id.srl_container)
+    }
 
         init {
-//            rvEmoji.visibility = View.GONE
-            rvEmoji.layoutManager = GridLayoutManager(context, 8)
+            rvEmoji.layoutManager = GridLayoutManager(context, 8, GridLayoutManager.VERTICAL, false)
             rvEmoji.adapter = adapter
             commentInputEt.addTextChangedListener(object: TextWatcher {
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -101,10 +107,20 @@ companion object{
                 rvEmoji.visibility = View.VISIBLE
             }
             rvEmoji.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
-                Log.d(TAG, "emoji recyclerView is slide: ${rvEmoji.childCount}")
+                Log.d(TAG, "emoji recyclerView is slide: $scrollX  $oldScrollX")
                 val deletePosition = IntArray(2)
                 ivDeleteBtn.getLocationInWindow(deletePosition)
-                adapter.hideBottomRightIocn(deletePosition)
+                    if(kotlin.math.abs(scrollX) > 0){
+                        adapter.hideBottomRightIcon(deletePosition)
+                    }
+            }
+            refreshLayout.setHeaderHeight(60f)
+            refreshLayout.setFooterHeight(80f)
+            refreshLayout.setOnRefreshListener {
+                refreshLayout.finishRefresh()
+            }
+            refreshLayout.setOnLoadMoreListener {
+                refreshLayout.finishLoadMore()
             }
         }
 
