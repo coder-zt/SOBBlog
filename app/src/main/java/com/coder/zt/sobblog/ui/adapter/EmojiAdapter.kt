@@ -59,6 +59,7 @@ class EmojiAdapter(val callback:(emojiUrl:String)->Unit) : RecyclerView.Adapter<
             }
             holder.databind.root.setOnClickListener {
                 callback("<span><img src=\"https://cdn.sunofbeaches.com/emoji/${index}.png\"></span>")
+                EmojiDataMan.addRecentlyEmoji(index)
             }
             viewData.add(holder)
         }else if(holder is ViewTitle){
@@ -112,10 +113,9 @@ class EmojiAdapter(val callback:(emojiUrl:String)->Unit) : RecyclerView.Adapter<
                 "<span><img src=\"https://cdn.sunofbeaches.com/emoji/${position}.png\"></span>"
             val sp = Html.fromHtml(content, 0, EmojiImageGetter(databind.tvEmoji.context, 3), null)
             databind.tvEmoji.text = sp
-//            databind.tvEmoji.visibility = View.VISIBLE
 //            databind.tvEmoji.setBackgroundColor(Color.WHITE)
 //                val alpha = databind.tvEmoji.onSlide(deletePosition)
-//                databind.vCover.alpha = alpha
+                databind.vCover.alpha = 0f
         }
     }
 

@@ -1,5 +1,6 @@
 package com.coder.zt.sobblog.ui.view
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.Color
 import android.os.Build
@@ -10,10 +11,12 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -34,9 +37,12 @@ companion object{
 
     private val editContentList = mutableListOf<String>()
     private val adapter = EmojiAdapter(){
+        val insertIndex = commentInputEt.selectionStart
+        commentInputEt.text.delete(commentInputEt.selectionStart,commentInputEt.selectionEnd)
+
         editContentList.add(it)
         val sp = Html.fromHtml(it,0, EmojiImageGetter(context, 2), null)
-        commentInputEt.text.insert(commentInputEt.selectionEnd, sp)
+        commentInputEt.text.insert(insertIndex, sp)
     }
     val contentView: View by lazy {
         LayoutInflater.from(context).inflate(R.layout.comment_group_view, this)
@@ -104,16 +110,34 @@ companion object{
 
             })
             ivEmojiSwitch.setOnClickListener {
-                rvEmoji.visibility = View.VISIBLE
+                refreshLayout.visibility = View.VISIBLE
+                ivDeleteBtn.visibility = View.VISIBLE
             }
-            rvEmoji.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
-                Log.d(TAG, "emoji recyclerView is slide: $scrollX  $oldScrollX")
-                val deletePosition = IntArray(2)
-                ivDeleteBtn.getLocationInWindow(deletePosition)
-                    if(kotlin.math.abs(scrollX) > 0){
+            rvEmoji.addOnScrollListener(object: RecyclerView.OnScrollListener() {
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+                    Log.d(TAG, "onScrollStateChanged: ")
+                    rvEmoji.postDelayed(object:Runnable{
+                        override fun run() {
+                            val deletePosition = IntArray(2)
+                            ivDeleteBtn.getLocationInWindow(deletePosition)
+                            adapter.hideBottomRightIcon(deletePosition)
+                        }
+
+                    }, 200)
+
+                }
+
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    Log.d(TAG, "onScrolled: ")
+                    val deletePosition = IntArray(2)
+                    ivDeleteBtn.getLocationInWindow(deletePosition)
+                    if(kotlin.math.abs(dy) > 0){
                         adapter.hideBottomRightIcon(deletePosition)
                     }
-            }
+                }
+            })
             refreshLayout.setHeaderHeight(60f)
             refreshLayout.setFooterHeight(80f)
             refreshLayout.setOnRefreshListener {
@@ -135,6 +159,7 @@ companion object{
         }
 
         private fun deleteContent(start: Int, before: Int) {
+            Log.d(TAG, "deleteContent: $start -> $before")
             for ( index in start until before ){
                 editContentList.removeAt(start)
             }
@@ -149,5 +174,12 @@ companion object{
             }
 
         }
+
+
+    private lateinit var mActivity: Activity
+
+    fun setActivity(activity:Activity){
+        mActivity = activity
+    }
 
 }

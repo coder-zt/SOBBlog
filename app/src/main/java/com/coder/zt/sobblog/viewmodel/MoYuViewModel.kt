@@ -124,7 +124,7 @@ companion object{
 
     
     private fun compressPicture(file: File, callback:(path:File)->Unit) {
-       Compress.with(SOBApp._context, file)
+       Compress.with(SOBApp.getContext(), file)
             .setQuality(70)
             .setCompressListener(object : CompressListener {
                 override fun onStart() {

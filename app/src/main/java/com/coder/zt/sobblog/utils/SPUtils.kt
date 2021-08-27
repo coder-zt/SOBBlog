@@ -28,7 +28,7 @@ class SPUtils {
     }
 
     val sp by lazy {
-        SOBApp._context?.getSharedPreferences(Constants.SP_NAME,Context.MODE_PRIVATE)
+        SOBApp.getContext().getSharedPreferences(Constants.SP_NAME,Context.MODE_PRIVATE)
     }
 
     fun save(key:String, value:String){
@@ -37,8 +37,12 @@ class SPUtils {
         edit?.apply()
     }
 
-    fun read(key: String):String?{
-        return sp?.getString(key, "")
+    fun read(key: String): String {
+        var value = ""
+        sp.getString(key, "")?.let {
+            value = it
+        }
+        return value
     }
 
     fun saveObject(key:String, obj:Any) {
@@ -68,8 +72,8 @@ class SPUtils {
     fun readList(key:String):List<String>{
         val values = read(key)
         val result = mutableListOf<String>()
-        values?.let {
-            val splitStrs = it.split(Constants.SPLIT_SIGN)
+        if(values.isEmpty()){
+            val splitStrs = values.split(Constants.SPLIT_SIGN)
             for (splitStr in splitStrs) {
                 result.add(splitStr)
             }

@@ -48,7 +48,7 @@ class AndroidBug5497Workaround(val activity: Activity) {
                 frameLayoutParams!!.height = usableHeightSansKeyboard - heightDifference + 96
             } else {
                 Log.d(TAG, "possiblyResizeChildOfContent: 小于等于")
-                frameLayoutParams!!.height = usableHeightSansKeyboard - StatusBarUtil.getNavigationBarHeight(SOBApp._context)
+                frameLayoutParams!!.height = usableHeightSansKeyboard - StatusBarUtil.getNavigationBarHeight(SOBApp.getContext())
             }
             mChildOfContent!!.requestLayout()
             usableHeightPrevious = usableHeightNow

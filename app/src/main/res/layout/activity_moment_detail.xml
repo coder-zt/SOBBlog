@@ -349,6 +349,13 @@
 
         </androidx.core.widget.NestedScrollView>
 
-
+        <com.coder.zt.sobblog.ui.view.CommentGroupView
+            android:id="@+id/cgv_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

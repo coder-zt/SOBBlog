@@ -55,6 +55,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@+id/comment_bar_ll">
 
         <androidx.recyclerview.widget.RecyclerView
@@ -62,6 +63,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:letterSpacing="3"
+            android:background="@color/white"
             android:overScrollMode="never"/>
 
 
@@ -72,6 +74,7 @@
         android:layout_width="100dp"
         android:layout_height="54dp"
         android:padding="10dp"
+        android:visibility="gone"
         android:layout_marginBottom="20dp"
         android:background="#20ff0022"
         android:src="@drawable/picture_icon_delete"

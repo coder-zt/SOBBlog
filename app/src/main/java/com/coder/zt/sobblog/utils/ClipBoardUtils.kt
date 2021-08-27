@@ -10,7 +10,7 @@ object ClipBoardUtils {
         // 得到剪贴板管理器
         // 得到剪贴板管理器
         val cmb: ClipboardManager =
-            SOBApp._context?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            SOBApp.getContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         cmb.text = message.trim()
     }
 

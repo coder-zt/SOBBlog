@@ -3,6 +3,7 @@ package com.coder.zt.sobblog.ui.activity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.coder.zt.sobblog.R
@@ -15,6 +16,7 @@ import com.coder.zt.sobblog.ui.adapter.ArticleCommentAdapter
 import com.coder.zt.sobblog.ui.adapter.GridImagesAdapter
 import com.coder.zt.sobblog.ui.adapter.MoYuAdapter
 import com.coder.zt.sobblog.ui.base.BaseActivity
+import com.coder.zt.sobblog.utils.AndroidBug5497Workaround
 import com.coder.zt.sobblog.utils.AppRouter
 import com.coder.zt.sobblog.utils.ToastUtils
 import com.coder.zt.sobblog.utils.TransUtils
@@ -25,6 +27,12 @@ class MomentDetailActivity:BaseActivity<ActivityMomentDetailBinding>() {
     override fun getLayoutId() = R.layout.activity_moment_detail
 
     private lateinit var momentId:String
+    //动态的ID
+    lateinit var minifeedIdTemp:String
+    //回复评论的ID
+    private var commentIdTemp:String? = null
+    //被评论用户的ID
+    private var targetUserId:String? = null
 
     private val viewModel: MoYuViewModel by lazy{
         ViewModelProvider(this).get(MoYuViewModel::class.java)
@@ -33,6 +41,7 @@ class MomentDetailActivity:BaseActivity<ActivityMomentDetailBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initData()
+        AndroidBug5497Workaround.assistActivity(this)
     }
 
     private fun initData() {
@@ -59,10 +68,10 @@ class MomentDetailActivity:BaseActivity<ActivityMomentDetailBinding>() {
                                 getString(R.string.check_login_comment_tips)
                             )
                         ) {
-//                        minifeedIdTemp = any as String//动态id
-//                        targetUserId = ""//被评论者的ID
-//                        commentIdTemp = ""//评论ID
-//                        showCommentInput("")
+                        minifeedIdTemp = any as String//动态id
+                        targetUserId = ""//被评论者的ID
+                        commentIdTemp = ""//评论ID
+                        showCommentInput("")
                         }
                     }
                     MoYuAdapter.DOTYPE.REPLY -> {//回复评论
@@ -101,6 +110,12 @@ class MomentDetailActivity:BaseActivity<ActivityMomentDetailBinding>() {
         viewModel.feedComment.observe(this){
             setComment(it)
         }
+    }
+
+    private fun showCommentInput(toName: String) {
+        dataBinding.cgvComment.visibility = View.VISIBLE
+        val imm =  getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.showSoftInput(dataBinding.cgvComment, InputMethodManager.SHOW_IMPLICIT)
     }
 
     override fun onResume() {
