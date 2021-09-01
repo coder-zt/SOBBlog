@@ -38,31 +38,31 @@ companion object{
     private val editContentList = mutableListOf<String>()
     private val adapter = EmojiAdapter(){
         val insertIndex = commentInputEt.selectionStart
-        commentInputEt.text.delete(commentInputEt.selectionStart,commentInputEt.selectionEnd)
+        commentInputEt.text?.delete(commentInputEt.selectionStart,commentInputEt.selectionEnd)
 
         editContentList.add(it)
         val sp = Html.fromHtml(it,0, EmojiImageGetter(context, 2), null)
-        commentInputEt.text.insert(insertIndex, sp)
+        commentInputEt.text?.insert(insertIndex, sp)
     }
     val contentView: View by lazy {
         LayoutInflater.from(context).inflate(R.layout.comment_group_view, this)
     }
-        val rvEmoji:RecyclerView by lazy{
-            contentView.findViewById(R.id.rv_emoji)
-        }
-        val commentInputEt:EditText by lazy {
-            contentView.findViewById(R.id.comment_input_et)
-        }
-        val tvSendBtn:TextView by lazy {
-            contentView.findViewById(R.id.comment_send_tv)
-        }
-        val ivEmojiSwitch:ImageView by lazy {
-            contentView.findViewById(R.id.iv_emoji)
-        }
+    val rvEmoji:RecyclerView by lazy{
+        contentView.findViewById(R.id.rv_emoji)
+    }
+    val commentInputEt:KeybroadListenerEditText by lazy {
+        contentView.findViewById(R.id.comment_input_et)
+    }
+    val tvSendBtn:TextView by lazy {
+        contentView.findViewById(R.id.comment_send_tv)
+    }
+    val ivEmojiSwitch:ImageView by lazy {
+        contentView.findViewById(R.id.iv_emoji)
+    }
 
-        val ivDeleteBtn:ImageView by lazy {
-                    contentView.findViewById(R.id.iv_delete)
-                }
+    val ivDeleteBtn:ImageView by lazy {
+                contentView.findViewById(R.id.iv_delete)
+            }
     val refreshLayout: SmartRefreshLayout by lazy {
         contentView.findViewById(R.id.srl_container)
     }

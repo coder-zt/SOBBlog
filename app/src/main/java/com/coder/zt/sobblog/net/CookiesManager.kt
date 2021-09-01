@@ -1,12 +1,9 @@
 package com.coder.zt.sobblog.net
 
-import android.provider.SyncStateContract
 import android.util.Log
-import com.coder.zt.sobblog.BuildConfig
 import com.coder.zt.sobblog.utils.Constants
 import com.coder.zt.sobblog.utils.GsonUtils
 import com.coder.zt.sobblog.utils.SPUtils
-import com.google.gson.Gson
 import okhttp3.Cookie
 import okhttp3.CookieJar
 import okhttp3.HttpUrl
@@ -17,19 +14,21 @@ class CookiesManager : CookieJar {
     }
     private val cookieStoreBlog = HashMap<String, List<Cookie>>()
 
-    override fun saveFromResponse(httpUrl: HttpUrl, list: List<Cookie>) {
-        Log.d(TAG,"Response httpUrl:$httpUrl")
-        if (Constants.BASE_URL.contains(httpUrl.host)) {
-            cookieStoreBlog.put(Constants.BASE_URL, list)
+    override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {
+        Log.d(TAG,"Response httpUrl:$url")
+        if (Constants.BASE_URL.contains(url.host)) {
+            cookieStoreBlog.put(Constants.BASE_URL, cookies)
             val listStr = mutableListOf<String>()
-            for (cookie in list) {
+            for (cookie in cookies) {
                 listStr.add(GsonUtils.getInstance().toJson(cookie))
             }
             SPUtils.getInstance().saveList(Constants.BASE_URL, listStr)
+        }else{
+            Log.d(TAG,"saveFromResponse 未保存:${url.host}")
         }
     }
 
-    override fun loadForRequest(httpUrl: HttpUrl): List<Cookie> {
+    override fun loadForRequest(url: HttpUrl): List<Cookie> {
         val list = mutableListOf<Cookie>()
         if (!cookieStoreBlog[Constants.BASE_URL].isNullOrEmpty()) {
             return cookieStoreBlog[Constants.BASE_URL]!!
@@ -41,6 +40,7 @@ class CookiesManager : CookieJar {
             }
             list.add(GsonUtils.getInstance().fromJson(result,Cookie::class.java))
         }
+        Log.d(TAG, "loadForRequest: $list")
         return list
     }
 }

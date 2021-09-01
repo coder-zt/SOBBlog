@@ -15,7 +15,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <EditText
+        <com.coder.zt.sobblog.ui.view.KeybroadListenerEditText
             android:id="@+id/comment_input_et"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

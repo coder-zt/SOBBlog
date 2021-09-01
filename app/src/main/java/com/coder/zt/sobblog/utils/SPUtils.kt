@@ -1,10 +1,9 @@
 package com.coder.zt.sobblog.utils
 
 import android.content.Context
+import android.util.Log
 import com.coder.zt.sobblog.SOBApp
-import com.coder.zt.sobblog.repository.UserRepository
 import java.lang.StringBuilder
-import java.util.*
 
 class SPUtils {
 
@@ -66,15 +65,16 @@ class SPUtils {
             }
             toString()
         }
+        Log.d(TAG, "saveList: $value")
         save(key,value)
     }
 
     fun readList(key:String):List<String>{
         val values = read(key)
         val result = mutableListOf<String>()
-        if(values.isEmpty()){
-            val splitStrs = values.split(Constants.SPLIT_SIGN)
-            for (splitStr in splitStrs) {
+        if(values.isNotBlank()){
+            val splitStrings = values.split(Constants.SPLIT_SIGN)
+            for (splitStr in splitStrings) {
                 result.add(splitStr)
             }
         }
