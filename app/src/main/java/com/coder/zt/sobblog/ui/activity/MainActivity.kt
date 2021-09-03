@@ -14,6 +14,7 @@ import com.coder.zt.sobblog.ui.fragment.IndexFragment
 import com.coder.zt.sobblog.ui.fragment.MineFragment
 import com.coder.zt.sobblog.ui.fragment.DiscoveryFragment
 import com.coder.zt.sobblog.ui.fragment.OtherFragment
+import com.coder.zt.sobblog.utils.AndroidBug5497Workaround
 import com.coder.zt.sobblog.utils.Constants
 import com.coder.zt.sobblog.utils.ToastUtils
 import com.coder.zt.sobblog.viewmodel.UserViewModel
@@ -39,6 +40,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        AndroidBug5497Workaround.assistActivity(this)
         initView()
         initData()
     }

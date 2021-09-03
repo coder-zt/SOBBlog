@@ -3,6 +3,7 @@ package com.coder.zt.sobblog.ui.view
 import android.app.Activity
 import android.content.Context
 import android.graphics.Color
+import android.graphics.Rect
 import android.os.Build
 import android.text.Editable
 import android.text.Html
@@ -11,6 +12,7 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
@@ -29,7 +31,7 @@ import com.scwang.smart.refresh.header.ClassicsHeader
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import java.lang.Math.abs
 
-@RequiresApi(Build.VERSION_CODES.N)
+
 class CommentGroupView(context: Context, attrs: AttributeSet):  ConstraintLayout(context, attrs)    {
 companion object{
     private const val TAG = "CommentGroupView"
@@ -177,9 +179,25 @@ companion object{
 
 
     private lateinit var mActivity: Activity
-
+    private var oldDiff = 0
     fun setActivity(activity:Activity){
         mActivity = activity
+        val decorView = mActivity.window.decorView
+        decorView.viewTreeObserver.addOnGlobalLayoutListener(object:ViewTreeObserver.OnGlobalLayoutListener{
+            override fun onGlobalLayout() {
+                var rect: Rect = Rect()
+                decorView.getWindowVisibleDisplayFrame(rect)
+                rect?.let {
+                    val diff = decorView.rootView.height - rect.height()
+                    val open = diff > 200
+                    if(diff != oldDiff){
+                        Log.d(TAG, "onGlobalLayout: $open")
+                    }
+                }
+
+            }
+        }
+        )
     }
 
 }

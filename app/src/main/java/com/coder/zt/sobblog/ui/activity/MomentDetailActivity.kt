@@ -1,9 +1,11 @@
 package com.coder.zt.sobblog.ui.activity
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.coder.zt.sobblog.R
@@ -38,10 +40,17 @@ class MomentDetailActivity:BaseActivity<ActivityMomentDetailBinding>() {
         ViewModelProvider(this).get(MoYuViewModel::class.java)
     }
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initView()
         initData()
         AndroidBug5497Workaround.assistActivity(this)
+    }
+
+
+    private fun initView() {
+//        dataBinding.cgvComment.setActivity(this)
     }
 
     private fun initData() {

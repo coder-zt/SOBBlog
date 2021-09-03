@@ -27,6 +27,7 @@ class DiscoveryFragment:BaseFragment<FragmentDiscoveryBinding>() {
         private const val TAG = "DiscoveryFragment"
     }
     override fun initData() {
+        dataBinding.cgvComment.setActivity(requireActivity())
         dataBinding.rvModule.adapter = DiscoveryModuleAdapter(){
             when(it){
                 //摸鱼
