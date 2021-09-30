@@ -39,6 +39,8 @@ class AndroidBug5497Workaround(val activity: Activity) {
     }
 
     private fun possiblyResizeChildOfContent() {
+        val isShow = NavigationUtils.hasNavigationBar(activity)
+        Log.d(TAG, "possiblyResizeChildOfContent:$isShow 是否显示了导航条 ===> ${NavigationUtils.isMiuiFullScreen(activity)}")
         val usableHeightNow = computeUsableHeight()//剩余内容的高度
         if (usableHeightNow != usableHeightPrevious) {
             val usableHeightSansKeyboard = mChildOfContent!!.rootView.height//整个屏幕的高度
@@ -48,7 +50,11 @@ class AndroidBug5497Workaround(val activity: Activity) {
                 frameLayoutParams!!.height = usableHeightSansKeyboard - heightDifference + 96
             } else {
                 Log.d(TAG, "possiblyResizeChildOfContent: 小于等于")
-                frameLayoutParams!!.height = usableHeightSansKeyboard - StatusBarUtil.getNavigationBarHeight(SOBApp.getContext())
+                frameLayoutParams!!.height = usableHeightSansKeyboard - if(isShow || NavigationUtils.isMiuiFullScreen(activity)){
+                    NavigationUtils.getNavigationBarHeight(SOBApp.getContext())
+                }else{
+                    0
+                }
             }
             mChildOfContent!!.requestLayout()
             usableHeightPrevious = usableHeightNow

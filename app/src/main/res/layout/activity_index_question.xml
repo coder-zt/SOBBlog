@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/linearLayout6"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="26dp"
+            android:gravity="center_horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/tv_new"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="最新问题"
+                android:layout_toStartOf="@+id/tv_wait"
+                android:textColor="@color/black"
+                android:textSize="22sp" />
+
+            <TextView
+                android:id="@+id/tv_wait"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:text="等待解决"
+                android:textColor="@color/black"
+                android:textSize="22sp" />
+
+            <TextView
+                android:id="@+id/tv_hot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="推荐问题"
+                android:layout_toRightOf="@+id/tv_wait"
+                android:textColor="@color/black"
+                android:textSize="22sp" />
+
+        </RelativeLayout>
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/vp_content"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout6" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -40,7 +40,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        AndroidBug5497Workaround.assistActivity(this)
         initView()
         initData()
     }

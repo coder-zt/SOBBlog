@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.coder.zt.sobblog.R
 import com.coder.zt.sobblog.databinding.FragmentDiscoveryBinding
 import com.coder.zt.sobblog.ui.activity.MoYuActivity
+import com.coder.zt.sobblog.ui.activity.QuestionIndexActivity
 import com.coder.zt.sobblog.ui.adapter.DiscoveryModuleAdapter
 import com.coder.zt.sobblog.ui.adapter.EmojiAdapter
 import com.coder.zt.sobblog.ui.base.BaseFragment
@@ -27,7 +28,6 @@ class DiscoveryFragment:BaseFragment<FragmentDiscoveryBinding>() {
         private const val TAG = "DiscoveryFragment"
     }
     override fun initData() {
-        dataBinding.cgvComment.setActivity(requireActivity())
         dataBinding.rvModule.adapter = DiscoveryModuleAdapter(){
             when(it){
                 //摸鱼
@@ -37,7 +37,8 @@ class DiscoveryFragment:BaseFragment<FragmentDiscoveryBinding>() {
                 }
                 //问答
                 DiscoveryModuleAdapter.ItemType.TYPE_QUESTION->{
-                    ToastUtils.show("问答还没做呢，快去鱼塘摸摸鱼！")
+                    val intent = Intent(activity, QuestionIndexActivity::class.java)
+                    startActivity(intent)
                 }
             }
         }
