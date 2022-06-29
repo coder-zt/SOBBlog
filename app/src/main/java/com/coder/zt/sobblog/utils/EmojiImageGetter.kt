@@ -39,7 +39,7 @@ class EmojiImageGetter(val context: Context, val size:Int) :Html.ImageGetter {
                 Log.d(TAG, "getDrawable: bytes.size: ${bytes.size}")
                 var bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
                 val matrix = Matrix()
-                matrix.setScale(3f, 3f)
+                matrix.setScale(1f, 1f)
                 val bm = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
                 Log.d(TAG, "getDrawable: width: ${bitmap.width}  height: ${bitmap.height}")
                 drawable = BitmapDrawable(bm)

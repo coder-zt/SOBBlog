@@ -71,6 +71,7 @@ class SPUtils {
 
     fun readList(key:String):List<String>{
         val values = read(key)
+        Log.d(TAG, "readList: $values")
         val result = mutableListOf<String>()
         if(values.isNotBlank()){
             val splitStrings = values.split(Constants.SPLIT_SIGN)

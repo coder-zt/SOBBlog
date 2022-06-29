@@ -30,15 +30,21 @@ class CookiesManager : CookieJar {
 
     override fun loadForRequest(url: HttpUrl): List<Cookie> {
         val list = mutableListOf<Cookie>()
-        if (!cookieStoreBlog[Constants.BASE_URL].isNullOrEmpty()) {
-            return cookieStoreBlog[Constants.BASE_URL]!!
-        }
+//        if (!cookieStoreBlog[Constants.BASE_URL].isNullOrEmpty()) {
+//            return cookieStoreBlog[Constants.BASE_URL]!!
+//        }
+
         val results = SPUtils.getInstance().readList(Constants.BASE_URL)
+        Log.d(TAG, "loadForRequest: $results")
         for (result in results) {
             if(result.isEmpty()){
                 break
             }
-            list.add(GsonUtils.getInstance().fromJson(result,Cookie::class.java))
+            val c = Cookie.parse(url,result )
+            c?.let {
+                list.add(c)
+            }
+
         }
         Log.d(TAG, "loadForRequest: $list")
         return list

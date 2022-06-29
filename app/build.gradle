@@ -19,7 +19,7 @@ android {
     }
     signingConfigs {
         release {
-            storeFile file("E:\\Coding\\Android\\SOBBlog\\sobblog.jks")
+            storeFile file("/Users/edy/Android/SOBBlog/sobblog.jks")
             storePassword "123456"
             keyAlias "key0"
             keyPassword "123456"

@@ -38,7 +38,6 @@ class ToastUtils {
         }
 
         //普通Toast展示
-        @RequiresApi(Build.VERSION_CODES.N)
         fun show(msg:String, error: Boolean){
             val toast = Toast(SOBApp.getContext())
             toast.setGravity(Gravity.CENTER_HORIZONTAL or Gravity.TOP, 0, ScreenUtils.dp2px(60))
@@ -48,7 +47,11 @@ class ToastUtils {
                 R.layout.toast_content_view, null, false
             )
             //内容
-            val sp = Html.fromHtml(msg,0, SOBApp.getContext().let { EmojiImageGetter(it, 2) }, null)
+            val sp = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                Html.fromHtml(msg,0, SOBApp.getContext().let { EmojiImageGetter(it, 1) }, null)
+            } else {
+                msg
+            }
             inflate.tvContent.text = sp
             if(error){
                 //背景

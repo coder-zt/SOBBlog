@@ -19,6 +19,7 @@ object ServiceCreator {
 
     private val client = OkHttpClient.Builder()
         .addInterceptor(httpLoggingInterceptor)
+        .addInterceptor(HeaderInterceptor())
         .cookieJar(cookieJar)
         .readTimeout(60, TimeUnit.SECONDS) //设置读取超时时间
         .writeTimeout(60, TimeUnit.SECONDS) //设置写的超时时间

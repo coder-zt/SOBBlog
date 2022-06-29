@@ -50,6 +50,7 @@ class UserRepository {
 
     suspend fun captcha(): Bitmap? {
         val netWork = UserNetWork.getInstance().captcha(Random().nextInt())
+
         var bitmap: Bitmap? = null
         val bys: ByteArray
         try {
@@ -64,7 +65,7 @@ class UserRepository {
 
     suspend fun checkToken(): ResponseData<SobUserInfo> {
         val netWork = UserNetWork.getInstance().checkToken()
-        Log.d(TAG, "login: ${netWork.data}")
+        Log.d(TAG, "checkToken: ${netWork.data}")
         return netWork
     }
 

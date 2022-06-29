@@ -84,6 +84,7 @@ class MoYuAdapter(val callback:(code:DOTYPE, data:Any) -> Unit): RecyclerView.Ad
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if(position >0){
             val contentItem = holder as ContentView
@@ -168,7 +169,6 @@ class MoYuAdapter(val callback:(code:DOTYPE, data:Any) -> Unit): RecyclerView.Ad
         private var showExpansion = false
         private var requestComment = false
         private lateinit var adapter:ArticleCommentAdapter
-        @RequiresApi(Build.VERSION_CODES.N)
         fun setData(miniFeed: MiniFeed, position: Int, listener:()->Unit, callback:(code:DOTYPE, data:Any) -> Unit) {
             requestComment = false
             showExpansion = false
@@ -178,7 +178,11 @@ class MoYuAdapter(val callback:(code:DOTYPE, data:Any) -> Unit): RecyclerView.Ad
             Log.d(TAG, "setData: ${miniFeed.content}")
 //            inflate.tvContent.text = Html.fromHtml(miniFeed.content)
 
-            val sp = Html.fromHtml(miniFeed.content,0, EmojiImageGetter(inflate.tvContent.context, 2), null)
+            val sp = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                Html.fromHtml(miniFeed.content,0, EmojiImageGetter(inflate.tvContent.context, 1), null)
+            }else{
+                miniFeed.content
+            }
             inflate.tvContent.text = sp
 
             //展示评论、点赞数量

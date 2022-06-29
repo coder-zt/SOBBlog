@@ -40,7 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
-                android:text="@{data.nickname.isEmpty()?data.nickname:`点击即可登录`}"
+                android:text="@{data.nickname.isEmpty()?`点击即可登录`:data.nickname}"
                 app:vip_text_color = "@{data.vip}"
                 android:textColor="@color/white"
                 android:textSize="22sp"

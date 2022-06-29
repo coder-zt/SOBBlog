@@ -110,7 +110,10 @@ class MoYuRepository {
         var url = SPUtils.getInstance().read(Constants.SP_KEY_WARP_URL)
         if (url.isNullOrEmpty() || isUpDate()) {
             val comment = MoYuNetWork.getInstance().getWarpData()
-            url = Constants.BING_BASE_URL + comment.MediaContents[0].ImageContent.Image.Url
+            url = comment.MediaContents[0].ImageContent.Image.Url
+            if(!url.startsWith("https:")){
+                url += Constants.BING_BASE_URL
+            }
             SPUtils.getInstance().save(Constants.SP_KEY_WARP_URL, url)
             SPUtils.getInstance().save(Constants.SP_KEY_WARP_TIME, comment.MediaContents[0].Ssd)
         }

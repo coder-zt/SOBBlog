@@ -10,7 +10,7 @@ object Constants {
     const val SP_KEY_WARP_URL: String = "sp_key_warp_url"
     const val SP_KEY_WARP_TIME: String = "sp_key_warp_time"
     //https//www.sunofbeach.net/u/1284274686481473536
-    const val BASE_URL = "https://api.sunofbeach.net"
+    const val BASE_URL = "https://api.sunofbeaches.com"
     const val WEBSITE_URL = "sunofbeach.net"
     const val BING_BASE_URL = "https://cn.bing.com"
     const val SUCCESS_CODE = 10000

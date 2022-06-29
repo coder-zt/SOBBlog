@@ -43,7 +43,11 @@ companion object{
         commentInputEt.text?.delete(commentInputEt.selectionStart,commentInputEt.selectionEnd)
 
         editContentList.add(it)
-        val sp = Html.fromHtml(it,0, EmojiImageGetter(context, 2), null)
+        val sp = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Html.fromHtml(it,0, EmojiImageGetter(context, 1), null)
+        } else {
+            it
+        }
         commentInputEt.text?.insert(insertIndex, sp)
     }
     val contentView: View by lazy {
