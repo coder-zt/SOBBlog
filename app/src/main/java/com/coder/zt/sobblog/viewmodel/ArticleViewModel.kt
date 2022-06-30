@@ -9,6 +9,7 @@ import com.coder.zt.sobblog.model.base.ResponseData
 import com.coder.zt.sobblog.model.user.RewardUserInfo
 import com.coder.zt.sobblog.repository.ArticleRepository
 import com.coder.zt.sobblog.utils.ToastUtils
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class ArticleViewModel:ViewModel() {

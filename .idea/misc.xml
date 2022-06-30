@@ -6,6 +6,10 @@
         <entry key="../../../../layout/custom_preview.xml" value="0.18568840579710144" />
         <entry key="app/src/main/res/layout/activity_article_detail.xml" value="0.16576086956521738" />
         <entry key="app/src/main/res/layout/fragment_mine.xml" value="0.209375" />
+        <entry key="app/src/main/res/layout/item_empty.xml" value="0.203125" />
+        <entry key="app/src/main/res/layout/item_error.xml" value="0.203125" />
+        <entry key="app/src/main/res/layout/item_loading.xml" value="0.20208333333333334" />
+        <entry key="app/src/main/res/layout/rv_article_info.xml" value="0.203125" />
         <entry key="app/src/main/res/layout/rv_moyu.xml" value="0.209375" />
       </map>
     </option>

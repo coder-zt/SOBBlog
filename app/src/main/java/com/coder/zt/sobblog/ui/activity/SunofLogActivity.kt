@@ -5,8 +5,6 @@ import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import com.coder.zt.sobblog.R
 import com.coder.zt.sobblog.databinding.ActivitySunofBinding
-import com.coder.zt.sobblog.ui.adapter.ArticleInfoAdapter
-import com.coder.zt.sobblog.ui.adapter.PopListAdapter
 import com.coder.zt.sobblog.ui.adapter.SunofCoinAdapter
 import com.coder.zt.sobblog.ui.base.BaseActivity
 import com.coder.zt.sobblog.viewmodel.UserViewModel

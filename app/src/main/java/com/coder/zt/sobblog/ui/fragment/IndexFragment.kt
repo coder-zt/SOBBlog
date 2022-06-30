@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.coder.zt.sobblog.R
 import com.coder.zt.sobblog.databinding.FragmentIndexBinding
 import com.coder.zt.sobblog.ui.adapter.ArticleInfoAdapter
+import com.coder.zt.sobblog.ui.adapter.ArticleInfoStateAdapter
 import com.coder.zt.sobblog.ui.base.BaseFragment
 import com.coder.zt.sobblog.utils.AppRouter
 import com.coder.zt.sobblog.viewmodel.ArticleViewModel
@@ -21,8 +22,8 @@ class IndexFragment:BaseFragment<FragmentIndexBinding>() {
         ViewModelProvider(this).get(ArticleViewModel::class.java)
     }
 
-    private val adapter: ArticleInfoAdapter by lazy{
-            ArticleInfoAdapter(){
+    private val adapter: ArticleInfoStateAdapter by lazy{
+        ArticleInfoStateAdapter(){
                 AppRouter.toArticleDetailActivity(requireActivity(), it)
             }
     }
